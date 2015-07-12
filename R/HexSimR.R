@@ -133,6 +133,9 @@ collate.census <- function(path.results=NULL, scenarios="all") {
 #'   against a baseline scenario using Strictly Standardised Mean Difference 
 #'   (SSMD, Zhang 2007).  
 #'   
+#' It takes as data input the output from \code{collate.census} (it reads data
+#'   directly from xls files). 
+#'   
 #' @param path.results The path where the results are located
 #' @param scenarios A character vector with scenarios to be processed or "all"
 #' @param base A character vector with the name of the scenario to be used as 
@@ -204,4 +207,36 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
   lapply(seq_along(scenarios), save.xlsx, scenarios, ssmds, pvalues)
   
   return(list(ssmds, pvalues))
+}
+
+#' Calculates descriptive stats from the HexSim generated report 'movement'
+#' 
+#' @param rep.move The fully qualified (i.e. including the path) name of the report 
+#'   'movement'
+#' @return A data.frame where each column is a HexSim's Event (and it is saved 
+#'   to disk as .csv file)
+#' @import data.table
+#' @export  
+move <- function(rep.move=NULL) {
+  library()
+  
+  #----------------------------------------------------------------------------#
+  # Helper functions
+  #----------------------------------------------------------------------------#
+  
+  descr <- function(data,  lev) {
+    setkey(data,  EventName)
+    d <- data[lev,  summary(MetersDisplaced)]
+    return(d)
+  }
+  
+  #----------------------------------------------------------------------------#
+  
+  if (is.null(rep.move)) rep.move <- file.choose()
+  mov <- fread(rep.move)
+  setnames(mov,  names(mov),  gsub(" ",  "",  names(mov)))
+  groups <- mov[,  unique(EventName)]
+  l <- sapply(X = groups,  descr,  data=mov)
+  write.csv(l, file=paste(dirname(rep.move), "summary_move.csv", sep="/"))
+  return(l)
 }
