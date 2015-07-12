@@ -16,14 +16,13 @@
 #'
 #' @param path.results The path where the 'Results' folder is located
 #' @param scenarios A character vector with scenarios to be processed or "all"
-#' @return 
+#' @return A list with three elements: the combined data, the mean and standard
+#'   deviation 
 #' @import data.table
-#' @import XLConnent
+#' @import XLConnect
 #' @export
 
 collate.census <- function(path.results=NULL, scenarios="all") {
-  library(data.table)
-  library(XLConnect)
   
   #----------------------------------------------------------------------------#
   # Helper functions
