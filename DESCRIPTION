@@ -1,6 +1,6 @@
 Package: HexSimR
 Type: Package
-Title: What the package does (short line)
+Title: an R package for post HexSim simulation analysis
 Version: 1.0
 Date: 2015-07-12
 Author: as.person("Carlo Pacioni <C.Pacioni@Murdoch.edu.au> [aut, cre]")
