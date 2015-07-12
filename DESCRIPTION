@@ -3,7 +3,7 @@ Type: Package
 Title: What the package does (short line)
 Version: 1.0
 Date: 2015-07-12
-Author: Who wrote it
+Author: as.person("Carlo Pacioni <C.Pacioni@Murdoch.edu.au> [aut, cre]")
 Maintainer: Who to complain to <yourfault@somewhere.net>
 Description: More about what it does (maybe more than one line)
 License: What license is it under?
