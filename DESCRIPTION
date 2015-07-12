@@ -1,9 +1,22 @@
 Package: HexSimR
 Type: Package
 Title: an R package for post HexSim simulation analysis
-Version: 1.0
-Date: 2015-07-12
+Version: 0.0.0.900
+Date: 2015-05-29
 Author: as.person("Carlo Pacioni <C.Pacioni@Murdoch.edu.au> [aut, cre]")
-Maintainer: Who to complain to <yourfault@somewhere.net>
-Description: More about what it does (maybe more than one line)
-License: What license is it under?
+BugReports: https://github.com/carlopacioni/HexSimR/issues
+Description: data of population viability analysis (PVA) that were generated with the software HexSim (Schumaker N, HexSim (Version 3). US Environmental Protection Agency. Environmental Research Laboratory, Corvallis, Oregon. [http://www.epa.gov/hexsim](http://www.epa.gov/hexsim)), can be collated, plotted and analysed.
+License: GPL-3
+Depends:
+    R (>= 3.2.0)
+Imports:
+    data.table,
+    ggplot2,
+    XLConnect
+Suggests:
+    knitr,
+    rmarkdown,
+    devtools,
+    roxygen2,
+    gridExtra,
+    testthat
