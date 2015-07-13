@@ -1,3 +1,26 @@
+#' Save SSMD results to xlsx file
+#' 
+#' Two tabs are saved for each scenarios: SSMD and p values.
+#' @param i Numeric vector with seq 1 to number of scenarios
+#' @param scenarios Character vector with names of scenarios
+#' @param ssmds data.frame with SSMD values
+#' @param pvalues data.frame with SSMD values
+#' @param wb Workbook where to save the tabs
+#' @import XLConnect
+#' @export
+ssmd2xlsx <- function(i, scenarios, ssmds, pvalues, wb) {
+  if(nchar(scenarios) > 25) {
+    scenarios <- substr(scenarios, nchar(scenarios) - 24, nchar(scenarios)) 
+  }
+  createSheet(wb, name=paste0("SSMD_", scenarios[i]))
+  writeWorksheet(wb, ssmds[[i]], sheet=paste0("SSMD_", scenarios[i]))
+  createSheet(wb, name=paste0("pval_", scenarios[i]))
+  writeWorksheet(wb, pvalues[[i]], sheet=paste0("pval_", scenarios[i]))
+  saveWorkbook(wb)}
+
+
+
+
 #' Combine together HexSim census output across iterations.
 #'
 #' Combine together HexSim census output across iterations. If the scenarios have 
@@ -151,6 +174,10 @@ collate.census <- function(path.results=NULL, scenarios="all") {
 #' @export
 
 SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0) {
+ 
+  #----------------------------------------------------------------------------#
+  # Helper functions
+  #----------------------------------------------------------------------------#
   
   read.means <- function(scenario, path.results, ncensus) {
     mean_data <- readWorksheetFromFile(
@@ -161,28 +188,21 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
   }
   
   read.sds <- function(scenario, path.results, ncensus) {
-    mean_data <- readWorksheetFromFile(
+    std_data <- readWorksheetFromFile(
       paste0(path.results, "/", scenario, "/", scenario, ".", 
              ncensus, ".", "all", ".", "xlsx"), 
       sheet="sd")
-    return(mean_data)
+    return(std_data)
   }
   
-  ssmd_census <- function(i, means, sds) {
+  ssmd_census <- function(i, means, sds, mean_base) {
     r <- (means[[i]][-c(1, 2)] - mean_base[-c(1, 2)]) / 
       sqrt(sds[[i]][-c(1, 2)]^2 + sd_base[-c(1, 2)]^2)
     return(r)
   }
   
   pval <- function(x) pnorm(abs(as.matrix(x)), lower.tail=FALSE)
-  
-  save.xlsx <- function(i, scenarios, ssmds, pvalues) {
-    createSheet(wb, name=paste("SSMD_", scenarios[i]))
-    writeWorksheet(wb, ssmds[[i]], sheet=paste("SSMD_", scenarios[i]))
-    createSheet(wb, name=paste("pvalues_", scenarios[i]))
-    writeWorksheet(wb, pvalues[[i]], sheet=paste("pvalues_", scenarios[i]))
-    saveWorkbook(wb)}
-  
+  #----------------------------------------------------------------------------#
   if(is.null(base)) stop("Please, provide the name of the base scenario")
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- choose.dir(caption = txt)
@@ -199,14 +219,89 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
   means <-lapply(scenarios, read.means, path.results, ncensus)
   sds <-lapply(scenarios, read.sds, path.results, ncensus)
   
-  ssmds <- lapply(seq_along(scenarios), ssmd, means, sds)
+  ssmds <- lapply(seq_along(scenarios), ssmd_census, means, sds, mean_base)
+  names(ssmds) <- scenarios
   pvalues <- lapply(ssmds, pval)
-  
+  names(pvalues) <- scenarios
   wb <- loadWorkbook(paste0(path.results, "/", "SSMD_census", ncensus, ".", "xlsx"), 
                      create=TRUE)
-  lapply(seq_along(scenarios), save.xlsx, scenarios, ssmds, pvalues)
+  lapply(seq_along(scenarios), ssmd2xlsx, scenarios, ssmds, pvalues, wb)
   
   return(list(ssmds, pvalues))
+}
+
+#' Compare mean movement distances against those of a baseline scenario.
+#' 
+#' \code{SSMD.move} carrries out pairwise compasisons of the mean movement distances 
+#'   against those of a baseline scenario using Strictly Standardised Mean Difference 
+#'   (SSMD, Zhang 2007).  
+#'   
+#' It directly reads the .csv files written with \code{move}. It assumes that all 
+#'   files have the same name, which, if different from the deafualt, can be passed
+#'   with the argument\code{sum.move}.
+#'   
+#' @param path.results The path where the results are located
+#' @param scenarios A character vector with scenarios to be processed or "all"
+#' @param base A character vector with the name of the scenario to be used as 
+#'   term of comparison
+#' @param sum.move The name of the file where the data are (indluding the extension).
+#' @return A list with SSMD in the first element and p-values in the second. 
+#'   These resutls are also saved to disk as two tabs in an excel file.
+#' @references
+#' Zhang, X. D. 2007. A pair of new statistical parameters for quality control
+#' in RNA interference high-throughput screening assays. Genomics 89:552-561.
+#'
+#' @import XLConnect
+#' @export
+
+SSMD.move <- function(path.results=NULL, scenarios="all", base=NULL, 
+                      sum.move="summary_move.csv") {
+  #----------------------------------------------------------------------------#
+  # Helper functions
+  #----------------------------------------------------------------------------#
+  
+  read.data <- function(scenario, path.results, sum.move) {
+    data <- read.csv(
+      paste0(path.results, "/", scenario, "/", sum.move))
+    rownames(data) <- data[, 1] 
+    return(data[, 2:dim(data)[2]])
+  }
+  
+  
+  ssmd_move <- function(i, data, base) {
+    r <- (data[[i]]["Mean", ] - base["Mean", ]) / 
+      sqrt(data[[i]]["Std", ]^2 + base["Std", ]^2)
+    row.names(r) <- NULL
+    return(r)
+  }
+  
+  pval <- function(x) pnorm(abs(as.matrix(x)), lower.tail=FALSE)
+  
+  
+  #----------------------------------------------------------------------------#
+  
+  if(is.null(base)) stop("Please, provide the name of the base scenario")
+  txt <- "Please, select the 'Results' folder within the workspace"
+  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(scenarios == "all") {
+    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+    scenarios <- scenarios[scenarios != base]
+  }
+  
+  base.data <- read.data(scenario=base, path.results, sum.move)
+   
+  data <-lapply(scenarios, read.data, path.results, sum.move)
+  
+  ssmds <- lapply(seq_along(scenarios), ssmd_move, data, base.data)
+  names(ssmds) <- scenarios
+  pvalues <- lapply(ssmds, pval)
+  names(pvalues) <- scenarios
+  wb.name <- paste0(path.results, "/", "SSMD_move", ".", "xlsx")
+  if(file.exists(wb.name)) file.remove(wb.name)
+  wb <- loadWorkbook(wb.name, create=TRUE)
+  lapply(seq_along(scenarios), ssmd2xlsx, scenarios, ssmds, pvalues, wb)
+  res <- list(SSMD=ssmds, pvalues=pvalues)
+  return(res)
 }
 
 #' Calculates descriptive stats from the HexSim generated report 'movement'
@@ -218,7 +313,6 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
 #' @import data.table
 #' @export  
 move <- function(rep.move=NULL) {
-  library()
   
   #----------------------------------------------------------------------------#
   # Helper functions
@@ -227,6 +321,9 @@ move <- function(rep.move=NULL) {
   descr <- function(data,  lev) {
     setkey(data,  EventName)
     d <- data[lev,  summary(MetersDisplaced)]
+    std <- data[lev,  sd(MetersDisplaced)]
+    names(std) <- "Std"
+    d <- c(d, std)
     return(d)
   }
   
@@ -239,4 +336,92 @@ move <- function(rep.move=NULL) {
   l <- sapply(X = groups,  descr,  data=mov)
   write.csv(l, file=paste(dirname(rep.move), "summary_move.csv", sep="/"))
   return(l)
+}
+
+#' Calculates descriptive stats from the HexSim generated report 'ranges'
+#'
+#' \code{ranges} also calculates the mean number of groups and the mean size of
+#'   territory in ha and sqkm 
+#'   
+#' @param rep.ranges The fully qualified (i.e. including the path) name of the 
+#'   report
+#' @param hx The size of one hexagon in hectares 
+#' @param events A character vector with the name of the events for which the 
+#'   descriptive statistics needs to be calculated
+#' @param start The first time step to be included in the summary statistics
+#' @param end The last time step to be include in the summary statistics
+#' @return A data.table with summary statistics, and a .csv with the same data is 
+#'   also saved to disk
+#' @import data.table
+#' @import XLConnect
+#' @export
+
+ranges <- function(rep.ranges=NULL, hx=NULL, events=NULL, start="min", end="max") {
+  #----------------------------------------------------------------------------#
+  # Helper functions
+  #----------------------------------------------------------------------------#
+    
+  mean.ranges <- function(event, summary, start, end) {
+    setkeyv(summary, c("TimeStep", "Events"))
+    var <- c("GroupSize", "Resources", "nGroups", "ha", "sqkm")
+    m <- summary[J(start:end, event), lapply(.SD, mean, na.rm=TRUE), .SDcols=var]
+    m[, Event := event]
+    m[, Stat := "Mean"]
+    setcolorder(m, 
+          c("Event", "Stat", "GroupSize", "Resources", "nGroups", "ha", "sqkm"))
+    return(m)
+  }
+  
+  sd.ranges <- function(event, summary, start, end) {
+    setkeyv(summary, c("TimeStep", "Events"))
+    var <- c("GroupSize", "Resources", "nGroups", "ha", "sqkm")
+    s <- summary[J(start:end, event), lapply(.SD, sd, na.rm=TRUE), .SDcols=var]
+    s[, Event := event]
+    s[, Stat := "SD"]
+    setcolorder(s, 
+          c("Event", "Stat", "GroupSize", "Resources", "nGroups", "ha", "sqkm"))
+    return(s)
+  }
+  
+  #----------------------------------------------------------------------------#
+  
+  if (!is.numeric(hx)) stop("Please provide a suitable value for hx")
+  if (is.null(rep.ranges)) rep.ranges <- file.choose()
+  message(paste("Parsing the report", basename(rep.ranges)))
+  h <- read.csv(rep.ranges, h=F, nrow=1, colClasses="character")
+  h <- gsub(" ", "", h)
+  message("Inspecting the file to detect the maximum number of columns")
+  ncols <- max(count.fields(rep.ranges, sep=","))
+  h <- c(h, rep("NA", ncols - length(h)))
+  col.class <- c(rep("integer", 2), rep("character", 2), rep("integer", 3), 
+                 "numeric", "integer", rep("NULL", ncols - 9))
+  range <- read.csv(rep.ranges, h=F, skip=1, colClasses=col.class, col.names=h)
+  range <- data.table(range)
+  summary <- range[, lapply(.SD, mean), .SDcol=h[7:9], by=list(EventName,TimeStep)]
+  summary[, nGroups := range[, length(GroupID), by=list(EventName,TimeStep)][, V1]]
+  summary[, Events := gsub(" ", "", EventName)]
+  summary[, ha := NumberofHexagons * hx]
+  summary[, sqkm := ha * 0.01]
+  if(is.null(events)) {
+    events <- summary[, unique(Events)]
+  } else {
+    events <- gsub(" ", "", events)
+  }
+  if(start == "min") start <- summary[, min(TimeStep)]
+  if(end == "max") end <- summary[, max(TimeStep)]
+  l.means <- lapply(events, mean.ranges, summary, start, end)
+  means <- rbindlist(l.means)
+  l.std <- lapply(events, sd.ranges, summary, start, end)
+  std <- rbindlist(l.std)
+  write.csv(summary, file=paste(dirname(rep.ranges), "descriptive_range.csv", 
+                                sep="/"))
+  wb.name <- paste(dirname(rep.ranges), "summary_range.xlsx", sep="/")
+  if(file.exists(wb.name)) file.remove(wb.name)
+  wb <- loadWorkbook(wb.name, create=TRUE)
+  createSheet(wb, name="means")
+  writeWorksheet(wb, means, sheet="means")
+  createSheet(wb, name="sd")
+  writeWorksheet(wb, std, sheet="sd")
+  saveWorkbook(wb)
+  return(list(descriptive=summary, means=means, sds=std))
 }
