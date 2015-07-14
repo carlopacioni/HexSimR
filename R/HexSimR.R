@@ -253,7 +253,6 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
 #'
 #' @import XLConnect
 #' @export
-
 SSMD.move <- function(path.results=NULL, scenarios="all", base=NULL, 
                       sum.move="summary_move.csv") {
   #----------------------------------------------------------------------------#
@@ -266,8 +265,7 @@ SSMD.move <- function(path.results=NULL, scenarios="all", base=NULL,
     rownames(data) <- data[, 1] 
     return(data[, 2:dim(data)[2]])
   }
-  
-  
+    
   ssmd_move <- function(i, data, base) {
     r <- (data[[i]]["Mean", ] - base["Mean", ]) / 
       sqrt(data[[i]]["Std", ]^2 + base["Std", ]^2)
@@ -413,9 +411,9 @@ ranges <- function(rep.ranges=NULL, hx=NULL, events=NULL, start="min", end="max"
   means <- rbindlist(l.means)
   l.std <- lapply(events, sd.ranges, summary, start, end)
   std <- rbindlist(l.std)
-  write.csv(summary, file=paste(dirname(rep.ranges), "descriptive_range.csv", 
+  write.csv(summary, file=paste(dirname(rep.ranges), "descriptive_ranges.csv", 
                                 sep="/"))
-  wb.name <- paste(dirname(rep.ranges), "summary_range.xlsx", sep="/")
+  wb.name <- paste(dirname(rep.ranges), "summary_ranges.xlsx", sep="/")
   if(file.exists(wb.name)) file.remove(wb.name)
   wb <- loadWorkbook(wb.name, create=TRUE)
   createSheet(wb, name="means")
@@ -424,4 +422,83 @@ ranges <- function(rep.ranges=NULL, hx=NULL, events=NULL, start="min", end="max"
   writeWorksheet(wb, std, sheet="sd")
   saveWorkbook(wb)
   return(list(descriptive=summary, means=means, sds=std))
+}
+
+
+#' Compare census values against a baseline scenario.
+#' 
+#' \code{SSMD.census} carrries out pairwise compasisons of the census values 
+#'   against a baseline scenario using Strictly Standardised Mean Difference 
+#'   (SSMD, Zhang 2007).  
+#'   
+#' It takes as data input the output from \code{collate.census} (it reads data
+#'   directly from xls files). 
+#'   
+#' @param path.results The path where the results are located
+#' @param scenarios A character vector with scenarios to be processed or "all"
+#' @param base A character vector with the name of the scenario to be used as 
+#'   term of comparison
+#' @param sum.ranges The name of the file where the data are (indluding the extension).
+#' @return A list with SSMD in the first element and p-values in the second. 
+#'   These resutls are also saved to disk as two tabs in an excel file.
+#' @references
+#' Zhang, X. D. 2007. A pair of new statistical parameters for quality control
+#' in RNA interference high-throughput screening assays. Genomics 89:552-561.
+#'
+#' @import XLConnect
+#' @export
+
+SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL, 
+                        sum.ranges="summary_ranges.xlsx") {
+  
+  #----------------------------------------------------------------------------#
+  # Helper functions
+  #----------------------------------------------------------------------------#
+  
+  read.means <- function(scenario, path.results, sum.ranges) {
+    mean_data <- readWorksheetFromFile(
+      paste(path.results, scenario, sum.ranges, sep="/"), 
+      sheet="means")
+    return(mean_data)
+  }
+  
+  read.sds <- function(scenario, path.results, ncensus) {
+    std_data <- readWorksheetFromFile(
+      paste(path.results, scenario, sum.ranges, sep="/"), 
+      sheet="sd")
+    return(std_data)
+  }
+  
+  ssmd_ranges <- function(i, means, sds, mean_base, sd_base) {
+    r <- (means[[i]][, -c(1, 2)] - mean_base[, -c(1, 2)]) / 
+      sqrt(sds[[i]][, -c(1, 2)]^2 + sd_base[, -c(1, 2)]^2)
+    return(r)
+  }
+  
+  pval <- function(x) pnorm(abs(as.matrix(x)), lower.tail=FALSE)
+  #----------------------------------------------------------------------------#
+  if(is.null(base)) stop("Please, provide the name of the base scenario")
+  txt <- "Please, select the 'Results' folder within the workspace"
+  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(scenarios == "all") {
+    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+    scenarios <- scenarios[scenarios != base]
+  }
+  
+  wb_base <- loadWorkbook(paste(path.results, base, sum.ranges, sep="/"))
+  mean_base <- readWorksheet(wb_base, sheet="means")
+  sd_base <- readWorksheet(wb_base, sheet="sd")
+  
+  means <-lapply(scenarios, read.means, path.results, sum.ranges)
+  sds <-lapply(scenarios, read.sds, path.results, sum.ranges)
+  
+  ssmds <- lapply(seq_along(scenarios), ssmd_ranges, means, sds, 
+                  mean_base, sd_base)
+  names(ssmds) <- scenarios
+  pvalues <- lapply(ssmds, pval)
+  names(pvalues) <- scenarios
+  wb <- loadWorkbook(paste0(path.results, "/", "SSMD_ranges.xlsx"), create=TRUE)
+  lapply(seq_along(scenarios), ssmd2xlsx, scenarios, ssmds, pvalues, wb)
+  
+  return(list(ssmds, pvalues))
 }
