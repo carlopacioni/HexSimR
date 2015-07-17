@@ -37,7 +37,7 @@ ssmd2xlsx <- function(i, scenarios, ssmds, pvalues, wb) {
 #'
 #' Note, when there is a large number of files, this function may be memory hungry 
 #'
-#' @param path.results The path where the 'Results' folder is located
+#' @param path.results The path for the 'Results' folder 
 #' @param scenarios A character vector with scenarios to be processed or "all"
 #' @return A list with three elements: the combined data, the mean and standard
 #'   deviation 
@@ -159,11 +159,10 @@ collate.census <- function(path.results=NULL, scenarios="all") {
 #' It takes as data input the output from \code{collate.census} (it reads data
 #'   directly from xls files). 
 #'   
-#' @param path.results The path where the results are located
-#' @param scenarios A character vector with scenarios to be processed or "all"
 #' @param base A character vector with the name of the scenario to be used as 
 #'   term of comparison
 #' @param ncensus The number of the census to be considered
+#' @inheritParams collate.census
 #' @return A list with SSMD in the first element and p-values in the second. 
 #'   These resutls are also saved to disk as two tabs in an excel file.
 #' @references
@@ -240,11 +239,8 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
 #'   files have the same name, which, if different from the deafualt, can be passed
 #'   with the argument\code{sum.move}.
 #'   
-#' @param path.results The path where the results are located
-#' @param scenarios A character vector with scenarios to be processed or "all"
-#' @param base A character vector with the name of the scenario to be used as 
-#'   term of comparison
 #' @param sum.move The name of the file where the data are (indluding the extension).
+#' @inheritParams SSMD.census
 #' @return A list with SSMD in the first element and p-values in the second. 
 #'   These resutls are also saved to disk as two tabs in an excel file.
 #' @references
@@ -328,6 +324,7 @@ move <- function(rep.move=NULL) {
   #----------------------------------------------------------------------------#
   
   if (is.null(rep.move)) rep.move <- file.choose()
+  message(paste("Parsing the report", basename(rep.move)))
   mov <- fread(rep.move)
   setnames(mov,  names(mov),  gsub(" ",  "",  names(mov)))
   groups <- mov[,  unique(EventName)]
@@ -434,11 +431,8 @@ ranges <- function(rep.ranges=NULL, hx=NULL, events=NULL, start="min", end="max"
 #' It takes as data input the output from \code{collate.census} (it reads data
 #'   directly from xls files). 
 #'   
-#' @param path.results The path where the results are located
-#' @param scenarios A character vector with scenarios to be processed or "all"
-#' @param base A character vector with the name of the scenario to be used as 
-#'   term of comparison
 #' @param sum.ranges The name of the file where the data are (indluding the extension).
+#' @inheritParams SSMD.census
 #' @return A list with SSMD in the first element and p-values in the second. 
 #'   These resutls are also saved to disk as two tabs in an excel file.
 #' @references
@@ -501,4 +495,58 @@ SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL,
   lapply(seq_along(scenarios), ssmd2xlsx, scenarios, ssmds, pvalues, wb)
   
   return(list(ssmds, pvalues))
+}
+
+#' Generate summary statistics for multiple reports
+#' 
+#' \code{multi.reports} is basically a wrapper for the two functions that process
+#'   HexSim generated reports. It assumes that the names of the report files were 
+#'   not changed from defaults and that each report was generated in a similar 
+#'   fashion. That is, either they are all generated from a combined log file, or
+#'   they are generated from each iteration's log file. It reads the reports in 
+#'   each of the scenario's folder (or iteration subfolders) and process them as  
+#'   using either \code{move} or \code{ranges}.
+#'   
+#' If the reports file is generated from each iteration's log file, then the 
+#'   reports are sitting within each iteration's subfolder and \code{path.results} 
+#'   has to point to the scenario's folder (i.e. the subfolders will be the 
+#'   scenario's name with the suffix [x], where x is the number of the iteration).
+#'   
+#'   @param pop.name The name of the population
+#'   @param type Whether movement ("move") or ranges ("ranges") reports should be 
+#'     processed
+#'   @param all Whether the reports were generated from a combined log file
+#'   @inheritParams SSMD.census
+#'   @inheritParams ranges
+#'   @return A list where each element is the output from either \code{move} or
+#'     \code{ranges}.
+#'   @export
+multi.reports <- function(path.results=NULL, scenarios="all", pop.name=NULL, 
+                          type="move", all=TRUE, hx=NULL, events=NULL, 
+                          start="min", end="max") {
+  #----------------------------------------------------------------------------#
+  # Helper functions
+  #----------------------------------------------------------------------------#
+  
+  file.names <- function(scenario, path.results, pop.name) {
+    n <- paste0(path.results, "/", scenario, "/", scenario,
+                if(all == TRUE) "-[all]", "_REPORT_", type, "_", pop.name, ".csv")
+    return(n)
+  }
+  #----------------------------------------------------------------------------#
+  
+  if(is.null(pop.name)) stop("Please, provide the name of the population")
+  txt <- "Please, select the 'Results' folder within the workspace"
+  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(scenarios == "all") 
+    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  
+  rep.names <- lapply(scenarios, file.names, path.results, pop.name)
+  if(type == "move") {
+    rep.summaries <- lapply(rep.names, move)
+  } else {
+    rep.summaries <- lapply(rep.names, ranges, hx, events, start, end)
+  }
+  
+  return(rep.summaries)
 }

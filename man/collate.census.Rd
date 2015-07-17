@@ -7,7 +7,7 @@
 collate.census(path.results = NULL, scenarios = "all")
 }
 \arguments{
-\item{path.results}{The path where the 'Results' folder is located}
+\item{path.results}{The path for the 'Results' folder}
 
 \item{scenarios}{A character vector with scenarios to be processed or "all"}
 }

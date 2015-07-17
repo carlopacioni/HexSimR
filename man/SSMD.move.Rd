@@ -8,7 +8,7 @@ SSMD.move(path.results = NULL, scenarios = "all", base = NULL,
   sum.move = "summary_move.csv")
 }
 \arguments{
-\item{path.results}{The path where the results are located}
+\item{path.results}{The path for the 'Results' folder}
 
 \item{scenarios}{A character vector with scenarios to be processed or "all"}
 
