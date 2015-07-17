@@ -9,9 +9,9 @@
 #' @import XLConnect
 #' @export
 ssmd2xlsx <- function(i, scenarios, ssmds, pvalues, wb) {
-  if(nchar(scenarios) > 25) {
+  suppressWarnings(if(nchar(scenarios) > 25) {
     scenarios <- substr(scenarios, nchar(scenarios) - 24, nchar(scenarios)) 
-  }
+  })
   createSheet(wb, name=paste0("SSMD_", scenarios[i]))
   writeWorksheet(wb, ssmds[[i]], sheet=paste0("SSMD_", scenarios[i]))
   createSheet(wb, name=paste0("pval_", scenarios[i]))
