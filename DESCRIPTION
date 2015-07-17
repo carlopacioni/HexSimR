@@ -9,8 +9,7 @@ BugReports: https://github.com/carlopacioni/HexSimR/issues
 Description: This package offers a number of tools to collate, plot and analyse
  Population Viability Analysis (PVA) data that were generated with the software 
  HexSim (Schumaker N, HexSim (Version 3); US Environmental Protection Agency. 
- Environmental Research Laboratory, Corvallis, Oregon; 
- [http://www.epa.gov/hexsim](http://www.epa.gov/hexsim).
+ Environmental Research Laboratory, Corvallis, Oregon;(http://www.epa.gov/hexsim).
 License: GPL-3
 Depends:
     R (>= 3.2.0)
