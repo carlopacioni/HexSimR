@@ -3,6 +3,7 @@
 export(SSMD.census)
 export(SSMD.move)
 export(SSMD.ranges)
+export(clean.genepop)
 export(collate.census)
 export(move)
 export(multi.reports)
