@@ -30,3 +30,73 @@
                                   "_cleaned", ".txt"))
     return(infile)
   }
+
+
+#' Write a batch .xml file to generate genepop input files for all replicates of 
+#'   given scenario(s)
+#' 
+#' Generate a batch .xml file in the workspace directory that will instruct 
+#'   OutputTransformer.exe to generate genepop input files for all replicates of 
+#'   the scenario(s) passed with \code{scenarios}. If \code{scenarios="all"} is
+#'   used, then all the scenairos will be inlcuded.
+#' 
+#' @param time.steps A numeric vector to indicate the time step to be included
+#' @param traits A character vector with the name of the traints to be included 
+#' @inheritParams collate.census 
+#' @inheritParams multi.reports 
+#' @return A .xml file named batchFile_genepop_Reports.xml
+#' @export
+w.genepop.batch <- function(path.results, scenarios="all", time.steps=1, 
+                              pop.name, traits) {
+  #----------------------------------------------------------------------------#
+  # Helper functions
+  #----------------------------------------------------------------------------#
+  gen.input <- function(nscen, l.iter.folders, time.steps, pop.name, traits, 
+                        scenarios) {
+    iters <- seq_along(l.iter.folders[[nscen]])
+    scenario <- scenarios[nscen]
+    iter_TS <- lapply(iters, byiter, paths=l.iter.folders[[nscen]], time.steps, 
+                      pop.name, traits, scenario)
+    return(iter_TS)
+  }
+  
+  byiter <- function(iter, paths, time.steps, pop.name, traits, scenario) {
+    path <- paths[iter]
+    TS <- lapply(time.steps, gen.block, pop.name, traits, scenario, path)
+    return(TS)
+  }
+  
+  gen.block <- function(time.step, pop.name, traits, scenario, path) {
+    open.args <- "  <args>" 
+    open.arg <- "    <arg>"
+    close.arg <- "</arg>"
+    close.args <- "  </args>"
+    arg1 <- paste0("-genepop:", time.step, ":\"", pop.name, "\":\"", traits, "\"")
+    log.file <- paste0(scenario, ".log")
+    arg2 <- paste(path, log.file, sep="\\")
+    block <- c(open.args, 
+               paste0(open.arg, arg1, close.arg),
+               paste0(open.arg, arg2, close.arg),
+               close.args)
+    return(block)
+  }
+  
+  #----------------------------------------------------------------------------#
+  
+  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(scenarios == "all") 
+    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
+  nscens <- seq_along(scenarios)
+  traits <- paste0(traits, collapse="\":\"" )
+  
+  fl <- "<?xml version=\"1.0\"?>"
+  open.block <- "<OutputTransform>"
+  close.block <- "</OutputTransform>"
+  scen_iter_TS <- lapply(nscens, gen.input, l.iter.folders, time.steps, pop.name, 
+                         traits, scenarios)
+  
+  wspace <- sub(pattern = "Results", replacement = "", path.results)
+  writeLines(c(fl, open.block, unlist(scen_iter_TS), close.block),
+             con=paste0(wspace, "batchFile_genepop_Reports.xml")) 
+}
