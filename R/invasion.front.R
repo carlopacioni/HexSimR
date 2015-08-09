@@ -33,14 +33,6 @@ invasion.front <- function(path.results, ncensus, value=1, patch.width,
   # Helper functions
   #----------------------------------------------------------------------------#
   
-  iter.folders <- function(dir.path, scenario) {
-    folders <- list.dirs(path=paste(dir.path, scenario, sep="/"), 
-                         recursive=FALSE)
-    indices <- grep(pattern=paste0("^", scenario), x=basename(folders))
-    scen.folders <- folders[indices]
-    return(scen.folders)
-  }
-  
   sel.max <-function(x, value) {
     m <- max(which(x >= value))
     return(m)
