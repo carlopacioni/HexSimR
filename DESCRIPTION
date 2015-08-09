@@ -3,8 +3,9 @@ Type: Package
 Title: an R package for post HexSim simulation analysis
 Version: 0.0.0.900
 Date: 2015-05-29
-Author: Carlo Pacioni [aut, cre]
-Maintainer: Carlo Pacioni <c.pacioni@murdoch.edu.au>
+Authors@R: as.person(c(
+  "Carlo Pacioni <c.pacioni@murdoch.edu.au> [aut, cre]",
+  "Jason Bryer [ctb]"))
 BugReports: https://github.com/carlopacioni/HexSimR/issues
 Description: This package offers a number of tools to collate, plot and analyse
  Population Viability Analysis (PVA) data that were generated with the software 
