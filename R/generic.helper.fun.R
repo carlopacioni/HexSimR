@@ -5,6 +5,7 @@
 #'   path for where results for each iterations are saved.
 #' @param dir.path See the path where the 'Results' folder is located 
 #' @param scenario Scenario to be processed. This is normally passed with lapply()
+#' @return A list where each element of the path to the replicates of a scenario
 iter.folders <- function(dir.path, scenario) {
   folders <- list.dirs(path=paste(dir.path, scenario, sep="/"), 
                        recursive=FALSE)
