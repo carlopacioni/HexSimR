@@ -7,9 +7,12 @@
 clean.genepop(fname, title = NULL)
 }
 \arguments{
-\item{fname}{A charater vector with the name of the file}
+\item{fname}{A charater vector with the name of the file including the path}
 
 \item{title}{A charater vector to be used to replace the first line in the file}
+}
+\value{
+Save to disk a cleaned up genepop input file and a character vector
 }
 \description{
 HexSim includes a 'structure block' at the end of its genepop input file

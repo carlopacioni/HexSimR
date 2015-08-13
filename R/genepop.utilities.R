@@ -11,8 +11,9 @@
 #'   the HexSim generated files, which are then re-saved with the same name and 
 #'   a suffix 'cleaned'.
 #'    
-#' @param fname A charater vector with the name of the file
+#' @param fname A charater vector with the name of the file including the path
 #' @param title A charater vector to be used to replace the first line in the file
+#' @return Save to disk a cleaned up genepop input file and a character vector
 #' @export      
   clean.genepop  <-  function(fname, title=NULL) {
     if(is.null(title)) title <- "Title missing"
@@ -31,9 +32,74 @@
     return(infile)
   }
 
+#' Remove illegal characters from several HexSim generated genepop input files
+#' 
+#' \code{multi.clean.genepop} is a wrapper for \code{clean.genepop} that processes
+#'   all HexSim generated genepop files within a given scenario(s). It assumes 
+#'   that the names of the report files were 
+#'   not changed from defaults. It reads the files in 
+#'   each of the scenario's iteration subfolder and processes them   
+#'   using \code{clean.genepop}.
+#'   
+#' \code{multi.clean.genepop} identifies the files searching for a text file 
+#'   whose root's name is the \emph{scenario_name} of the file and the text 
+#'   'REPORT_genepop', so if you have modofied the name of the files, this 
+#'   function won't work. Similarly, if you have added files named with a pattern
+#'   consistent with what described above, the function will try to process these
+#'   as well.   
+#'   
+#' When using \code{multi.clean.genepop} there is no option to choose the title 
+#'   of the genepop files 
+#'   (i.e. the first line of the genepop input file).
+#'   
+#'   @inheritParams multi.reports
+#'   @return A list of \code{clean.genepop} for each scenario
+#'   @seealso clean.genepop
+#'   @export
+multi.clean.genepop <- function(path.results=NULL, scenarios="all", 
+                                pop.name=NULL) {
+  #----------------------------------------------------------------------------#
+  # Helper functions
+  #----------------------------------------------------------------------------#
+  
+  apply.clean.gen <- function(nscen, l.iter.folders, scenarios, pop.name) {
+    iters <- seq_along(l.iter.folders[[nscen]])
+    gen.names <- lapply(iters, file.names, nscen, l.iter.folders, scenarios, 
+                        pop.name)
+    infiles <- lapply(gen.names, byTS)
+    return(infiles)
+  }
+  
+  byTS <- function (gen.name) {
+    l.infiles <- lapply(gen.name, clean.genepop)
+    return(l.infiles)
+  }
+  
+  file.names <- function(iter, nscen, l.iter.folders, scenarios, pop.name) {
+    n <- list.files(l.iter.folders[[nscen]][iter], 
+                    pattern=paste0(scenarios[nscen], "_REPORT_genepop_", 
+                                   pop.name, ".*", "txt$"), full.names=TRUE)
+    return(n)
+  }
+  #----------------------------------------------------------------------------#
+  
+  if(is.null(pop.name)) stop("Please, provide the name of the population")
+  txt <- "Please, select the 'Results' folder within the workspace"
+  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(scenarios == "all") 
+    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  
+  l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
+  nscens <- seq_along(scenarios)
+  
+  gen.files <- lapply(nscens, apply.clean.gen, l.iter.folders, scenarios, pop.name)
+  
+  return(gen.files)
+}
 
-#' Write a batch .xml file to generate genepop input files for all replicates of 
-#'   given scenario(s)
+
+#' Write a .xml file to generate genepop input files in batch mode for all 
+#' replicates of given scenario(s)
 #' 
 #' Generate a batch .xml file in the workspace directory that will instruct 
 #'   OutputTransformer.exe to generate genepop input files for all replicates of 
