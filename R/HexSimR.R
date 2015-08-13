@@ -360,7 +360,8 @@ ranges <- function(rep.ranges=NULL, hx=NULL, events=NULL, start="min", end="max"
   h <- c(h, rep("NA", ncols - length(h)))
   col.class <- c(rep("integer", 2), rep("character", 2), rep("integer", 3), 
                  "numeric", "integer", rep("NULL", ncols - 9))
-  range <- read.csv(rep.ranges, h=F, skip=1, colClasses=col.class, col.names=h)
+  range <- read.csv(rep.ranges, header=FALSE, skip=1, colClasses=col.class, 
+                    col.names=h)
   range <- data.table(range)
   summary <- range[, lapply(.SD, mean), .SDcol=h[7:9], by=list(EventName,TimeStep)]
   summary[, nGroups := range[, length(GroupID), by=list(EventName,TimeStep)][, V1]]
