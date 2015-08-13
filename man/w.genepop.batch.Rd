@@ -2,8 +2,8 @@
 % Please edit documentation in R/genepop.utilities.R
 \name{w.genepop.batch}
 \alias{w.genepop.batch}
-\title{Write a batch .xml file to generate genepop input files for all replicates of
-  given scenario(s)}
+\title{Write a .xml file to generate genepop input files in batch mode for all
+replicates of given scenario(s)}
 \usage{
 w.genepop.batch(path.results, scenarios = "all", time.steps = 1, pop.name,
   traits)
