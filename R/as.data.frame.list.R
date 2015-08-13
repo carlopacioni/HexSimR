@@ -29,22 +29,20 @@
 #' @export
 #' @examples
 #'     test1 <- list( c(a='a',b='b',c='c'), c(a='d',b='e',c='f'))
-#'     as.data.frame(test1)
+#'     HexSimR:::as.data.frame.list(test1)
 #'     
 #'     test2 <- list( c('a','b','c'), c(a='d',b='e',c='f'))
-#'     as.data.frame(test2)
+#'     HexSimR:::as.data.frame.list(test2)
 #'     
 #'     test3 <- list('Row1'=c(a='a',b='b',c='c'), 'Row2'=c(var1='d',var2='e',var3='f'))
-#'     as.data.frame(test3)
+#'     HexSimR:::as.data.frame.list(test3)
 #'     
 #'     test4 <- list('Row1'=letters[1:5], 'Row2'=letters[1:7], 'Row3'=letters[8:14])
-#'     as.data.frame(test4)
+#'     HexSimR:::as.data.frame.list(test4)
 #'     
 #'     test5 <- list(letters[1:10], letters[11:20])
-#'     as.data.frame(test5)
+#'     HexSimR:::as.data.frame.list(test5)
 #'     
-#'     test6 <- list(list(letters), letters)
-#'     as.data.frame(test6)
 as.data.frame.list <- function(x, row.names=NULL, optional=FALSE, ...) {
   if(!all(unlist(lapply(x, class)) %in% 
             c('raw','character','complex','numeric','integer','logical'))) {
@@ -92,27 +90,4 @@ as.data.frame.list <- function(x, row.names=NULL, optional=FALSE, ...) {
     row.names(df) <- row.names
   }
   return(df)
-}
-
-if(FALSE) { #Test the function
-  require(devtools)
-  source_gist(4676064)
-  
-  test1 <- list( c(a='a',b='b',c='c'), c(a='d',b='e',c='f'))
-  as.data.frame(test1)
-  
-  test2 <- list( c('a','b','c'), c(a='d',b='e',c='f'))
-  as.data.frame(test2)
-  
-  test3 <- list('Row1'=c(a='a',b='b',c='c'), 'Row2'=c(a='d',var2='e',var3='f'))
-  as.data.frame(test3)
-  
-  test4 <- list('Row1'=letters[1:5], 'Row2'=letters[1:7], 'Row3'=letters[8:14])
-  as.data.frame(test4)
-  
-  test5 <- list(letters[1:10], letters[11:20])
-  as.data.frame(test5)
-  
-  test6 <- list(list(letters), letters)
-  as.data.frame(test6)
 }
