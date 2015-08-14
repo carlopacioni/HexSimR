@@ -19,7 +19,7 @@
 #'   \code{HexSimR} knows which one to pick to carry out the calculations. 
 #'     
 #' @param ncensus The census number to be processed
-#' @param value The treshold occupancy value 
+#' @param value The threshold occupancy value 
 #' @param patch.width The width of the patch 
 #' @inheritParams collate.census 
 #' @return A list with three elements: the combined data, the mean and standard

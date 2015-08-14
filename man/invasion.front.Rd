@@ -12,7 +12,7 @@ invasion.front(path.results, ncensus, value = 1, patch.width,
 
 \item{ncensus}{The census number to be processed}
 
-\item{value}{The treshold occupancy value}
+\item{value}{The threshold occupancy value}
 
 \item{patch.width}{The width of the patch}
 

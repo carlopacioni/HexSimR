@@ -15,20 +15,20 @@ SSMD.move(path.results = NULL, scenarios = "all", base = NULL,
 \item{base}{A character vector with the name of the scenario to be used as
 term of comparison}
 
-\item{sum.move}{The name of the file where the data are (indluding the extension).}
+\item{sum.move}{The name of the file where the data are (including the extension).}
 }
 \value{
 A list with SSMD in the first element and p-values in the second.
-  These resutls are also saved to disk as two tabs in an excel file.
+  These results are also saved to disk as two tabs in an excel file.
 }
 \description{
-\code{SSMD.move} carrries out pairwise compasisons of the mean movement distances
+\code{SSMD.move} carries out pairwise comparisons of the mean movement distances
   against those of a baseline scenario using Strictly Standardised Mean Difference
   (SSMD, Zhang 2007).
 }
 \details{
 It directly reads the .csv files written with \code{move}. It assumes that all
-  files have the same name, which, if different from the deafualt, can be passed
+  files have the same name, which, if different from the default, can be passed
   with the argument\code{sum.move}.
 }
 \references{

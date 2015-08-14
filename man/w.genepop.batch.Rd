@@ -17,7 +17,7 @@ w.genepop.batch(path.results, scenarios = "all", time.steps = 1, pop.name,
 
 \item{pop.name}{The name of the population}
 
-\item{traits}{A character vector with the name of the traints to be included}
+\item{traits}{A character vector with the name of the traits to be included}
 }
 \value{
 A .xml file named batchFile_genepop_Reports.xml
@@ -26,6 +26,6 @@ A .xml file named batchFile_genepop_Reports.xml
 Generate a batch .xml file in the workspace directory that will instruct
   OutputTransformer.exe to generate genepop input files for all replicates of
   the scenario(s) passed with \code{scenarios}. If \code{scenarios="all"} is
-  used, then all the scenairos will be inlcuded.
+  used, then all the scenarios will be included.
 }
 

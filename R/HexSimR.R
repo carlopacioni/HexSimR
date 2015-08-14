@@ -120,9 +120,96 @@ collate.census <- function(path.results=NULL, scenarios="all") {
   return(list(data=data.comb, means=scen.means, sds=scen.sds))
 }
 
+#' Carry out calculations on a subset of variables in a specific census file
+#' 
+#' \code{census.calc} carries out calculations indicated with the argument \code{bin.f}.
+#'   For example, this will be needed when trait are sub-classes and there is
+#'   the need to sum a subset of them (e.g. traits are divided by gender and age
+#'   and the user wants to have the total by gender) or calculate a proportion 
+#'   (e.g. sex-ratio or over the total). Therefore, typically, these operations 
+#'   will be sums, subtractions, divisions or 
+#'   multiplications. However, \code{bin.f} can take any function that it is
+#'   compatible with \code{Reduce()} (default is \code{"+"}).
+#'   
+#' The existing census file will be overwritten with the new census file, which 
+#'   will include the new variable.   
+#'   
+#' The subset of data to be used by \code{bin.f} is indicated with \code{headers}.
+#'   This argument takes a character vector with the headers of the census files. 
+#'   These have to match exactly the headers in the census file (including spaces).
+#'   \code{headers} is internally modified with \code{make.names()} to guarantee 
+#'   that names are syntactically valid. Therefore, a character vector where the
+#'   headers were already modified and would match the results of \code{make.names()}
+#'   is also acceptable.
+#'    
+#' The argument \code{var.name} is the name of the new variable being calculated.
+#'   If none is passed, then, by default, \code{census.calc} will paste together
+#'   the names passed with \code{headers} separated by the operator passed with
+#'   \code{bin.f}. If \code{bin.f} is a function (i.e. a R object of class 
+#'   'function'), the default behaviour will fail and an error is reported. In 
+#'   this case, the user have to pass a valid \code{var.name}.
+#' 
+#' If more then one calculations needs to be performed, of the same calculations
+#'   needs to be performed on different groups of variables (headers), then 
+#'   \code{census.calc} needs to be run multiple times.
+#'     
+#' @param headers A character vector matching exactly the headers of the census 
+#'   file columns that are to be used by \code{bin.f} 
+#' @param var.name A character vector to name the new variable. Mandatory if 
+#'   \code{bin.f} is of class \code{function}. See details.
+#' @param bin.f A character vector to pass the binary function to be applied to 
+#'   the columns identified by \code{headers} (Default: \code{"+"})
+#' @inheritParams collate.census 
+#' @inheritParams invasion.front 
+#' @return Save census file to disk and return a list with the new census files
+#' @import data.table
+#' @export
+census.calc <- function(path.results, ncensus, headers, var.name=NULL, bin.f="+",
+                      scenarios="all") {
+  #----------------------------------------------------------------------------#
+  # Helper functions
+  #----------------------------------------------------------------------------#
+  
+  byiter <- function(iter, l.iter.folders, census.file, nscen, var.name, bin.f, 
+                     headers) {
+    f <- paste(l.iter.folders[[nscen]][iter], census.file, sep="/")
+    census.data <- fread(f)  
+    setnames(census.data, make.names(names(census.data)))   
+    census.data[, (var.name) := Reduce(bin.f, .SD), .SDcols=headers, by="Time.Step"]
+    write.csv(census.data, f, row.names=FALSE)
+    return(census.data)
+  }
+  
+  byscen <- function (nscen, scenarios, l.iter.folders, ncensus, var.name, bin.f, 
+                      headers) {
+    census.file <- paste0(scenarios[[nscen]], ".", ncensus, ".", "csv")
+    iters <- seq_along(l.iter.folders[[nscen]])    
+    l.scen.i <- lapply(iters, byiter, l.iter.folders, census.file, nscen, 
+                       var.name, bin.f, headers)
+    
+    return(l.scen.i)
+  }
+  #----------------------------------------------------------------------------#
+  if(is.function(bin.f) & is.null(var.name)) 
+    stop("Please, pass a character vector to var.name")
+  txt <- "Please, select the 'Results' folder within the workspace"
+  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(scenarios == "all") 
+    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  headers <- make.names(headers)
+  if(is.null(var.name)) 
+    var.name <- paste0(headers, collapse=bin.f)
+  l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
+  nscens <- seq_along(scenarios)
+  new.census <- lapply(nscens, byscen, scenarios, l.iter.folders, ncensus, 
+                       var.name, bin.f, headers)
+  return(new.census)
+}
+
+
 #' Compare census values against a baseline scenario.
 #' 
-#' \code{SSMD.census} carrries out pairwise compasisons of the census values 
+#' \code{SSMD.census} carries out pairwise comparisons of the census values 
 #'   against a baseline scenario using Strictly Standardised Mean Difference 
 #'   (SSMD, Zhang 2007).  
 #'   
@@ -134,7 +221,7 @@ collate.census <- function(path.results=NULL, scenarios="all") {
 #' @param ncensus The number of the census to be considered
 #' @inheritParams collate.census
 #' @return A list with SSMD in the first element and p-values in the second. 
-#'   These resutls are also saved to disk as two tabs in an excel file.
+#'   These results are also saved to disk as two tabs in an excel file.
 #' @references
 #' Zhang, X. D. 2007. A pair of new statistical parameters for quality control
 #' in RNA interference high-throughput screening assays. Genomics 89:552-561.
@@ -201,18 +288,18 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
 
 #' Compare mean movement distances against those of a baseline scenario.
 #' 
-#' \code{SSMD.move} carrries out pairwise compasisons of the mean movement distances 
+#' \code{SSMD.move} carries out pairwise comparisons of the mean movement distances 
 #'   against those of a baseline scenario using Strictly Standardised Mean Difference 
 #'   (SSMD, Zhang 2007).  
 #'   
 #' It directly reads the .csv files written with \code{move}. It assumes that all 
-#'   files have the same name, which, if different from the deafualt, can be passed
+#'   files have the same name, which, if different from the default, can be passed
 #'   with the argument\code{sum.move}.
 #'   
-#' @param sum.move The name of the file where the data are (indluding the extension).
+#' @param sum.move The name of the file where the data are (including the extension).
 #' @inheritParams SSMD.census
 #' @return A list with SSMD in the first element and p-values in the second. 
-#'   These resutls are also saved to disk as two tabs in an excel file.
+#'   These results are also saved to disk as two tabs in an excel file.
 #' @references
 #' Zhang, X. D. 2007. A pair of new statistical parameters for quality control
 #' in RNA interference high-throughput screening assays. Genomics 89:552-561.
@@ -395,17 +482,17 @@ ranges <- function(rep.ranges=NULL, hx=NULL, events=NULL, start="min", end="max"
 
 #' Compare census values against a baseline scenario.
 #' 
-#' \code{SSMD.census} carrries out pairwise compasisons of the census values 
+#' \code{SSMD.census} carries out pairwise comparisons of the census values 
 #'   against a baseline scenario using Strictly Standardised Mean Difference 
 #'   (SSMD, Zhang 2007).  
 #'   
 #' It takes as data input the output from \code{collate.census} (it reads data
 #'   directly from xls files). 
 #'   
-#' @param sum.ranges The name of the file where the data are (indluding the extension).
+#' @param sum.ranges The name of the file where the data are (including the extension).
 #' @inheritParams SSMD.census
 #' @return A list with SSMD in the first element and p-values in the second. 
-#'   These resutls are also saved to disk as two tabs in an excel file.
+#'   These results are also saved to disk as two tabs in an excel file.
 #' @references
 #' Zhang, X. D. 2007. A pair of new statistical parameters for quality control
 #' in RNA interference high-throughput screening assays. Genomics 89:552-561.

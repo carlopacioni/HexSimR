@@ -7,9 +7,9 @@
 clean.genepop(fname, title = NULL)
 }
 \arguments{
-\item{fname}{A charater vector with the name of the file including the path}
+\item{fname}{A character vector with the name of the file including the path}
 
-\item{title}{A charater vector to be used to replace the first line in the file}
+\item{title}{A character vector to be used to replace the first line in the file}
 }
 \value{
 Save to disk a cleaned up genepop input file and a character vector

@@ -28,7 +28,7 @@ A list of \code{clean.genepop} for each scenario
 \details{
 \code{multi.clean.genepop} identifies the files searching for a text file
   whose root's name is the \emph{scenario_name} of the file and the text
-  'REPORT_genepop', so if you have modofied the name of the files, this
+  'REPORT_genepop', so if you have modified the name of the files, this
   function won't work. Similarly, if you have added files named with a pattern
   consistent with what described above, the function will try to process these
   as well.

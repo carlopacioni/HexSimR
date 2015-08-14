@@ -15,14 +15,14 @@ SSMD.ranges(path.results = NULL, scenarios = "all", base = NULL,
 \item{base}{A character vector with the name of the scenario to be used as
 term of comparison}
 
-\item{sum.ranges}{The name of the file where the data are (indluding the extension).}
+\item{sum.ranges}{The name of the file where the data are (including the extension).}
 }
 \value{
 A list with SSMD in the first element and p-values in the second.
-  These resutls are also saved to disk as two tabs in an excel file.
+  These results are also saved to disk as two tabs in an excel file.
 }
 \description{
-\code{SSMD.census} carrries out pairwise compasisons of the census values
+\code{SSMD.census} carries out pairwise comparisons of the census values
   against a baseline scenario using Strictly Standardised Mean Difference
   (SSMD, Zhang 2007).
 }

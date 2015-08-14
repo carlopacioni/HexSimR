@@ -11,8 +11,8 @@
 #'   the HexSim generated files, which are then re-saved with the same name and 
 #'   a suffix 'cleaned'.
 #'    
-#' @param fname A charater vector with the name of the file including the path
-#' @param title A charater vector to be used to replace the first line in the file
+#' @param fname A character vector with the name of the file including the path
+#' @param title A character vector to be used to replace the first line in the file
 #' @return Save to disk a cleaned up genepop input file and a character vector
 #' @export      
   clean.genepop  <-  function(fname, title=NULL) {
@@ -43,7 +43,7 @@
 #'   
 #' \code{multi.clean.genepop} identifies the files searching for a text file 
 #'   whose root's name is the \emph{scenario_name} of the file and the text 
-#'   'REPORT_genepop', so if you have modofied the name of the files, this 
+#'   'REPORT_genepop', so if you have modified the name of the files, this 
 #'   function won't work. Similarly, if you have added files named with a pattern
 #'   consistent with what described above, the function will try to process these
 #'   as well.   
@@ -104,10 +104,10 @@ multi.clean.genepop <- function(path.results=NULL, scenarios="all",
 #' Generate a batch .xml file in the workspace directory that will instruct 
 #'   OutputTransformer.exe to generate genepop input files for all replicates of 
 #'   the scenario(s) passed with \code{scenarios}. If \code{scenarios="all"} is
-#'   used, then all the scenairos will be inlcuded.
+#'   used, then all the scenarios will be included.
 #' 
 #' @param time.steps A numeric vector to indicate the time step to be included
-#' @param traits A character vector with the name of the traints to be included 
+#' @param traits A character vector with the name of the traits to be included 
 #' @inheritParams collate.census 
 #' @inheritParams multi.reports 
 #' @return A .xml file named batchFile_genepop_Reports.xml
