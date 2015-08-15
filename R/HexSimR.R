@@ -147,7 +147,9 @@ collate.census <- function(path.results=NULL, scenarios="all") {
 #'   the names passed with \code{headers} separated by the operator passed with
 #'   \code{bin.f}. If \code{bin.f} is a function (i.e. a R object of class 
 #'   'function'), the default behaviour will fail and an error is reported. In 
-#'   this case, the user have to pass a valid \code{var.name}.
+#'   this case, the user have to pass a valid \code{var.name}. It is recommended 
+#'   to use letters, numbers and the dot or underline ("_") characters, to start with 
+#'   a letter or the dot not followed by a number. 
 #' 
 #' If more then one calculations needs to be performed, of the same calculations
 #'   needs to be performed on different groups of variables (headers), then 
