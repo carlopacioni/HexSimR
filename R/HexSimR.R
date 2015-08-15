@@ -276,8 +276,10 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
   names(ssmds) <- scenarios
   pvalues <- lapply(ssmds, pval)
   names(pvalues) <- scenarios
-  wb <- loadWorkbook(paste0(path.results, "/", "SSMD_census", ncensus, ".", "xlsx"), 
-                     create=TRUE)
+  
+  wb.name <- paste0(path.results, "/", "SSMD_census", ncensus, ".", "xlsx")
+  if(file.exists(wb.name)) file.remove(wb.name)
+  wb <- loadWorkbook(wb.name, create=TRUE)
   lapply(seq_along(scenarios), ssmd2xlsx, scenarios, ssmds, pvalues, wb)
   
   return(list(ssmds, pvalues))
@@ -546,7 +548,10 @@ SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL,
   names(ssmds) <- scenarios
   pvalues <- lapply(ssmds, pval)
   names(pvalues) <- scenarios
-  wb <- loadWorkbook(paste0(path.results, "/", "SSMD_ranges.xlsx"), create=TRUE)
+  
+  wb.name <- paste0(path.results, "/", "SSMD_ranges", ".", "xlsx")
+  if(file.exists(wb.name)) file.remove(wb.name)
+  wb <- loadWorkbook(wb.name, create=TRUE)
   lapply(seq_along(scenarios), ssmd2xlsx, scenarios, ssmds, pvalues, wb)
   
   return(list(ssmds, pvalues))
