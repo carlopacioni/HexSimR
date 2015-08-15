@@ -34,8 +34,8 @@ w.combine.log.batch <- function(path.results, scenarios="all", dir.out=NULL) {
   #----------------------------------------------------------------------------#
   
   if(is.null(path.results)) path.results <- choose.dir(caption = txt)
-  if(scenarios == "all") 
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  suppressWarnings(if(scenarios == "all") 
+    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   if(is.null(dir.out)) dir.out <- getwd()
   l.coms <- lapply(scenarios, com.scenario, path.results)
    

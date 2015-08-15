@@ -88,8 +88,8 @@ invasion.front <- function(path.results, ncensus, value=1, patch.width,
   #----------------------------------------------------------------------------#
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- choose.dir(caption = txt)
-  if(scenarios == "all") 
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  suppressWarnings(if(scenarios == "all") 
+    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   
   l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
   nscens <- seq_along(scenarios)
