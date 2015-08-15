@@ -31,14 +31,8 @@ collate.census <- function(path.results=NULL, scenarios="all") {
   
   byiter <- function(iter, l.iter.folders, census.list, census, nscen) {
     f <- paste(l.iter.folders[[nscen]][iter], census.list[census], sep="/")
-    # census.data <- fread(f) # This currently doesn't work because 
-    # there is a comma at the end of header row 
-    census.data <- fread(f, skip=1)
-    h <- c("Run", "Time.Step", "Population.Size", "Group.Members",
-           "Floaters",   "Lambda" )
-    ncols <- dim(census.data)[2]
-    traits <- paste0("TraitInd", 0:(ncols - 7))
-    setnames(census.data, c(h, traits))
+    census.data <- fread(f)
+    setnames(census.data, make.names(names(census.data)))
     return(census.data)
   }
   

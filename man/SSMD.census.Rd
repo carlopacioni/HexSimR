@@ -19,7 +19,8 @@ term of comparison}
 }
 \value{
 A list with SSMD in the first element and p-values in the second.
-  These results are also saved to disk as two tabs in an excel file.
+  These results are also saved to disk as two tabs in an excel file named
+  "SSMD_census[ncensus].xlsx", where [ncensus] is the number of the census file.
 }
 \description{
 \code{SSMD.census} carries out pairwise comparisons of the census values
