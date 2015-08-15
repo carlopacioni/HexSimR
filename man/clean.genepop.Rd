@@ -7,7 +7,8 @@
 clean.genepop(fname, title = NULL)
 }
 \arguments{
-\item{fname}{A character vector with the name of the file including the path}
+\item{fname}{A character vector with the name of the input file including the
+path}
 
 \item{title}{A character vector to be used to replace the first line in the file}
 }
@@ -22,8 +23,8 @@ HexSim includes a 'structure block' at the end of its genepop input file
   reads genepop input files (e.g. the R package diveRsity). Similarly, the
   space between the word 'Trait' and the trait number, and the equal and column
   symbols in the first line of the file can cause unexpected
-  behaviour in some applications. All these unusual features are removed from
-  the HexSim generated files, which are then re-saved with the same name and
-  a suffix 'cleaned'.
+  behaviours in some applications. All these unusual features are removed from
+  the HexSim generated files, which are then re-saved with the same name,
+  a suffix 'cleaned' and an extensin ".gen".
 }
 

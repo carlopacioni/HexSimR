@@ -7,11 +7,12 @@
 #'   reads genepop input files (e.g. the R package diveRsity). Similarly, the 
 #'   space between the word 'Trait' and the trait number, and the equal and column
 #'   symbols in the first line of the file can cause unexpected 
-#'   behaviour in some applications. All these unusual features are removed from
-#'   the HexSim generated files, which are then re-saved with the same name and 
-#'   a suffix 'cleaned'.
+#'   behaviours in some applications. All these unusual features are removed from
+#'   the HexSim generated files, which are then re-saved with the same name,  
+#'   a suffix 'cleaned' and an extensin ".gen".
 #'    
-#' @param fname A character vector with the name of the file including the path
+#' @param fname A character vector with the name of the input file including the 
+#'   path
 #' @param title A character vector to be used to replace the first line in the file
 #' @return Save to disk a cleaned up genepop input file and a character vector
 #' @export      
@@ -28,7 +29,7 @@
     writeLines(infile, con=paste0(dirname(fname),
                                   "/",
                                   sub(".txt", "", basename(fname)), 
-                                  "_cleaned", ".txt"))
+                                  "_cleaned", ".gen"))
     return(infile)
   }
 
@@ -166,3 +167,35 @@ w.genepop.batch <- function(path.results, scenarios="all", time.steps=1,
   writeLines(c(fl, open.block, unlist(scen_iter_TS), close.block),
              con=paste0(wspace, "batchFile_genepop_Reports.xml")) 
 }
+#' Genetic distance
+#' 
+#' \code{gen.dist} calculates the Joist's D between all possible population pairs
+#'    using the R package \code{mmod}.
+#'    
+#' This function takes the output from the function \code{clean.genepop} 
+#'   (or \code{multi.clean.genepop}) as input and uses the R package \code{adegenet}
+#'   to convert the input in a genind object. 
+#'     
+#' A text file with extension .pairD that contains a pairwise distance  matrix 
+#'   is saved to disk.
+#'   
+#' \code{mean.type} can be set to either "arithmetic" or "harmonic" (default), 
+#'   which is used to calculate the global estimates of Hs and Ht (see 
+#'   \code{mmod}'s manual for details).
+#' 
+#' @param mean.type The type of mean to be calculated over multiple loci
+#' @inheritParams clean.genepop
+#' @import adegenet
+#' @import mmod
+#' @export
+gen.dist <- function(fname, mean.type="harmonic") {
+  adegen.data <- adegenet::read.genepop(fname, ncode=3L, quiet=TRUE)
+  gen.dist <- pairwise_D(adegen.data, hsht_mean=mean.type)
+  dir.out <- dirname(fname)
+  dist.name <- basename(fname)
+  dist.name <- sub("REPORT_genepop_", "", dist.name)
+  dist.name <- sub("_cleaned.gen", "", dist.name)
+  dist.name <- paste(dist.name, "pairD", sep=".")
+  write.csv(as.matrix(gen.dist), file=paste0(dir.out, "/", dist.name))
+}
+
