@@ -113,7 +113,7 @@ multi.clean.genepop <- function(path.results=NULL, scenarios="all",
 #' @inheritParams multi.reports 
 #' @return A .xml file named batchFile_genepop_Reports.xml
 #' @export
-w.genepop.batch <- function(path.results, scenarios="all", time.steps=1, 
+w.genepop.batch <- function(path.results=NULL, scenarios="all", time.steps=1, 
                               pop.name, traits) {
   #----------------------------------------------------------------------------#
   # Helper functions

@@ -20,7 +20,7 @@
 #' @inheritParams collate.census 
 #' @return A .bat file named comb_log_files.bat
 #' @export
-w.combine.log.batch <- function(path.results, scenarios="all", dir.out=NULL) {
+w.combine.log.batch <- function(path.results=NULL, scenarios="all", dir.out=NULL) {
   #----------------------------------------------------------------------------#
   # Helper functions
   #----------------------------------------------------------------------------#

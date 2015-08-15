@@ -27,7 +27,7 @@
 #' @import data.table
 #' @import XLConnect
 #' @export
-invasion.front <- function(path.results, ncensus, value=1, patch.width, 
+invasion.front <- function(path.results=NULL, ncensus, value=1, patch.width, 
                            scenarios="all") {
   #----------------------------------------------------------------------------#
   # Helper functions

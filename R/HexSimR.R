@@ -160,8 +160,8 @@ collate.census <- function(path.results=NULL, scenarios="all") {
 #' @return Save census file to disk and return a list with the new census files
 #' @import data.table
 #' @export
-census.calc <- function(path.results, ncensus, headers, var.name=NULL, bin.f="+",
-                      scenarios="all") {
+census.calc <- function(path.results=NULL, ncensus, headers, var.name=NULL, 
+                        bin.f="+", scenarios="all") {
   #----------------------------------------------------------------------------#
   # Helper functions
   #----------------------------------------------------------------------------#
