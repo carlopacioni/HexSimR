@@ -223,7 +223,8 @@ census.calc <- function(path.results, ncensus, headers, var.name=NULL, bin.f="+"
 #' @param ncensus The number of the census to be considered
 #' @inheritParams collate.census
 #' @return A list with SSMD in the first element and p-values in the second. 
-#'   These results are also saved to disk as two tabs in an excel file.
+#'   These results are also saved to disk as two tabs in an excel file named 
+#'   "SSMD_census[ncensus].xlsx", where [ncensus] is the number of the census file.
 #' @references
 #' Zhang, X. D. 2007. A pair of new statistical parameters for quality control
 #' in RNA interference high-throughput screening assays. Genomics 89:552-561.
