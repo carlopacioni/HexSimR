@@ -1,11 +1,11 @@
 #' Calculate the progressive occupancy of an array of hexagons
 #' 
-#' The user has to set up an array of patches (which may comprise on or more 
-#'   hexagons and then determine the occupancy 
+#' The user has to set up an array of patches (which may comprise of one or more 
+#'   hexagons) and then determine the occupancy 
 #'   of these patches during the simulations. This can be achieved by generating 
-#'   a sequenced trait linked to an accumulator that it is updated with a 
+#'   a sequenced trait linked to an accumulator that it is updated with an 
 #'   'individual location' updater. Finally, by setting up a census event that 
-#'   summarises the number of individuals within each patch it will be 
+#'   summarises the number of individuals within each patch, it will be 
 #'   possible to use this function to calculate the progress of the front of 
 #'   invasion across the array of hexagons.
 #'   
@@ -15,15 +15,15 @@
 #'   'number' will depend on how many census event you have in the HexSim sequence.
 #'   The first census event will be saved with the number 0, the second with the
 #'   number 1 and so forth. The number of the census file that holds the individual
-#'   location data is the one that need to be passed to \code{census} so that 
+#'   location data is the one that need to be passed to \code{ncensus} so that 
 #'   \code{HexSimR} knows which one to pick to carry out the calculations. 
 #'     
 #' @param ncensus The census number to be processed
 #' @param value The threshold occupancy value 
 #' @param patch.width The width of the patch 
 #' @inheritParams collate.census 
-#' @return A list with three elements: the combined data, the mean and standard
-#'   deviation 
+#' @return A list with three elements: the mean and standard
+#'   deviation for each time step and overall. 
 #' @import data.table
 #' @import XLConnect
 #' @export
