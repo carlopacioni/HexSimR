@@ -22,9 +22,8 @@
     infile <- gsub(pattern=" \\(.*\\)", replacement="", rl)
     infile <- gsub(pattern="Trait ", replacement="Trait", infile)
     cut.off <- grep(pattern="^\\[\\[Structure", infile)
-    if(cut.off > 1) {
-      infile <- infile[1:cut.off - 1]
-    }
+    if(length(cut.off) > 0) infile <- infile[1:cut.off - 1]
+    
     infile[1] <- title
     writeLines(infile, con=paste0(dirname(fname),
                                   "/",
