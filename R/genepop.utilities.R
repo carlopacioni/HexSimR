@@ -251,3 +251,77 @@ multi.gen.dist <- function(path.results=NULL, scenarios="all", pop.name=NULL,
   return(gen.files)
 }
 
+#' Mean genetic distance
+#' 
+#' This function calculates the mean and standard deviation of the genetic 
+#'   distance (calcualted with \code{gen.dist}) across all replicates for the same
+#'   scenario.
+#' 
+#' @inheritParams collate.census 
+#' @inheritParams multi.reports
+#' @inheritParams invasion.front
+#' @inheritParams w.genepop.batch
+#' @return A list with three elements: the mean and standard
+#'   deviation for each time step and overall. 
+#' @import XLConnect
+#' @export
+m.gen.dist <- function(path.results=NULL, scenarios="all", pop.name, 
+                          traits) {
+  #----------------------------------------------------------------------------#
+  # Helper functions
+  #----------------------------------------------------------------------------#
+  # Return a list where each element is one scenario
+  byscen <- function (nscen, scenarios, l.iter.folders, traits) {
+    fnames <- list.files(path=scenarios[[nscen]][1], 
+                         pattern=paste0(scenarios[[nscen]], "_[0-9]+_", traits, 
+                                        ".pairD"))
+    iters <- seq_along(l.iter.folders[[nscen]]) 
+    l.TS.i <- lapply(fnames, byTS, iters, l.iter.folders, nscen)
+    return(l.TS.i)
+  }
+  
+  byTS <- function (fname, iters, l.iter.folders, nscen) {
+    l.data <- lapply(iters, read.data, fname, l.iter.folders, nscen)
+    outer.len <- length(l.data)
+    inner.len <-  dim(l.data[[1]])
+    arr <- array( unlist(l.data) , c(inner.len, outer.len) )
+    dist.means <- apply(arr, 1:2, mean, na.rm=TRUE)
+    dist.sds <- apply(arr, 1:2, sd, na.rm=TRUE)
+    
+    means.dist.name <- sub(pattern=".pairD", replacement="_means", fname)
+    wb.name <- paste0(l.iter.folders[[nscen]], "/", means.dist.name, ".xlsx")
+    if(file.exists(wb.name)) file.remove(wb.name)
+    wb <- loadWorkbook(wb.name, create=TRUE)
+    createSheet(wb, name="means")
+    writeWorksheet(wb, dist.means, sheet="means")
+    createSheet(wb, name="sd")
+    writeWorksheet(wb, dist.sds, sheet="sd")
+    saveWorkbook(wb)    
+    return(list(dist.means=dist.means, dist.means=dist.sds))
+  }
+  
+  read.data <- function(iter, fname, l.iter.folders, nscen) {
+    f <- paste(l.iter.folders[[nscen]][iter], fname, sep="/")
+    dist.data <- as.matrix(read.csv(f, row.names=1)) 
+    return(dist.data)
+  }
+  
+  trait.assembler <- function(traits) {
+    comb <- unlist(lapply(traits, function(trait) paste0("[", trait, "]")))
+    comb <- paste0(comb, collapse="")
+  }
+  #----------------------------------------------------------------------------#
+  txt <- "Please, select the 'Results' folder within the workspace"
+  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  suppressWarnings(if(scenarios == "all") 
+    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+  traits <- trait.assembler(traits)
+  
+  l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
+  nscens <- seq_along(scenarios)
+  means.gen.dist <- lapply(nscens, byscen, scenarios=scenarios, traits=traits,
+                     l.iter.folders=l.iter.folders)
+  
+  return(means.gen.dist)
+}
+
