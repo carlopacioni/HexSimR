@@ -5,8 +5,8 @@
 \title{Write a .xml file to generate genepop input files in batch mode for all
 replicates of given scenario(s)}
 \usage{
-w.genepop.batch(path.results, scenarios = "all", time.steps = 1, pop.name,
-  traits)
+w.genepop.batch(path.results = NULL, scenarios = "all", time.steps = 1,
+  pop.name, traits)
 }
 \arguments{
 \item{path.results}{The path for the 'Results' folder}

@@ -4,7 +4,7 @@
 \alias{invasion.front}
 \title{Calculate the progressive occupancy of an array of hexagons}
 \usage{
-invasion.front(path.results, ncensus, value = 1, patch.width,
+invasion.front(path.results = NULL, ncensus, value = 1, patch.width,
   scenarios = "all")
 }
 \arguments{

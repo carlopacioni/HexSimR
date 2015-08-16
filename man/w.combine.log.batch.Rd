@@ -5,7 +5,8 @@
 \title{Write a .bat file to generate combined log files in batch mode for all
  selected scenarios}
 \usage{
-w.combine.log.batch(path.results, scenarios = "all", dir.out = NULL)
+w.combine.log.batch(path.results = NULL, scenarios = "all",
+  dir.out = NULL)
 }
 \arguments{
 \item{path.results}{The path for the 'Results' folder}
