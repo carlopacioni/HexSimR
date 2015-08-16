@@ -199,3 +199,56 @@ gen.dist <- function(fname, mean.type="harmonic") {
   write.csv(as.matrix(gen.dist), file=paste0(dir.out, "/", dist.name))
 }
 
+#' Genetic distance of multiple scenarios
+#' 
+#' \code{multi.gen.dist} is a wrapper for \code{gen.dist} that generated
+#'   a matrix of genetic distanced for multiple scenarios. 
+#'   
+#' It will generate a matrix for each replicate within the scenario's folder.
+#'   
+#'   @inheritParams multi.reports
+#'   @inheritParams gen.dist
+#'   @return See \code{gen.dist} for each scenario
+#'   @seealso gen.dist
+#'   @export
+multi.gen.dist <- function(path.results=NULL, scenarios="all", pop.name=NULL,
+                           mean.type="harmonic") {
+  #----------------------------------------------------------------------------#
+  # Helper functions
+  #----------------------------------------------------------------------------#
+  
+  apply.gen.dist <- function(nscen, l.iter.folders, scenarios, pop.name) {
+    iters <- seq_along(l.iter.folders[[nscen]])
+    gen.names <- lapply(iters, file.names, nscen, l.iter.folders, scenarios, 
+                        pop.name)
+    distances <- lapply(gen.names, byTS)
+    return(distances)
+  }
+  
+  byTS <- function (gen.name) {
+    l.infiles <- lapply(gen.name, gen.dist, mean.type)
+    return(l.infiles)
+  }
+  
+  file.names <- function(iter, nscen, l.iter.folders, scenarios, pop.name) {
+    fn <- list.files(l.iter.folders[[nscen]][iter], 
+                    pattern=paste0(scenarios[nscen], "_REPORT_genepop_", pop.name,
+                                    ".*", "_cleaned.gen$"), full.names=TRUE)
+    return(fn)
+  }
+  #----------------------------------------------------------------------------#
+  
+  if(is.null(pop.name)) stop("Please, provide the name of the population")
+  txt <- "Please, select the 'Results' folder within the workspace"
+  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  suppressWarnings(if(scenarios == "all") 
+    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+  
+  l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
+  nscens <- seq_along(scenarios)
+  
+  gen.files <- lapply(nscens, apply.gen.dist, l.iter.folders, scenarios, pop.name)
+  
+  return(gen.files)
+}
+
