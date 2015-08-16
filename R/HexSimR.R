@@ -439,7 +439,7 @@ ranges <- function(rep.ranges=NULL, hx=NULL, events=NULL, start="min", end="max"
   if (!is.numeric(hx)) stop("Please provide a suitable value for hx")
   if (is.null(rep.ranges)) rep.ranges <- file.choose()
   message(paste("Parsing the report", basename(rep.ranges)))
-  h <- read.csv(rep.ranges, h=F, nrow=1, colClasses="character")
+  h <- read.csv(rep.ranges, header=FALSE, nrow=1, colClasses="character")
   h <- gsub(" ", "", h)
   message("Inspecting the file to detect the maximum number of columns")
   ncols <- max(count.fields(rep.ranges, sep=","))
