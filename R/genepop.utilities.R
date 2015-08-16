@@ -271,16 +271,17 @@ m.gen.dist <- function(path.results=NULL, scenarios="all", pop.name,
   # Helper functions
   #----------------------------------------------------------------------------#
   # Return a list where each element is one scenario
-  byscen <- function (nscen, scenarios, l.iter.folders, traits) {
-    fnames <- list.files(path=scenarios[[nscen]][1], 
-                         pattern=paste0(scenarios[[nscen]], "_[0-9]+_", traits, 
-                                        ".pairD"))
+  byscen <- function (nscen, scenarios, l.iter.folders, pop.name, traits, path.results) {
+    fnames <- list.files(path=l.iter.folders[[nscen]][1], 
+                         pattern=paste0(scenarios[[nscen]], "_", pop.name,
+                                        "_[0-9]+_", traits, ".pairD"))
     iters <- seq_along(l.iter.folders[[nscen]]) 
-    l.TS.i <- lapply(fnames, byTS, iters, l.iter.folders, nscen)
+    l.TS.i <- lapply(fnames, byTS, iters, l.iter.folders, nscen, path.results,
+                     scenarios)
     return(l.TS.i)
   }
   
-  byTS <- function (fname, iters, l.iter.folders, nscen) {
+  byTS <- function (fname, iters, l.iter.folders, nscen, path.results, scenarios) {
     l.data <- lapply(iters, read.data, fname, l.iter.folders, nscen)
     outer.len <- length(l.data)
     inner.len <-  dim(l.data[[1]])
@@ -289,7 +290,8 @@ m.gen.dist <- function(path.results=NULL, scenarios="all", pop.name,
     dist.sds <- apply(arr, 1:2, sd, na.rm=TRUE)
     
     means.dist.name <- sub(pattern=".pairD", replacement="_means", fname)
-    wb.name <- paste0(l.iter.folders[[nscen]], "/", means.dist.name, ".xlsx")
+    wb.name <- paste0(path.results, "/", scenarios[nscen], "/", 
+                      means.dist.name, ".xlsx")
     if(file.exists(wb.name)) file.remove(wb.name)
     wb <- loadWorkbook(wb.name, create=TRUE)
     createSheet(wb, name="means")
@@ -307,7 +309,7 @@ m.gen.dist <- function(path.results=NULL, scenarios="all", pop.name,
   }
   
   trait.assembler <- function(traits) {
-    comb <- unlist(lapply(traits, function(trait) paste0("[", trait, "]")))
+    comb <- unlist(lapply(traits, function(trait) paste0("\\[", trait, "\\]")))
     comb <- paste0(comb, collapse="")
   }
   #----------------------------------------------------------------------------#
@@ -319,8 +321,9 @@ m.gen.dist <- function(path.results=NULL, scenarios="all", pop.name,
   
   l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
   nscens <- seq_along(scenarios)
-  means.gen.dist <- lapply(nscens, byscen, scenarios=scenarios, traits=traits,
-                     l.iter.folders=l.iter.folders)
+  means.gen.dist <- lapply(nscens, byscen, scenarios=scenarios, pop.name, 
+                           traits=traits, l.iter.folders=l.iter.folders, 
+                           path.results)
   
   return(means.gen.dist)
 }
