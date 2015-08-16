@@ -15,8 +15,10 @@ License: GPL-3
 Depends:
     R (>= 3.2.0)
 Imports:
+    adegenet,
     data.table,
     ggplot2,
+    mmod,
     XLConnect
 Suggests:
     knitr,
