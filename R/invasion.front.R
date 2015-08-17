@@ -103,9 +103,9 @@ invasion.front <- function(path.results=NULL, ncensus, value=1, patch.width,
   scen.over <- lapply(progress, scen.overall)
   
   
-  scen.means <- rbindlist(scen.means)
-  scen.sds <- rbindlist(scen.sds)
-  scen.over <- rbindlist(scen.over)
+  scen.means <- rbindlist(scen.means, use.names=TRUE, fill=TRUE)
+  scen.sds <- rbindlist(scen.sds, use.names=TRUE, fill=TRUE)
+  scen.over <- rbindlist(scen.over, use.names=TRUE, fill=TRUE)
     
   Scenario <- scenarios
   scen.means <- cbind(Scenario, scen.means)
