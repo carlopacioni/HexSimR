@@ -41,7 +41,7 @@ collate.census <- function(path.results=NULL, scenarios="all") {
     # a list with data from one census type and one scenario for each iterations
     l.census.data <- lapply(iters, byiter, census=census, census.list=file.list, 
                             l.iter.folders=l.iter.folders, nscen)
-    census.data.comb <- rbindlist(l.census.data)
+    census.data.comb <- rbindlist(l.census.data, use.names=TRUE)
     return(census.data.comb)
   }
   
@@ -248,7 +248,7 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
     return(std_data)
   }
   
-  ssmd_census <- function(i, means, sds, mean_base) {
+  ssmd_census <- function(i, means, sds, mean_base, sd_base) {
     r <- (means[[i]][-c(1, 2)] - mean_base[-c(1, 2)]) / 
       sqrt(sds[[i]][-c(1, 2)]^2 + sd_base[-c(1, 2)]^2)
     return(r)
@@ -272,7 +272,8 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
   means <-lapply(scenarios, read.means, path.results, ncensus)
   sds <-lapply(scenarios, read.sds, path.results, ncensus)
   
-  ssmds <- lapply(seq_along(scenarios), ssmd_census, means, sds, mean_base)
+  ssmds <- lapply(seq_along(scenarios), ssmd_census, means, sds, 
+                  mean_base, sd_base)
   names(ssmds) <- scenarios
   pvalues <- lapply(ssmds, pval)
   names(pvalues) <- scenarios
@@ -462,9 +463,9 @@ ranges <- function(rep.ranges=NULL, hx=NULL, events=NULL, start="min", end="max"
   if(start == "min") start <- summary[, min(TimeStep)]
   if(end == "max") end <- summary[, max(TimeStep)]
   l.means <- lapply(events, mean.ranges, summary, start, end)
-  means <- rbindlist(l.means)
+  means <- rbindlist(l.means, use.names=TRUE)
   l.std <- lapply(events, sd.ranges, summary, start, end)
-  std <- rbindlist(l.std)
+  std <- rbindlist(l.std, use.names=TRUE)
   write.csv(summary, file=paste(dirname(rep.ranges), "descriptive_ranges.csv", 
                                 sep="/"))
   wb.name <- paste(dirname(rep.ranges), "summary_ranges.xlsx", sep="/")
