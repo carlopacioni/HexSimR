@@ -9,9 +9,9 @@ multi.reports(path.results = NULL, scenarios = "all", pop.name = NULL,
   end = "max")
 }
 \arguments{
-\item{path.results}{The path for the 'Results' folder}
+\item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or "all"}
 
 \item{pop.name}{The name of the population}
 

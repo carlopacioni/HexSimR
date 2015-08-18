@@ -25,6 +25,6 @@ HexSim includes a 'structure block' at the end of its genepop input file
   symbols in the first line of the file can cause unexpected
   behaviours in some applications. All these unusual features are removed from
   the HexSim generated files, which are then re-saved with the same name,
-  a suffix 'cleaned' and an extensin ".gen".
+  a suffix "cleaned" and an extensin ".gen".
 }
 

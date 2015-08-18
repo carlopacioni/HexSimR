@@ -2,15 +2,15 @@
 % Please edit documentation in R/genepop.utilities.R
 \name{multi.gen.dist}
 \alias{multi.gen.dist}
-\title{Genetic distance of multiple scenarios}
+\title{Genetic distance for multiple scenarios}
 \usage{
 multi.gen.dist(path.results = NULL, scenarios = "all", pop.name = NULL,
   mean.type = "harmonic")
 }
 \arguments{
-\item{path.results}{The path for the 'Results' folder}
+\item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or "all"}
 
 \item{pop.name}{The name of the population}
 
@@ -20,11 +20,11 @@ multi.gen.dist(path.results = NULL, scenarios = "all", pop.name = NULL,
 See \code{gen.dist} for each scenario
 }
 \description{
-\code{multi.gen.dist} is a wrapper for \code{gen.dist} that generated
-  a matrix of genetic distanced for multiple scenarios.
+\code{multi.gen.dist} is a wrapper for \code{gen.dist} that generates
+  a matrix of genetic distances for multiple scenarios.
 }
 \details{
-It will generate a matrix for each replicate within the scenario's folder.
+\code{multi.gen.dist} will generate a matrix for each replicate within the scenario's folder.
 }
 \seealso{
 gen.dist

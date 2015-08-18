@@ -8,7 +8,7 @@ invasion.front(path.results = NULL, ncensus, value = 1, patch.width,
   scenarios = "all")
 }
 \arguments{
-\item{path.results}{The path for the 'Results' folder}
+\item{path.results}{The path to the 'Results' folder}
 
 \item{ncensus}{The census number to be processed}
 
@@ -16,7 +16,7 @@ invasion.front(path.results = NULL, ncensus, value = 1, patch.width,
 
 \item{patch.width}{The width of the patch}
 
-\item{scenarios}{A character vector with scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or "all"}
 }
 \value{
 A list with three elements: the mean and standard

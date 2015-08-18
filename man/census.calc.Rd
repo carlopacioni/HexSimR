@@ -8,7 +8,7 @@ census.calc(path.results = NULL, ncensus, headers, var.name = NULL,
   bin.f = "+", scenarios = "all")
 }
 \arguments{
-\item{path.results}{The path for the 'Results' folder}
+\item{path.results}{The path to the 'Results' folder}
 
 \item{ncensus}{The census number to be processed}
 
@@ -21,7 +21,7 @@ file columns that are to be used by \code{bin.f}}
 \item{bin.f}{A character vector to pass the binary function to be applied to
 the columns identified by \code{headers} (Default: \code{"+"})}
 
-\item{scenarios}{A character vector with scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or "all"}
 }
 \value{
 Save census file to disk and return a list with the new census files

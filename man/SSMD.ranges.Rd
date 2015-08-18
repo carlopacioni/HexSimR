@@ -8,9 +8,9 @@ SSMD.ranges(path.results = NULL, scenarios = "all", base = NULL,
   sum.ranges = "summary_ranges.xlsx")
 }
 \arguments{
-\item{path.results}{The path for the 'Results' folder}
+\item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or "all"}
 
 \item{base}{A character vector with the name of the scenario to be used as
 term of comparison}

@@ -9,9 +9,9 @@ w.genepop.batch(path.results = NULL, scenarios = "all", time.steps = 1,
   pop.name, traits)
 }
 \arguments{
-\item{path.results}{The path for the 'Results' folder}
+\item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or "all"}
 
 \item{time.steps}{A numeric vector to indicate the time step to be included}
 

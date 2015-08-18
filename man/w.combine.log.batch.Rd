@@ -9,9 +9,9 @@ w.combine.log.batch(path.results = NULL, scenarios = "all",
   dir.out = NULL)
 }
 \arguments{
-\item{path.results}{The path for the 'Results' folder}
+\item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or "all"}
 
 \item{dir.out}{Path where to save the output. If NULL (default), the working
 directory is used}
