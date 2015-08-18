@@ -9,7 +9,7 @@
 #'   symbols in the first line of the file can cause unexpected 
 #'   behaviours in some applications. All these unusual features are removed from
 #'   the HexSim generated files, which are then re-saved with the same name,  
-#'   a suffix 'cleaned' and an extensin ".gen".
+#'   a suffix "cleaned" and an extensin ".gen".
 #'    
 #' @param fname A character vector with the name of the input file including the 
 #'   path
@@ -53,7 +53,8 @@
 #'   (i.e. the first line of the genepop input file).
 #'   
 #'   @inheritParams multi.reports
-#'   @return A list of \code{clean.genepop} for each scenario
+#'   @return Save to disk a genepop file with a suffix 'cleaned' and an extensin
+#'      ".gen" for each iteration within eachscenario
 #'   @seealso clean.genepop
 #'   @export
 multi.clean.genepop <- function(path.results=NULL, scenarios="all", 
@@ -92,9 +93,7 @@ multi.clean.genepop <- function(path.results=NULL, scenarios="all",
   l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
   nscens <- seq_along(scenarios)
   
-  gen.files <- lapply(nscens, apply.clean.gen, l.iter.folders, scenarios, pop.name)
-  
-  return(gen.files)
+  lapply(nscens, apply.clean.gen, l.iter.folders, scenarios, pop.name)
 }
 
 
