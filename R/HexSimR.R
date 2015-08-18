@@ -15,8 +15,8 @@
 #'
 #' Note, when there is a large number of files, this function may be memory hungry 
 #'
-#' @param path.results The path for the 'Results' folder 
-#' @param scenarios A character vector with scenarios to be processed or "all"
+#' @param path.results The path to the 'Results' folder 
+#' @param scenarios A character vector with the scenarios to be processed or "all"
 #' @return A list with three elements: the combined data, the mean and standard
 #'   deviation 
 #' @import data.table

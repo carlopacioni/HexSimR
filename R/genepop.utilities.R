@@ -197,12 +197,12 @@ gen.dist <- function(fname, mean.type="harmonic") {
   write.csv(as.matrix(gen.dist), file=paste0(dir.out, "/", dist.name))
 }
 
-#' Genetic distance of multiple scenarios
+#' Genetic distance for multiple scenarios
 #' 
-#' \code{multi.gen.dist} is a wrapper for \code{gen.dist} that generated
-#'   a matrix of genetic distanced for multiple scenarios. 
+#' \code{multi.gen.dist} is a wrapper for \code{gen.dist} that generates
+#'   a matrix of genetic distances for multiple scenarios. 
 #'   
-#' It will generate a matrix for each replicate within the scenario's folder.
+#' \code{multi.gen.dist} will generate a matrix for each replicate within the scenario's folder.
 #'   
 #'   @inheritParams multi.reports
 #'   @inheritParams gen.dist
