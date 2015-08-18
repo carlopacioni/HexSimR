@@ -33,3 +33,39 @@ ssmd2xlsx <- function(i, scenarios, ssmds, pvalues, wb) {
   createSheet(wb, name=paste0("pval_", scenarios[i]))
   writeWorksheet(wb, pvalues[[i]], sheet=paste0("pval_", scenarios[i]))
   saveWorkbook(wb)}
+
+#' Calculate SSMDs given a df (or equivalent) of means and stds
+#' 
+#' Calculate SSMDs given a df (or equivalent) of means and stds.
+#' 
+#' Checks whether the two dfs have same column names and attempt to re-order the 
+#'   columns if not.
+#' 
+#' @param mdata Data containing mean values
+#' @param mbase Data containing mean values for base scenario
+#' @param sddata Data containing standard deviation values
+#' @param sdbase Data containing standard deviation values for base scenario
+#' @param scenario The name of the scenario for which SSMDs are being calculated
+#' @import data.table
+#' @export
+calc.ssmd <- function(mdata, mbase, sddata, sdbase, scenario) {
+  mdata <- data.table(mdata) 
+  mbase <- data.table(mbase)
+  sddata <- data.table(sddata)
+  sdbase <- data.table(sdbase)
+  if(!identical(names(mdata), names(mbase))) {
+    if(identical(sort(names(mdata)), sort(names(mbase)))) {
+      message(paste("Column names of the census file from", scenario,
+                    "do not match base scenario. Reordering the columns..."))
+      setcolorder(mdata, names(mbase))
+      setcolorder(sddata, names(sdbase))
+      message("Done!")
+      } else {
+        stop(paste("Column names of the census file from", scenario,
+                   "do not match base scenario and it is not possible to 
+                   reorder the columns..."))
+      }
+    }
+  r <- (mdata - mbase) / sqrt(sddata^2 + sdbase^2)
+  return(r)
+}

@@ -248,10 +248,14 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
     return(std_data)
   }
   
-  ssmd_census <- function(i, means, sds, mean_base, sd_base) {
-    r <- (means[[i]][-c(1, 2)] - mean_base[-c(1, 2)]) / 
-      sqrt(sds[[i]][-c(1, 2)]^2 + sd_base[-c(1, 2)]^2)
+  ssmd_census <- function(i, means, sds, mean_base, sd_base, scenarios) {
+    r <- calc.ssmd(mdata=means[[i]][-c(1, 2)], 
+                   mbase=mean_base[-c(1, 2)], 
+                   sddata=sds[[i]][-c(1, 2)], 
+                   sdbase=sd_base[-c(1, 2)], 
+                   scenarios[i])
     return(r)
+    
   }
   
   pval <- function(x) pnorm(abs(as.matrix(x)), lower.tail=FALSE)
@@ -273,7 +277,7 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
   sds <-lapply(scenarios, read.sds, path.results, ncensus)
   
   ssmds <- lapply(seq_along(scenarios), ssmd_census, means, sds, 
-                  mean_base, sd_base)
+                  mean_base, sd_base, scenarios)
   names(ssmds) <- scenarios
   pvalues <- lapply(ssmds, pval)
   names(pvalues) <- scenarios
@@ -319,9 +323,13 @@ SSMD.move <- function(path.results=NULL, scenarios="all", base=NULL,
     return(data[, 2:dim(data)[2]])
   }
     
-  ssmd_move <- function(i, data, base) {
-    r <- (data[[i]]["Mean", ] - base["Mean", ]) / 
-      sqrt(data[[i]]["Std", ]^2 + base["Std", ]^2)
+  ssmd_move <- function(i, data, base, scenarios) {
+    
+    r <- calc.ssmd(mdata=data[[i]]["Mean", ], 
+                   mbase=base["Mean", ], 
+                   sddata=data[[i]]["Std", ], 
+                   sdbase=base["Std", ], 
+                   scenarios[i])
     row.names(r) <- NULL
     return(r)
   }
@@ -343,7 +351,7 @@ SSMD.move <- function(path.results=NULL, scenarios="all", base=NULL,
    
   data <-lapply(scenarios, read.data, path.results, sum.move)
   
-  ssmds <- lapply(seq_along(scenarios), ssmd_move, data, base.data)
+  ssmds <- lapply(seq_along(scenarios), ssmd_move, data, base.data, scenarios)
   names(ssmds) <- scenarios
   pvalues <- lapply(ssmds, pval)
   names(pvalues) <- scenarios
@@ -521,9 +529,12 @@ SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL,
     return(std_data)
   }
   
-  ssmd_ranges <- function(i, means, sds, mean_base, sd_base) {
-    r <- (means[[i]][, -c(1, 2)] - mean_base[, -c(1, 2)]) / 
-      sqrt(sds[[i]][, -c(1, 2)]^2 + sd_base[, -c(1, 2)]^2)
+  ssmd_ranges <- function(i, means, sds, mean_base, sd_base, scenarios) {
+    r <- calc.ssmd(mdata=means[[i]][-c(1, 2)], 
+                   mbase=mean_base[-c(1, 2)], 
+                   sddata=sds[[i]][-c(1, 2)], 
+                   sdbase=sd_base[-c(1, 2)], 
+                   scenarios[i])
     return(r)
   }
   
@@ -545,7 +556,7 @@ SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL,
   sds <-lapply(scenarios, read.sds, path.results, sum.ranges)
   
   ssmds <- lapply(seq_along(scenarios), ssmd_ranges, means, sds, 
-                  mean_base, sd_base)
+                  mean_base, sd_base, scenarios)
   names(ssmds) <- scenarios
   pvalues <- lapply(ssmds, pval)
   names(pvalues) <- scenarios
