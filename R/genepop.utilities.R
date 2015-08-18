@@ -245,10 +245,8 @@ multi.gen.dist <- function(path.results=NULL, scenarios="all", pop.name=NULL,
   l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
   nscens <- seq_along(scenarios)
   
-  gen.files <- lapply(nscens, apply.gen.dist, l.iter.folders, scenarios, pop.name)
-  
-  return(gen.files)
-}
+  lapply(nscens, apply.gen.dist, l.iter.folders, scenarios, pop.name)
+  }
 
 #' Mean genetic distance
 #' 
