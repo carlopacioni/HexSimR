@@ -55,15 +55,15 @@ calc.ssmd <- function(mdata, mbase, sddata, sdbase, scenario) {
   sdbase <- data.table(sdbase)
   if(!identical(names(mdata), names(mbase))) {
     if(identical(sort(names(mdata)), sort(names(mbase)))) {
-      message(paste("Column names of the census file from", scenario,
+      message(paste("Column names in the census file from", scenario,
                     "do not match base scenario. Reordering the columns..."))
       setcolorder(mdata, names(mbase))
       setcolorder(sddata, names(sdbase))
       message("Done!")
       } else {
-        stop(paste("Column names of the census file from", scenario,
+        stop(paste("Column names in the census file from", scenario,
                    "do not match base scenario and it is not possible to 
-                   reorder the columns..."))
+                   reorder them..."))
       }
     }
   r <- (mdata - mbase) / sqrt(sddata^2 + sdbase^2)
