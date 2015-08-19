@@ -25,7 +25,7 @@ iter.folders <- function(dir.path, scenario) {
 #' @import XLConnect
 #' @export
 ssmd2xlsx <- function(i, scenarios, ssmds, pvalues, wb) {
-  if(nchar(scenarios[1]) > 25) {
+  if(nchar(scenarios[i]) > 25) {
     scenarios <- substr(scenarios, nchar(scenarios) - 24, nchar(scenarios)) 
   }
   createSheet(wb, name=paste0("SSMD_", scenarios[i]))
