@@ -185,6 +185,8 @@ w.genepop.batch <- function(path.results=NULL, scenarios="all", time.steps=1,
 #' @inheritParams clean.genepop
 #' @import adegenet
 #' @import mmod
+#' @return Save to disk a file with same root of the input file with extension 
+#'   .pairD
 #' @export
 gen.dist <- function(fname, mean.type="harmonic") {
   adegen.data <- adegenet::read.genepop(fname, ncode=3L, quiet=TRUE)
@@ -251,7 +253,7 @@ multi.gen.dist <- function(path.results=NULL, scenarios="all", pop.name=NULL,
 #' Mean genetic distance
 #' 
 #' This function calculates the mean and standard deviation of the genetic 
-#'   distance (calcualted with \code{gen.dist}) across all replicates for the same
+#'   distance (calculated with \code{gen.dist}) across all replicates for the same
 #'   scenario.
 #' 
 #' @inheritParams collate.census 
@@ -259,7 +261,8 @@ multi.gen.dist <- function(path.results=NULL, scenarios="all", pop.name=NULL,
 #' @inheritParams invasion.front
 #' @inheritParams w.genepop.batch
 #' @return A list with three elements: the mean and standard
-#'   deviation for each time step and overall. 
+#'   deviation for each time step and overall. \code{m.gen.dist} also saves to 
+#'   disk a .xlsx with the same name of the input file with the suffix "_means". 
 #' @import XLConnect
 #' @export
 m.gen.dist <- function(path.results=NULL, scenarios="all", pop.name, 

@@ -12,6 +12,10 @@ path}
 
 \item{mean.type}{The type of mean to be calculated over multiple loci}
 }
+\value{
+Save to disk a file with same root of the input file with extension
+  .pairD
+}
 \description{
 \code{gen.dist} calculates the Joist's D between all possible population pairs
    using the R package \code{mmod}.

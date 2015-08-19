@@ -17,11 +17,12 @@ m.gen.dist(path.results = NULL, scenarios = "all", pop.name, traits)
 }
 \value{
 A list with three elements: the mean and standard
-  deviation for each time step and overall.
+  deviation for each time step and overall. \code{m.gen.dist} also saves to
+  disk a .xlsx with the same name of the input file with the suffix "_means".
 }
 \description{
 This function calculates the mean and standard deviation of the genetic
-  distance (calcualted with \code{gen.dist}) across all replicates for the same
+  distance (calculated with \code{gen.dist}) across all replicates for the same
   scenario.
 }
 
