@@ -64,6 +64,7 @@ multi.clean.genepop <- function(path.results=NULL, scenarios="all",
   #----------------------------------------------------------------------------#
   
   apply.clean.gen <- function(nscen, l.iter.folders, scenarios, pop.name) {
+    message(paste("Processing scenario:", scenarios[nscen]))
     iters <- seq_along(l.iter.folders[[nscen]])
     gen.names <- lapply(iters, file.names, nscen, l.iter.folders, scenarios, 
                         pop.name)
@@ -218,6 +219,7 @@ multi.gen.dist <- function(path.results=NULL, scenarios="all", pop.name=NULL,
   #----------------------------------------------------------------------------#
   
   apply.gen.dist <- function(nscen, l.iter.folders, scenarios, pop.name) {
+    message(paste("Processing scenario:", scenarios[nscen]))
     iters <- seq_along(l.iter.folders[[nscen]])
     gen.names <- lapply(iters, file.names, nscen, l.iter.folders, scenarios, 
                         pop.name)
