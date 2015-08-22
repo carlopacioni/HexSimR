@@ -265,9 +265,8 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
   if(is.null(path.results)) path.results <- choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") {
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
-    scenarios <- scenarios[scenarios != base]
   })
-  
+  scenarios <- scenarios[scenarios != base]
   wb_base <- loadWorkbook(paste0(path.results, "/", base, "/", base, ".", ncensus, 
                                  ".", "all", ".", "xlsx"))
   mean_base <- readWorksheet(wb_base, sheet="means")
@@ -344,9 +343,8 @@ SSMD.move <- function(path.results=NULL, scenarios="all", base=NULL,
   if(is.null(path.results)) path.results <- choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") {
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
-    scenarios <- scenarios[scenarios != base]
   })
-  
+  scenarios <- scenarios[scenarios != base]
   base.data <- read.data(scenario=base, path.results, sum.move)
    
   data <-lapply(scenarios, read.data, path.results, sum.move)
@@ -545,9 +543,8 @@ SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL,
   if(is.null(path.results)) path.results <- choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") {
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
-    scenarios <- scenarios[scenarios != base]
   })
-  
+  scenarios <- scenarios[scenarios != base]
   wb_base <- loadWorkbook(paste(path.results, base, sum.ranges, sep="/"))
   mean_base <- readWorksheet(wb_base, sheet="means")
   sd_base <- readWorksheet(wb_base, sheet="sd")
