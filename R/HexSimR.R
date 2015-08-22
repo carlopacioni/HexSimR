@@ -232,21 +232,6 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
   # Helper functions
   #----------------------------------------------------------------------------#
   
-  read.means <- function(scenario, path.results, ncensus) {
-    mean_data <- readWorksheetFromFile(
-      paste0(path.results, "/", scenario, "/", scenario, ".", 
-             ncensus, ".", "all", ".", "xlsx"), 
-      sheet="means")
-    return(mean_data)
-  }
-  
-  read.sds <- function(scenario, path.results, ncensus) {
-    std_data <- readWorksheetFromFile(
-      paste0(path.results, "/", scenario, "/", scenario, ".", 
-             ncensus, ".", "all", ".", "xlsx"), 
-      sheet="sd")
-    return(std_data)
-  }
   
   ssmd_census <- function(i, means, sds, mean_base, sd_base, scenarios) {
     r <- calc.ssmd(mdata=means[[i]][-c(1, 2)], 
@@ -258,7 +243,6 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
     
   }
   
-  pval <- function(x) pnorm(abs(as.matrix(x)), lower.tail=FALSE)
   #----------------------------------------------------------------------------#
   if(is.null(base)) stop("Please, provide the name of the base scenario")
   txt <- "Please, select the 'Results' folder within the workspace"
@@ -332,10 +316,6 @@ SSMD.move <- function(path.results=NULL, scenarios="all", base=NULL,
     row.names(r) <- NULL
     return(r)
   }
-  
-  pval <- function(x) pnorm(abs(as.matrix(x)), lower.tail=FALSE)
-  
-  
   #----------------------------------------------------------------------------#
   
   if(is.null(base)) stop("Please, provide the name of the base scenario")
@@ -535,8 +515,6 @@ SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL,
                    scenarios[i])
     return(r)
   }
-  
-  pval <- function(x) pnorm(abs(as.matrix(x)), lower.tail=FALSE)
   #----------------------------------------------------------------------------#
   if(is.null(base)) stop("Please, provide the name of the base scenario")
   txt <- "Please, select the 'Results' folder within the workspace"

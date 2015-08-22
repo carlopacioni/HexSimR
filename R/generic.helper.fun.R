@@ -69,3 +69,40 @@ calc.ssmd <- function(mdata, mbase, sddata, sdbase, scenario) {
   r <- (mdata - mbase) / sqrt(sddata^2 + sdbase^2)
   return(r)
 }
+
+#' Calculate p values 
+#' 
+#' \code{pval} calculates one-tailed p values from a data.frame that contains 
+#'   quantiles and it is used internally from SSMD functions.
+#'   @param x The data.frame of quantiles
+pval <- function(x) pnorm(abs(as.matrix(x)), lower.tail=FALSE)
+
+#' Read means values from output of collate.census
+#' 
+#' #' This function is internally used by other \code{HexSimR} functions
+#' @param scenario A character vector with the name of the scenario  
+#' @inheritParams collate.census
+#' @inheritParams SSMD.census
+#' @export
+read.means <- function(scenario, path.results, ncensus) {
+  mean_data <- readWorksheetFromFile(
+    paste0(path.results, "/", scenario, "/", scenario, ".", 
+           ncensus, ".", "all", ".", "xlsx"), 
+    sheet="means")
+  return(mean_data)
+}
+
+#' Read standard deviation values from output of collate.census
+#' 
+#' #' This function is internally used by other \code{HexSimR} functions
+#' @param scenario A character vector with the name of the scenario  
+#' @inheritParams collate.census
+#' @inheritParams SSMD.census
+#' @export
+read.sds <- function(scenario, path.results, ncensus) {
+  std_data <- readWorksheetFromFile(
+    paste0(path.results, "/", scenario, "/", scenario, ".", 
+           ncensus, ".", "all", ".", "xlsx"), 
+    sheet="sd")
+  return(std_data)
+}
