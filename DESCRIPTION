@@ -16,6 +16,7 @@ Depends:
     R (>= 3.2.0)
 Imports:
     adegenet,
+    reshape2,
     data.table,
     ggplot2,
     mmod,
