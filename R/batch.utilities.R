@@ -72,7 +72,7 @@ report.batch <- function(path.results=NULL, scenarios="all", ranges=TRUE,
     close.args <- "  </args>"
     arg1 <- paste0("-", report)
     log.file <- paste0(scenario, suf)
-    arg2 <- paste(path.results, log.file, sep="\\")
+    arg2 <- paste(path.results, scenario, log.file, sep="\\")
     block <- c(open.args, 
                paste0(open.arg, arg1, close.arg),
                paste0(open.arg, arg2, close.arg),
