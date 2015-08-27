@@ -100,4 +100,33 @@ census.plot <- function(path.results=NULL, scenarios="all", traits, ncensus=0,
   l.plots <- lapply(1:ngroups, make.plot, nscens_group, means, sds, traits, 
                     scenarios, ncensus, rm.T0) 
   return(l.plots)
-  }
+}
+
+#' Plots mean progress of invasion front
+#' 
+#' \code{invasion.plot} plots the mean progress of invasion front for each 
+#'   scenario included in the output of \code{invasion.front} (it reads data
+#'   directly from xls files). 
+#'
+#' @inheritParams clean.genepop   
+#' @return Save to disk ggplot objects (with extension .rda), a pdf with the 
+#'   plot and return the plot
+#' @import XLConnect
+#' @import data.table
+#' @import ggplot2
+#' @export
+invasion.plot <- function(fname=NULL) {
+  if(is.null(fname)) fname <- choose.files()
+  mean_data <- data.table(readWorksheetFromFile(fname, sheet="overall"))
+  mean_data[, min := Mean - Std]
+  mean_data[, max := Mean + Std]
+  limits <- aes(ymax=max, ymin=min)
+  p <- ggplot(mean_data, aes(x=Scenario, y=Mean)) +
+    geom_point() +
+    theme(axis.text.x=element_text(angle=-90)) +
+    geom_errorbar(limits)
+  save(p, file=paste0(dirname(fname), "/", "plot_invasion", ".rda"))
+  ggsave(paste0(dirname(fname), "/", "plot_invasion", ".pdf"), plot=p, 
+         heigh=297, width=210, unit="mm")
+  return(p)
+}
