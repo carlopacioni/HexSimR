@@ -28,14 +28,14 @@ make.plot <- function(ngroup, nscens_group, means, sds, traits, scenarios,
   dat <- rbindlist(l=l.d, use.names=TRUE)
   limits <- aes(ymax=max, ymin=min)
   p <- ggplot(dat, aes(color=Trait, x=Time.Step, y=Mean)) +
-    geom_point() +
+    geom_point(size=1.2) +
     facet_wrap(~Scenario, ncol=2) +
     xlab("Time Step") +
-    geom_errorbar(limits, width=0.15)
+    geom_errorbar(limits, width=0.5, size=0.1)
   save(p, file=paste0(path.results, "/", "plots_census.", ncensus, ".group.",
                       ngroup, ".rda"))
   ggsave(paste0(path.results, "/", "plots_census.", ncensus, ".group.",
-             ngroup, ".pdf"), plot=p)
+             ngroup, ".pdf"), plot=p, heigh=297, width=210, unit="mm")
   return(p)
 }
 
