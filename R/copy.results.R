@@ -69,7 +69,7 @@ copy.results  <-  function(path.results, out=getwd(),
     }
   }
   
-  copy.files <- function(path.results, fname, root=out) {
+  copy.files <- function(fname, path.results, root=out) {
     file.copy(from=paste(path.results, fname, sep="/"), 
               to=paste(root, fname, sep="/"))
   }
@@ -89,7 +89,7 @@ copy.results  <-  function(path.results, out=getwd(),
               if(comp.ranges == TRUE) ranges.name)
   
   if(!is.null(fnames)) {
-    lapply(fnames, copy.files, path.results, root=out)
+    lapply(fnames, copy.files, path.results)
   }
   
   if(plots == TRUE) copy.res(scenario=NULL, p="^plot", path.results, out)
