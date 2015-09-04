@@ -58,12 +58,12 @@ copy.results  <-  function(path.results, out=getwd(),
                           full.names = FALSE)
     file.copy(from=paste(path.results, scenario, file.list, sep="/"), 
               to=paste(out, scenario, file.list, sep="/"))
-    if(exists(paste(path.results, scenario, "summary_move.csv", sep="/"))) {
+    if(file.exists(paste(path.results, scenario, "summary_move.csv", sep="/"))) {
        copy.files(path.results, 
                   fname=paste(scenario, "summary_move.csv", sep="/"), root=out)
     }
     
-    if(exists(paste(path.results, scenario, "descriptive_ranges.csv", sep="/"))) {
+    if(file.exists(paste(path.results, scenario, "descriptive_ranges.csv", sep="/"))) {
       copy.files(path.results, 
                  fname=paste(scenario, "descriptive_ranges.csv", sep="/"), root=out)
     }
