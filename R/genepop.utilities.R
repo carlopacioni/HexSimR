@@ -168,7 +168,7 @@ w.genepop.batch <- function(path.results=NULL, scenarios="all", time.steps=1,
 }
 #' Genetic distance
 #' 
-#' \code{gen.dist} calculates the Joist's D between all possible population pairs
+#' \code{gen.dist} calculates the Jost's D between all possible population pairs
 #'    using the R package \code{mmod}.
 #'    
 #' This function takes the output from the function \code{clean.genepop} 
@@ -181,7 +181,12 @@ w.genepop.batch <- function(path.results=NULL, scenarios="all", time.steps=1,
 #' \code{mean.type} can be set to either "arithmetic" or "harmonic" (default), 
 #'   which is used to calculate the global estimates of Hs and Ht (see 
 #'   \code{mmod}'s manual for details).
-#' 
+#' @references Jost, L.O.U., 2008. GST and its relatives do not measure 
+#'   differentiation. Molecular Ecology 17, 4015-4026.
+#' @references Winter, D.J., 2012. mmod: an R library for the calculation of 
+#'   population differentiation statistics. Molecular Ecology Resources 12, 
+#'   1158-1160.
+#'   
 #' @param mean.type The type of mean to be calculated over multiple loci
 #' @inheritParams clean.genepop
 #' @import adegenet

@@ -17,7 +17,7 @@ Save to disk a file with same root of the input file with extension
   .pairD
 }
 \description{
-\code{gen.dist} calculates the Joist's D between all possible population pairs
+\code{gen.dist} calculates the Jost's D between all possible population pairs
    using the R package \code{mmod}.
 }
 \details{
@@ -31,5 +31,13 @@ A text file with extension .pairD that contains a pairwise distance  matrix
 \code{mean.type} can be set to either "arithmetic" or "harmonic" (default),
   which is used to calculate the global estimates of Hs and Ht (see
   \code{mmod}'s manual for details).
+}
+\references{
+Jost, L.O.U., 2008. GST and its relatives do not measure
+  differentiation. Molecular Ecology 17, 4015-4026.
+
+Winter, D.J., 2012. mmod: an R library for the calculation of
+  population differentiation statistics. Molecular Ecology Resources 12,
+  1158-1160.
 }
 
