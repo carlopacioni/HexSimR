@@ -33,7 +33,7 @@ The user has to set up an array of patches (which may comprise of one or more
   invasion across the array of hexagons.
 }
 \details{
-The census file where the data is stored is identify with the argument
+The census file where the data is stored is identified with the argument
   \code{ncensus}. Remember that by default HexSim names the census files with
   the name of the scenario, followed by the 'number' of the census event. This
   'number' will depend on how many census event you have in the HexSim sequence.
