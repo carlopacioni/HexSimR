@@ -68,13 +68,11 @@ multi.clean.genepop <- function(path.results=NULL, scenarios="all",
     iters <- seq_along(l.iter.folders[[nscen]])
     gen.names <- lapply(iters, file.names, nscen, l.iter.folders, scenarios, 
                         pop.name)
-    infiles <- lapply(gen.names, byTS)
-    return(infiles)
+    lapply(gen.names, byTS)
   }
   
   byTS <- function (gen.name) {
-    l.infiles <- lapply(gen.name, clean.genepop)
-    return(l.infiles)
+    lapply(gen.name, clean.genepop)
   }
   
   file.names <- function(iter, nscen, l.iter.folders, scenarios, pop.name) {
