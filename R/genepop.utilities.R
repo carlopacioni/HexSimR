@@ -29,7 +29,6 @@
                                   "/",
                                   sub(".txt", "", basename(fname)), 
                                   "_cleaned", ".gen"))
-    return(infile)
   }
 
 #' Remove illegal characters from several HexSim generated genepop input files
@@ -72,6 +71,9 @@ multi.clean.genepop <- function(path.results=NULL, scenarios="all",
   }
   
   byTS <- function (gen.name) {
+    m<-regexpr("\\[[[:digit:]]+\\]", text = gen.name[1])
+    txt <- regmatches(gen.name[1], m)
+    message(paste("Replicate:", txt))
     lapply(gen.name, clean.genepop)
   }
   
