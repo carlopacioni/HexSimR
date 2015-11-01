@@ -27,7 +27,7 @@ make.plot <- function(ngroup, nscens_group, means, sds, traits, scenarios,
                 prep.data, means, sds, traits, scenarios, rm.T0)
   dat <- rbindlist(l=l.d, use.names=TRUE)
   limits <- aes(ymax=max, ymin=min)
-  p <- ggplot(dat, aes(color=Trait, x=Time.Step, y=Mean)) +
+  p <- ggplot(dat, aes(color=Trait, x=Time.Step, y=Mean, shape=Trait)) +
     geom_point(size=1.2) +
     facet_wrap(~Scenario, ncol=2) +
     xlab("Time Step") +
