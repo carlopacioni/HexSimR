@@ -1,0 +1,175 @@
+--- 
+title: "HexSimR user guide" 
+author: "Carlo Pacioni" 
+date: "`r Sys.Date()`" 
+output: rmarkdown::html_vignette 
+vignette: > %\VignetteIndexEntry{Vignette Title} %\VignetteEngine{knitr::rmarkdown} %\VignetteEncoding{UTF-8} 
+---
+
+# Introduction
+HexSimR is an R package that it is designed to help in the 
+post-simulation data processing. I developed this package for my own needs and 
+it closely reflects what I needed to do. Because of this, it is not a package 
+that provides tools for an exhaustive support.
+My general approach with population modelling has been, so far, to develop a 
+baseline scenario/model. Then I change something in my 'alternative scenarios' 
+(these changes may be representative of management actions or environmental 
+changes). Once I am happy with these scenarios, I run lots of replicates for each of them and then evaluate how these changes have affected the population 
+trajectories and/or other population parameters. In the majority of the cases, I
+'evaluate' these changes by conducting pairwise comparisons. This means that I need some tools to calculate descriptive statistics across a number of replicates, collate results, and conduct statistical tests for the pairs of scenarios of my interest. If you are working on a project with a similar approach, hopefully, HexSimR may be useful to you too. __NOTE__ that an important consequence of my approach is that each scenario will have a consistent structure. For example, if in my baseline scenario there are three requests for a census, the first stratified by age, the second by sex and the third by a custom trait, in all alternative scenarios there will be three census requests identical to the baseline and in the same order. By doing so, hexSimR can average across data in the first census file, and then compare them across scenarios. If the scenarios do not follow a symmetric structure, you are actually comparing apples with oranges. In other words, there is no way for HexSimR to know what's in each files, it just locates the files based on HexSim output file naming conventions. you basically say to HexSimR "Compare the first census file across scenarios", if these files don't contain the same information, you will get the wrong answer (if any at all). It is up to you to make sure that you built the scenarios appropriately. __This is critical, if you didn't understand this point, go back and re-read the last few sentences until they make sense to you!__  
+Lastly, because I am an extremely lazy person, if I find myself to type the same things, or copy-paste the same things, more than twice, I normally get annoyed and find a way to avoid that too. Hence, HexSimR has also a few functions to help to get ready input or batch files, and to back results without the need to type or click the same things over and over again. For the same reasons, very often I assume that files' and folders' names were not changed from the defaults (as well as the sub-directory structure) so that I don't have to re-type them in every time. I tried to be flexible and often files' and folders' names are also passed as arguments, so if you happened to have changed them, you can still pass their name using the functions' arguments, but keep in mind that 
+1. I may not have been 100% consistent with this (which means that if you changed file/folder names and the functions don't work for you anymore, don't complain with me, but you are welcome to let me know and I'll see if I can make the function more flexible)  
+1. If you follow my approach you will find yourself typing very little, which I think it is a very positive thing!
+
+I will demonstrate below some of HexSimR functionalities by repeating some of 
+the steps I made while working on the paper "Spatially-explicit modelling of 
+wild dog populations and their management inside and outside the Western 
+Australian State Barrier Fence". The main purpose of this quick run down is to 
+help you to decide whether HexSimR is something that can be useful for you
+without having to dedicate much time to figure out what each function does. if you have already decided that you want to use it, it may still make sense for you to quickly scan through this document so that you familiarise yourself with what HexSimR can do and it should give you a head start when you pass on your own data. 
+
+The data that I use as an example are a reduced set of the simulations used for the paper (just two scenarios, and just two replicates for each scenario). This is to keep to a minimum the amount of data that you have to download when install HexSimR. Just to give you an idea of what the paper is about so that you can follow the example, we simulated wild dog population dynamics to forecast the effect of the fence upgrades and plausible control scenarios on wild dog populations on both sides of the State Barrier Fence. If you are wondering what the State Barrier Fence is, in a few words, it is a fence that cuts the south west of Western Australia with the intent to protect the most productive agriculture areas. For modelling purpose, just imagine a square roughly cut in half diagonally by a fence (__Figure__). I refer to 'inside' the fence, when I intend the region to the west of the fence. Simulation parameters were drawn from published research on biology and ecology of dingo population in the WA northern rangelands. We assumed that non-pure dingoes (i.e. domestic dogs and hybrids) would also comply with the same parameters. In the example here, I only kept a scenario where no control is performed, and a second where control is applied inside and outside the fence at the highest regime we believe it is possible in the region by mean of baiting, trapping and shooting. Both scenarios simulate a fully dog proof fence (i.e. no transpassing is allowed). 
+
+If you decide to use HexSimR, remember that for each function there is a help file, which you can access with the command `?_function.name_` where `_function.name_` is the name of the function you want information for. You should consult these if you want more specific information for any given function.
+
+# HexSimR functionalities - core analyses and data plotting
+## Calculations and plots with census and report files
+Imagine this: you have developed your baseline scenario, have finalised your additional ~40 alternative scenarios in order to test several combination of management options, and, finally, you have proudly run 200 replicates for each of them. Each scenario generates, say, three census files that contain data you want look at (in our example there are actually four census files). Now, you find yourself with 3 census files X 200 replicates X ~40 scenarios = ~24,000 post-simulation files to process (and that is just dealing with the census files, leaving alone all the rest). If you want to manually open and paste them together, or import one by one into a statistical package to analyse them, be my guest... Alternatively, you can get HexSimR to do this for you. In our example, I had created a map that divided the study area in two populations: inside and outside the fence. By doing this I could ask HexSim to generate a census file where each individual would obtain a value for a specific trait based on its location. 'Trait Index  2' and 'Trait Index  3' are the number of loners and pack members inside the fence, and 'Trait Index  4' and 'Trait Index 5' are the number of loners and pack members outside the fence. All I have to do now, for each census file, for each scenario, is to sum the value of these two variables to obtain the total population size inside and outside the fence, and then average these across the 200 replicates to know what the average trend is for each scenario. This what the three lines of codes below do. You have to only provide the path to the 'Results' folder, indicate which census event you are interested into (in this case is the number '2'), the name of the traits you want to consider with the argument `headers`, how you want to call your outcome variable (surprisingly, I'm calling them 'Inside' and 'Outside'), and finally what sort of operation you want to perform on these variables ("+" should be self-explanatory... but just to be explicit, inthe first line of code, it translates into: "Trait Index  2" + "Trait Index  3"). Note that the outcome variables are effectively added as new column in the census files. With `scenario='all'` I indicate that I want to do this for all scenarios that HexSimR finds in the 'Results' folder. Once this is done, with the function `collate.census` HexSimR calculates the mean and SD across all 200 iterations. Note, that `collate.census` does this for all census files that finds, so if I had performed several other operations, on several census files, and then called `collate.census`, I'd have obtained the average for each of them in one go (which is exactly what I have done for the paper, where we have calculated, for example, the population size, the proportion of individuals that are loners, the sex-ratio ect. If you are curious, have a look at the script, which is provided as supplementary material - if you don't have access to the paper feel free to email me to send you a copy).
+
+```{r}
+# total pop size inside and outside
+temp <- census.calc(path.results, ncensus=2, 
+                     headers=c("Trait Index  2", "Trait Index  3"), 
+                     var.name = "Inside", bin.f = "+", scenarios = "all")
+temp <- census.calc(path.results, ncensus=2, headers=c("Trait Index  4", "Trait Index  5"), 
+            var.name = "Outside", bin.f = "+", scenarios = "all")
+
+# Calculate the means and SDs
+collate.census(path.results, scenarios="all")
+
+
+```
+
+Finally, one thing you may want to do is to plot these means with SD bars to inspect the results visually.
+
+```{r}
+# Plot census
+census.plot(path.results, scenarios="all", traits=c("Inside", "Outside"), ncensus=2, ngroups=4)
+```
+
+A similar approach can be used for reports. For example, below HexSimR calculates the descriptive statistics for the movement and ranges reports (after these were generated. See 'HexSimR utilities' if you want to have a look on how to quickly generate those). 
+
+```{r}
+# After reports are generated...
+multi.reports(path.results, scenarios="all", pop.name="Dingoes", 
+                      type="move", all=TRUE, hx=NULL, events=NULL, 
+                      start="min", end="max") 
+                      
+multi.reports(path.results, scenarios="all", pop.name="Dingoes", 
+                     type="ranges", all=TRUE, hx=1122.4, 
+                     events=c("Lonersexplore", "Adjustterritories2"), 
+                     start="min", end="max")
+```           
+
+Now, that you have collated together all these data and have made up your mind about what could be possibly going on, you may want to statistically test whether the difference you have seen is significant. HexSimR offers you the possibility to compare scenarios with the Strictly Standardised Mean Difference (SSMD, Zhang 2007). The main reason why you should use SSMD is because it is a statistic that it is not inflated by large sample size, which are typically very large when running population dynamic model (in our example, we only have 2 but in the paper remember I ran 200 replicates and I would have normally ran 1,000 if it wasn't for computation limits!).  In the example below I ran a comparison for the census data, and the descriptive statistics of the two reports. The names of the functions should be self explanatory to indicate which one is which, if you get lost just call the help file with the name of the function.
+
+
+```{r}
+SSMD.census()
+
+SSMD.move(path.results, scenarios="all", base="DingoBase_SelDist", 
+                    sum.move="summary_move.csv")
+
+SSMD.ranges(path.results, scenarios="all", base="DingoBase_SelDist", 
+                       sum.ranges="summary_ranges.xlsx")
+
+
+```
+
+## Invasion front 
+In my paper I wanted to monitor the progress of the 'invasion' of wild dogs from east to west in the agriculture area in the south west of Western Australia, and I have developed a function to help doing this. An  acknowledgment is due to Nathan Schumaker, who suggested to use an array of hexagons rather than pixels from a ASCII file as I had initially thought. The advantage of Nathan's approach is that this function is now quite flexible as you can arrange the array in any possible way that it is meaningful to your case. Because there is some setting up you have to do before you run your model, I'll provide here some indications on how to do that. 
+
+Firstly, you have to create an array of hexagons. As mentioned before, I have created a linear array (__Figure...__). Another option (also suggested by Nathan) would have been to have radial patches. The bottom line is that it has to be something that does what you need it to do. Then, you have to give to each patch a value. I have used patches of four hexagons, and given them values from 1 to 11, east to west. Then you have to create a trait (which I called 'PopID') where each treat value represent a location. Possibly, using the trait builder named "Sequenced Trait" would make it easy to construct an accumulated trait with many trait values (__Figure...__).
+
+You have to make sure to insert an accumulate event using the 'individual location' updater in your model that targets the accumulator relevant for your trait (in my example 'PopID', __Figure__), which will update the location of the animals. 
+Lastly, you have to insert a census event that uses the trait you just set up, so that you will have a census file that will report the number of animals you have in each patch (which remembered are named 'Trait' in the census file). Once you have done all this and have run the simulations, you can then call `invasion.front` that will save an xls file with the mean & SD for each time step, as well as an overall mean. As usual, with `ncensus` you tell HexSimR which census file it should consider. The argument `value` is used to set a minimum threshold of animals. In my case, I set this to 1, which basically means that it is enough to have one animal in a patch to consider it occupied. You may want to use a different value depending on your needs. The `patch.width` is used to set the uni. in my case, each hexagon is 3.6 km if width, and each patch is 4 hexagons. So the width is 3.6 * 4 = 14.4 km. I could have used `patch.width=4`, in which case the distance traveled would have been expressed in number of hexagons.
+
+```{r}
+invasion.front(path.results, ncensus=3, value = 1, patch.width=3.6*4,
+               scenarios = "all")
+```
+
+
+Once done with this, you may want to plot these data to visually compare the mean distance traveled in each scenario:
+```{r}
+invasion.plot()
+```
+
+## Genetic analysis
+Let's say that you have set up all your scenarios in HexSim, have run the hundreds of simulations you wanted to and now you want to calculate the mean genetic distance between two populations. HexSimR offers the possibility to do this, but it calculates the genetic distance between the two populations for each replicate first, and then averages that across all replicates. This means that in order to use HexSimR's functions you have to get a genepop input file for each replicate (using HexSim). Right now, this involves adding manually to a queue a genepop-report for each iteration/scenario in a batch file (for each time step you want these statistics to be calculated). In other words, lots of clicking. The alternative is to use `w.genepop.batch()` to ask HexSim to generate the genepop input files. You can then use `multi.clean.genepop()` to make sure that the files respect the formatting required by `mmod` (Winter, 2012), which is used internally by HexSimR when you use `gen.dist()`. Here is an example. Note that we are calculating in one go the genetic distance for all scenarios, for two time steps:
+```{r}
+# batch file to generate genepop files. Pass this to OutputTransformer.exe
+w.genepop.batch (path.results, scenarios="all", time.steps=c(15, 30), 
+                 pop.name="Dingoes", traits="PopID")
+
+# Once OutputTransformer.exe is done, clean up the genepop input files
+multi.clean.genepop(path.results, scenarios="all", pop.name="Dingoes")
+
+# Get the mean and standard deviation of the genetic distance between populations
+multi.gen.dist(path.results, scenarios="all", pop.name="Dingoes")
+
+# Finally calculate the mean
+m.gen.dist(path.results, scenarios = "all", pop.name="Dingoes", traits="PopID")
+```
+
+Once we are done with all this, we can then plot the genetic distance to visualise what happen during the simulations:
+
+```{r}
+# Plot the mean and SD for the time step 30
+gen.plot(path.results = path.results, pop.name = "Dingoes", time.step = 30,
+         traits = "PopID")
+
+```
+
+
+   
+# HexSimR functionalities - minor utilities
+
+HexSimR also has a few little functions to speed up the process that really do not do much other than avoiding you to click repeatedly. These are listed below.
+
+### Prepare batch files
+If you ran several replicates of one scenario, you may want to combine their log file. HexSim provides an utility to do this, but if you use the graphical user interface (GUI) you have to click the relative option  for each scenario and wait for it to be done before you can move to the next. Of course, HexSim also gives you the option to generate a batch file and then run it with the command line. To set up the batch file you have to click on each scenario and add it to the batch file, , but I think I already mentioned that I'm an extremely lazy person and this is already too much clicking for me. A similar situation applies for the range or movement reports (if you are just starting with HexSim and don't know what these are, suffice to say that these are file where the data you are interested into are dumped for you to use). HexSimR can do all this in one line for each type of option (e.g. log files, movement report, ranges, etc).  If you want to generate a report, or combine the log file for all the scenarios you ran (quite likely I'd assume), you can just use 'all' in the argument `scenarios`, or you can pass a character vector with the names of the scenarios. 
+
+
+
+```{r}
+# Batch file to generate combined log files. Pass this to HexSimCommandLine.exe
+w.combine.log.batch(path.results, scenarios="all", dir.out=path.results)
+
+# Generate batch file for move and ranges reports. Pass this to OutputTransformer.exe
+report.batch(path.results, scenarios="all", ranges=TRUE, move=TRUE)
+
+```
+
+## Backing up results
+Unless I know that I am going to use these data again, I only keep a back up the simulations until the paper is accepted, but I definitely keep multiple back ups of my data analysis, which is easy because the size of the files is very small. because I don't want to copy everything by hand (did I mention I'm a lazy person?), and I want to keep the sub-folder structure so that I can still call HexSimR's functions,  HexSimR has also a function to  help in copying across the results to a new location. I didn't give this function a lot of testing, so please keep an eye that everything you want is effectively copied, but this should mirror the folder sub-structure and copy all the data you have  process with HexSimR leaving behind the log and raw files.
+
+```{r}
+copy.results(path.results, out = dir.out, copy.invasion = TRUE,
+             inv.name = "Invasion.front_part_A1_A2.xlsx", comp.census = F, comp.move = F,
+             move.name = "SSMD_move.xlsx", comp.ranges = F,
+             ranges.name = "SSMD_ranges.xlsx", plots = F, scen.results = TRUE,
+             scenarios = "all")
+```
+
+
+
+## Bonus: summarise everything in a table
+Well, everything in _one_ Table may  not be appropriate, but you can use somethin like the following script to put together a table like the one that it is in the paper.
+
+# References
+Winter, D.J., 2012. mmod: an R library for the calculation of population differentiation statistics. Molecular Ecology Resources 12, 1158-1160.
+
+Zhang, X. D. 2007. A pair of new statistical parameters for quality control in RNA interference
+high-throughput screening assays. Genomics 89:552-561.
+
