@@ -28,3 +28,4 @@ Suggests:
     roxygen2,
     gridExtra,
     testthat
+VignetteBuilder: knitr
