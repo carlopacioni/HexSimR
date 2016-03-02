@@ -14,6 +14,6 @@ read.sds(scenario, path.results, ncensus)
 \item{ncensus}{The number of the census to be considered}
 }
 \description{
-#' This function is internally used by other \code{HexSimR} functions
+This function is internally used by other \code{HexSimR} functions
 }
 
