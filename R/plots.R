@@ -87,6 +87,7 @@ prep.data <- function(i, means, sds, traits, scenarios, rm.T0) {
 
 census.plot <- function(path.results=NULL, scenarios="all", traits, ncensus=0, 
                         ngroups=1, rm.T0=TRUE) {
+  
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") {
@@ -127,6 +128,64 @@ invasion.plot <- function(fname=NULL) {
     geom_errorbar(limits)
   save(p, file=paste0(dirname(fname), "/", "plot_invasion", ".rda"))
   ggsave(paste0(dirname(fname), "/", "plot_invasion", ".pdf"), plot=p, 
+         heigh=297, width=210, unit="mm")
+  return(p)
+}
+
+#' Plot genetic distance with standard deviation bars
+#' 
+#' \code{gen.plot} generates a plot of the mean genetic distances with  
+#'   standard deviation bars. It assumes that file names are as for \code{HexSimR}
+#'   defaults.
+#'   
+#' @param time.step A numeric vector of length 1 to indicate the time step to 
+#'   be included
+#' @param r The raw in the genetic distance matrix to use
+#' @param c The column in the genetic distance matrix to use
+#' @inheritParams collate.census 
+#' @inheritParams multi.reports 
+#' @import XLConnect
+#' @import data.table
+#' @import ggplot2
+#' @export
+gen.plot <- function(path.results=NULL, scenarios="all", pop.name=NULL, 
+                     time.step=1, traits, r=2, c=1 ) {
+  #----------------------------------------------------------------------------#
+  # Helper functions
+  #----------------------------------------------------------------------------#
+  
+  read.gen.dist.data <- function(scenario, path.results, pop.name, time.step, 
+                                 traits, s, r, c) {
+    data <- readWorksheetFromFile(
+      paste0(path.results, "/", scenario, "/", scenario, "_", pop.name, "_", 
+             time.step, "_[", traits, "]_means.xlsx"), 
+      sheet=s)
+    return(data[r, c])
+  }
+  
+  #----------------------------------------------------------------------------#
+  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  suppressWarnings(if(scenarios == "all") 
+    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+  
+  traits <- paste0(traits, collapse="\":\"" )
+  
+  means <-lapply(scenarios, read.gen.dist.data, path.results, pop.name, 
+                 time.step, traits, s="means", r=2, c=1)
+  sds <-lapply(scenarios, read.gen.dist.data, path.results, pop.name, 
+               time.step, traits, s="sd", r=2, c=1)
+  d <- data.table(Scenario=scenarios, Mean=unlist(means), Std=unlist(sds))
+  d[, Min := Mean - Std]
+  d[, Max := Mean + Std]
+  limits <- aes(ymax=Max, ymin=Min)
+  p <- ggplot(d, aes(x=Scenario, y=Mean)) +
+    geom_point() +
+    theme(axis.text.x=element_text(angle=-90)) +
+    geom_errorbar(limits)
+  write.csv(d, file=paste0(path.results, "/", "gen.plot.data.csv"), 
+            row.names=FALSE)
+  save(p, file=paste0(path.results, "/", "plot_gen_distance", ".rda"))
+  ggsave(paste0(path.results, "/", "plot_gen_distance", ".pdf"), plot=p, 
          heigh=297, width=210, unit="mm")
   return(p)
 }
