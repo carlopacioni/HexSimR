@@ -11,6 +11,8 @@ m.gen.dist(path.results = NULL, scenarios = "all", pop.name, traits)
 
 \item{scenarios}{A character vector with the scenarios to be processed or "all"}
 
+\item{pop.name}{The name of the population}
+
 \item{traits}{A character vector with the name of the traits to be included}
 }
 \value{

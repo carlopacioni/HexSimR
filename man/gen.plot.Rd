@@ -12,6 +12,8 @@ gen.plot(path.results = NULL, scenarios = "all", pop.name = NULL,
 
 \item{scenarios}{A character vector with the scenarios to be processed or "all"}
 
+\item{pop.name}{The name of the population}
+
 \item{time.step}{A numeric vector of length 1 to indicate the time step to 
 be included}
 

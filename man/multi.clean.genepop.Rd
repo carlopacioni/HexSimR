@@ -7,6 +7,17 @@
 multi.clean.genepop(path.results = NULL, scenarios = "all",
   pop.name = NULL)
 }
+\arguments{
+\item{path.results}{The path to the 'Results' folder}
+
+\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+
+\item{pop.name}{The name of the population}
+}
+\value{
+Save to disk a genepop file with a suffix 'cleaned' and an extensin
+     ".gen" for each iteration within eachscenario
+}
 \description{
 \code{multi.clean.genepop} is a wrapper for \code{clean.genepop} that processes
   all HexSim generated genepop files within a given scenario(s). It assumes 
@@ -25,11 +36,8 @@ multi.clean.genepop(path.results = NULL, scenarios = "all",
 When using \code{multi.clean.genepop} there is no option to choose the title 
   of the genepop files 
   (i.e. the first line of the genepop input file).
-  
-  @inheritParams multi.reports
-  @return Save to disk a genepop file with a suffix 'cleaned' and an extensin
-     ".gen" for each iteration within eachscenario
-  @seealso clean.genepop
-  @export
+}
+\seealso{
+clean.genepop
 }
 

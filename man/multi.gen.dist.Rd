@@ -7,16 +7,25 @@
 multi.gen.dist(path.results = NULL, scenarios = "all", pop.name = NULL,
   mean.type = "harmonic")
 }
+\arguments{
+\item{path.results}{The path to the 'Results' folder}
+
+\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+
+\item{pop.name}{The name of the population}
+
+\item{mean.type}{The type of mean to be calculated over multiple loci}
+}
+\value{
+See \code{gen.dist} for each scenario
+}
 \description{
 \code{multi.gen.dist} is a wrapper for \code{gen.dist} that generates
   a matrix of genetic distances for multiple scenarios. 
   
 \code{multi.gen.dist} will generate a matrix for each replicate within the scenario's folder.
-  
-  @inheritParams multi.reports
-  @inheritParams gen.dist
-  @return See \code{gen.dist} for each scenario
-  @seealso gen.dist
-  @export
+}
+\seealso{
+gen.dist
 }
 

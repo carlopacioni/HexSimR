@@ -15,6 +15,8 @@ w.genepop.batch(path.results = NULL, scenarios = "all", time.steps = 1,
 
 \item{time.steps}{A numeric vector to indicate the time step to be included}
 
+\item{pop.name}{The name of the population}
+
 \item{traits}{A character vector with the name of the traits to be included}
 }
 \value{

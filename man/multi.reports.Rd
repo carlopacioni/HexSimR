@@ -8,6 +8,31 @@ multi.reports(path.results = NULL, scenarios = "all", pop.name = NULL,
   type = "move", all = TRUE, hx = NULL, events = NULL, start = "min",
   end = "max")
 }
+\arguments{
+\item{path.results}{The path to the 'Results' folder}
+
+\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+
+\item{pop.name}{The name of the population}
+
+\item{type}{Whether movement ("move") or ranges ("ranges") reports should be 
+processed}
+
+\item{all}{Whether the reports were generated from a combined log file}
+
+\item{hx}{The size of one hexagon in hectares}
+
+\item{events}{A character vector with the name of the events for which the 
+descriptive statistics needs to be calculated}
+
+\item{start}{The first time step to be included in the summary statistics}
+
+\item{end}{The last time step to be include in the summary statistics}
+}
+\value{
+A list where each element is the output from either \code{move} or
+    \code{ranges}.
+}
 \description{
 \code{multi.reports} is basically a wrapper for the two functions that process
   HexSim generated reports. It assumes that the names of the report files were 
@@ -21,15 +46,5 @@ If the reports file is generated from each iteration's log file, then the
   reports are sitting within each iteration's subfolder and \code{path.results} 
   has to point to the scenario's folder (i.e. the subfolders will be the 
   scenario's name with the suffix [x], where x is the number of the iteration).
-  
-  @param pop.name The name of the population
-  @param type Whether movement ("move") or ranges ("ranges") reports should be 
-    processed
-  @param all Whether the reports were generated from a combined log file
-  @inheritParams SSMD.census
-  @inheritParams ranges
-  @return A list where each element is the output from either \code{move} or
-    \code{ranges}.
-  @export
 }
 
