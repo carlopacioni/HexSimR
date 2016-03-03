@@ -51,11 +51,11 @@
 #'   of the genepop files 
 #'   (i.e. the first line of the genepop input file).
 #'   
-#'   @inheritParams multi.reports
-#'   @return Save to disk a genepop file with a suffix 'cleaned' and an extensin
+#' @inheritParams multi.reports
+#' @return Save to disk a genepop file with a suffix 'cleaned' and an extensin
 #'      ".gen" for each iteration within eachscenario
-#'   @seealso clean.genepop
-#'   @export
+#' @seealso clean.genepop
+#' @export
 multi.clean.genepop <- function(path.results=NULL, scenarios="all", 
                                 pop.name=NULL) {
   #----------------------------------------------------------------------------#
@@ -212,11 +212,11 @@ gen.dist <- function(fname, mean.type="harmonic") {
 #'   
 #' \code{multi.gen.dist} will generate a matrix for each replicate within the scenario's folder.
 #'   
-#'   @inheritParams multi.reports
-#'   @inheritParams gen.dist
-#'   @return See \code{gen.dist} for each scenario
-#'   @seealso gen.dist
-#'   @export
+#' @inheritParams multi.reports
+#' @inheritParams gen.dist
+#' @return See \code{gen.dist} for each scenario
+#' @seealso gen.dist
+#' @export
 multi.gen.dist <- function(path.results=NULL, scenarios="all", pop.name=NULL,
                            mean.type="harmonic") {
   #----------------------------------------------------------------------------#
