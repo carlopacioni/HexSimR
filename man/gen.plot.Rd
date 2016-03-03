@@ -17,13 +17,17 @@ gen.plot(path.results = NULL, scenarios = "all", pop.name = NULL,
 \item{time.step}{A numeric vector of length 1 to indicate the time step to 
 be included}
 
+\item{traits}{A character vector with the traits that were included in the 
+\code{m.gen.dist} call}
+
 \item{r}{The raw in the genetic distance matrix to use}
 
 \item{c}{The column in the genetic distance matrix to use}
 }
 \description{
 \code{gen.plot} generates a plot of the mean genetic distances with  
-  standard deviation bars. It assumes that file names are as for \code{HexSimR}
+  standard deviation bars. It assumes that file names that have been generated
+  with \code{m.gen.dist} are as for \code{HexSimR}
   defaults.
 }
 
