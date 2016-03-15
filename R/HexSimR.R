@@ -559,15 +559,15 @@ SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL,
 #'   has to point to the scenario's folder (i.e. the subfolders will be the 
 #'   scenario's name with the suffix [x], where x is the number of the iteration).
 #'   
-#'   @param pop.name The name of the population
-#'   @param type Whether movement ("move") or ranges ("ranges") reports should be 
+#' @param pop.name The name of the population
+#' @param type Whether movement ("move") or ranges ("ranges") reports should be 
 #'     processed
-#'   @param all Whether the reports were generated from a combined log file
-#'   @inheritParams SSMD.census
-#'   @inheritParams ranges
-#'   @return A list where each element is the output from either \code{move} or
+#' @param all Whether the reports were generated from a combined log file
+#' @inheritParams SSMD.census
+#' @inheritParams ranges
+#' @return A list where each element is the output from either \code{move} or
 #'     \code{ranges}.
-#'   @export
+#' @export
 multi.reports <- function(path.results=NULL, scenarios="all", pop.name=NULL, 
                           type="move", all=TRUE, hx=NULL, events=NULL, 
                           start="min", end="max") {

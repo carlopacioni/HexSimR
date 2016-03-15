@@ -94,7 +94,8 @@ read.means <- function(scenario, path.results, ncensus) {
 
 #' Read standard deviation values from output of collate.census
 #' 
-#' #' This function is internally used by other \code{HexSimR} functions
+#' This function is internally used by other \code{HexSimR} functions
+#' 
 #' @param scenario A character vector with the name of the scenario  
 #' @inheritParams collate.census
 #' @inheritParams SSMD.census
