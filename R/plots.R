@@ -87,7 +87,6 @@ prep.data <- function(i, means, sds, traits, scenarios, rm.T0) {
 
 census.plot <- function(path.results=NULL, scenarios="all", traits, ncensus=0, 
                         ngroups=1, rm.T0=TRUE) {
-  
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") {
