@@ -32,7 +32,12 @@ help you to decide whether HexSimR is something that can be useful for you
 without having to dedicate much time to figure out what each function does. if you have already decided that you want to use it, it may still make sense for you to quickly scan through this document so that you familiarise yourself with what HexSimR can do and it should give you a head start when you pass on your own data. 
 
 The data that I use as an example are a reduced set of the simulations used for the paper (just two scenarios, and just two replicates for each scenario). This is to keep to a minimum the amount of data that you have to download when install HexSimR. Just to give you an idea of what the paper is about so that you can follow the example, we simulated wild dog population dynamics to forecast the effect of the fence upgrades and plausible control scenarios on wild dog populations on both sides of the State Barrier Fence. If you are wondering what the State Barrier Fence is, in a few words, it is a fence that cuts the south west of Western Australia with the intent to protect the most productive agriculture areas. For modelling purpose, just imagine a square roughly cut in half diagonally by a fence as showed in the figure below. I refer to 'inside' the fence, when I intend the region to the west of the fence. Simulation parameters were drawn from published research on biology and ecology of dingo population in the WA northern rangelands. We assumed that non-pure dingoes (i.e. domestic dogs and hybrids) would also comply with the same parameters. In the example here, I only kept a scenario where no control is performed, and a second where control is applied inside and outside the fence at the highest regime we believe it is possible in the region by mean of baiting, trapping and shooting. Both scenarios simulate a fully dog proof fence (i.e. no transpassing is allowed).
-!["__Figure__"](Map.tif)
+
+```{r, echo=FALSE, out.width=690, fig.cap="__Figure 1.__ The HexSim generated map of the study area. Yellow; inside the fence; Green: outside."}
+knitr::include_graphics("Map.tif")
+```
+
+    
 
 To find out where the example data are we run the following, which loads the package and store the location of the example data in `example_dir`.
 
@@ -112,44 +117,78 @@ new.plot
 ```
 
 
-A similar approach can be used for reports. For example, below HexSimR calculates the descriptive statistics for the movement's and ranges' reports (after these were generated. See 'HexSimR utilities' if you want to have a look on how to quickly generate those). 
+Similarly, you may want to also calculate the descriptive statistics of 
+HexSim generated reports. At the moment HexSimR can process the movement and 
+ranges reports. For example, below HexSimR calculates the descriptive statistics 
+for the ranges' reports (after these were generated. See 'HexSimR utilities' if 
+you want to have a look on how to quickly generate those). 
 
-__RUN THIS CODE CHUNK AFTER REPORTS ARE INSERTED__
-
-```{r, eval=FALSE}
+```{r}
 # After reports are generated...
-multi.reports(path.results, scenarios="all", pop.name="Dingoes", 
-                      type="move", all=TRUE, hx=NULL, events=NULL, 
-                      start="min", end="max") 
-                      
-multi.reports(path.results, scenarios="all", pop.name="Dingoes", 
-                     type="ranges", all=TRUE, hx=1122.4, 
-                     events=c("Lonersexplore", "Adjustterritories2"), 
-                     start="min", end="max")
+m.range.rep <- multi.reports(path.results, scenarios="all", pop.name="Dingoes", 
+                               type="ranges", all=TRUE, hx=1122.4, 
+                               events=c("Lonersexplore", "Adjustterritories2"), 
+                               start="min", end="max")
 ```           
 
-Now, that you have collated together all these data and have made up your mind about what could be possibly going on, you may want to statistically test whether the difference you have seen is significant. HexSimR offers you the possibility to compare scenarios with the Strictly Standardised Mean Difference (SSMD, Zhang 2007). The main reason why you should use SSMD is because it is a statistic that it is not inflated by large sample size, which are typically very large when running population dynamic model (in our example, we only have 2 but in the paper remember I ran 200 replicates and I would have normally ran 1,000 if it wasn't for computation limits!).  In the example below I ran a comparison for the census data, and the descriptive statistics of the two reports. The names of the functions should be self explanatory to indicate which one is which, if you get lost just call the help file with the name of the function. If you want to loop `SSMD.census` to carry out multiple comparisons across several scenarios, have a look at the function `apply.ssmd` in the supplementary material of the paper for an example on how to do that. 
+You may like to explore the results of `multi.reports`. These are saved to disk
+for each scenario and are returned as a list to R. The list has an element for 
+each senario processed. Each of these elements is also a list with three elemnts:
+the first is the mean for each year.
+```{r}
+# The follwoing prints the mean Group size and Resources for each year of the 
+# first scenario
+m.range.rep[[1]][[1]][, 1:4, with=FALSE]
+```
 
-__RUN THIS CODE CHUNK AFTER REPORTS ARE INSERTED__
+The second and the third are, respectively,
+the mean and the standdard deviation across years between `start` and `end` for 
+each `events`. The events are the events you inserted in HexSim sequence. If you
+leave the default `NULL`, then all events are considered (see the help file for 
+the function `ranges` for more details on the output). 
+
+```{r}
+m.range.rep[[1]][[2]]
+m.range.rep[[1]][[3]]
+```
+
+
+Now, that you have collated together all these data and have made up your mind about what could be possibly going on, you may want to statistically test whether the difference you have seen is significant. HexSimR offers you the possibility to compare scenarios with the Strictly Standardised Mean Difference (SSMD, Zhang 2007). The main reason why you should use SSMD is because it is a statistic that it is not inflated by large sample size, which are typically very large when running population dynamic model (in our example, we only have 2 but in the paper remember I ran 200 replicates and I would have normally ran 1,000 if it wasn't for computation limits!).  In the example below I ran a comparison for the census data, and the descriptive statistics of the report. The names of the functions should be self explanatory to indicate which one is which, if you get lost just call the help file with the name of the function. If you want to loop `SSMD.census` to carry out multiple comparisons across several scenarios, have a look at the function `apply.ssmd` in the supplementary material of the paper for an example on how to do that. 
+
 ```{r}
 ssmd.cen <- SSMD.census(path.results, base="DingoBaseSBF_SelDist", ncensus=2)
 
-# SSMD.move(path.results, scenarios="all", base="DingoBase_SelDist", 
-#                    sum.move="summary_move.csv")
+ssmd.ran <- SSMD.ranges(path.results, scenarios="all", base="DingoBaseSBF_SelDist", 
+                       sum.ranges="summary_ranges.xlsx")
+```
 
-#SSMD.ranges(path.results, scenarios="all", base="DingoBase_SelDist", 
-#                       sum.ranges="summary_ranges.xlsx")
+Each `SSMD` function returns a list with two elements, the first is the statistics (i.e. the SSMD value),
+and the second is the p value. I only print out here the test for the ranges report
+because it is shorter:
 
-
+```{r}
+ssmd.ran
 ```
 
 ## Invasion front 
 In my paper I wanted to monitor the progress of the 'invasion' of wild dogs from east to west in the agriculture area in the south west of Western Australia, and I have developed a function to help doing this. An  acknowledgment is due to Nathan Schumaker, who suggested to use an array of hexagons rather than pixels from a ASCII file as I had initially thought. The advantage of Nathan's approach is that this function is now quite flexible as you can arrange the array in any possible way that it is meaningful to your case. Because there is some setting up you have to do before you run your model, I'll provide here some indications on how to do that. 
 
-Firstly, you have to create an array of hexagons. As mentioned before, I have created a linear array (__Figure...__). 
+Firstly, you have to create an array of hexagons. As mentioned before, I have created a linear array (__Figure 2__).  
+
+```{r, echo=FALSE, out.width=690, fig.cap="__Figure 2.__ An array of hexagons. Hexagons' values are incremented by one unit from east to west in groupd of four hexagons."}
+knitr::include_graphics("Array.tif")
+```
   
-  ![](Array.tif)
-Another option (also suggested by Nathan) would have been to have radial patches. The bottom line is that it has to be something that does what you need it to do. Then, you have to give to each patch a value. I have used patches of four hexagons, and given them values from 1 to 11, east to west. Then you have to create a trait (which I called 'PopID') where each treat value represent a location. Possibly, using the trait builder named "Sequenced Trait" would make it easy to construct an accumulated trait with many trait values (__Figure...__).
+
+Another option (also suggested by Nathan) would have been to have radial patches. The bottom line is that it has to be something that does what you need it to do. Then, you have to give to each patch a value. I have used patches of four hexagons, and given them values from 1 to 11, east to west (__Figure 2__). Then you have to create a trait (which I called 'PopID') where each treat value represent a location. Possibly, using the trait builder named "Sequenced Trait" would make it easy to construct an accumulated trait with many trait values (__Figure 3__).  
+  
+  
+
+```{r, echo=FALSE, out.width=490, fig.cap='__Figure 3.__ image showing how to select the "Sequenced Trait" trait builder in HexSim to generate an accumulator to be used to monitor the progress through an array of hexagons.'}
+knitr::include_graphics("SequencedTrait.tif")
+```
+  
+
 
 You have to make sure to insert an accumulate event using the 'individual location' updater in your model that targets the accumulator relevant for your trait (in my example 'PopID', __Figure__), which will update the location of the animals. 
 Lastly, you have to insert a census event that uses the trait you just set up, so that you will have a census file that will report the number of animals you have in each patch (which remembered are named 'Trait' in the census file). Once you have done all this and have run the simulations, you can then call `invasion.front` that will save an xls file with the mean & SD for each time step, as well as an overall mean. As usual, with `ncensus` you tell HexSimR which census file it should consider. The argument `value` is used to set a minimum threshold of animals. In my case, I set this to 1, which basically means that it is enough to have one animal in a patch to consider it occupied. You may want to use a different value depending on your needs. The `patch.width` is used to set the uni. in my case, each hexagon is 3.6 km if width, and each patch is 4 hexagons. So the width is 3.6 * 4 = 14.4 km. I could have used `patch.width=4`, in which case the distance traveled would have been expressed in number of hexagons.
@@ -169,10 +208,10 @@ inv.plot
 ```
 
 ## Genetic analysis
-Let's say that you have set up all your scenarios in HexSim, have run the hundreds of simulations you wanted to and now you want to calculate the mean genetic distance between two populations. HexSimR offers the possibility to do this, but it calculates the genetic distance between the two populations for each replicate first, and then averages that across all replicates. This means that in order to use HexSimR's functions you have to get a genepop input file for each replicate (using HexSim). Right now, this involves adding manually to a queue a genepop-report for each iteration/scenario in a batch file (for each time step you want these statistics to be calculated). In other words, lots of clicking. The alternative is to use `w.genepop.batch()` to ask HexSim to generate the genepop input files. You can then use `multi.clean.genepop()` to make sure that the files respect the formatting required by `mmod` (Winter, 2012), which is used internally by HexSimR when you use `gen.dist()`. Here is an example. Note that we are calculating in one go the genetic distance for all scenarios, for two time steps:
+Let's say that you have set up all your scenarios in HexSim, have run the hundreds of simulations you wanted to, and now you want to calculate the mean genetic distance between two populations. HexSimR offers the possibility to do this, but it calculates the genetic distance between the two populations for each replicate first, and then averages that across all replicates. This means that in order to use HexSimR's functions you have to get a genepop input file for each replicate (using HexSim). Right now, this involves adding manually to a queue a genepop-report for each iteration/scenario in a batch file (for each time step you want these statistics to be calculated). In other words, lots of clicking. The alternative is to use `w.genepop.batch()` to ask HexSim to generate the genepop input files. You can then use `multi.clean.genepop()` to make sure that the files respect the formatting required by `mmod` (Winter, 2012), which is used internally by HexSimR when you use `gen.dist()`. Here is an example. Note that we are calculating in one go the genetic distance for all scenarios, for two time steps:
 ```{r}
 # batch file to generate genepop files. Pass this to OutputTransformer.exe
-w.genepop.batch (path.results, scenarios="all", time.steps=c(15, 30), 
+w.genepop.batch (path.results, scenarios="all", time.steps=30, 
                  pop.name="Dingoes", traits="PopID")
 
 # Once OutputTransformer.exe is done, clean up the genepop input files
