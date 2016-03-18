@@ -565,6 +565,7 @@ SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL,
 #' @param all Whether the reports were generated from a combined log file
 #' @inheritParams SSMD.census
 #' @inheritParams ranges
+#' @seealso \code{\link{move}}, \code{\link{ranges}}
 #' @return A list where each element is the output from either \code{move} or
 #'     \code{ranges}.
 #' @export

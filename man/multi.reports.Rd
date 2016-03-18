@@ -47,4 +47,7 @@ If the reports file is generated from each iteration's log file, then the
   has to point to the scenario's folder (i.e. the subfolders will be the 
   scenario's name with the suffix [x], where x is the number of the iteration).
 }
+\seealso{
+\code{\link{move}}, \code{\link{ranges}}
+}
 
