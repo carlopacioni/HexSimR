@@ -23,7 +23,8 @@ processed}
 \item{hx}{The size of one hexagon in hectares}
 
 \item{events}{A character vector with the name of the events for which the 
-descriptive statistics needs to be calculated}
+mean and standard deviation across years needs to be calculated. If NULL 
+(default), all events are considered}
 
 \item{start}{The first time step to be included in the summary statistics}
 
