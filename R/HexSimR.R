@@ -377,19 +377,39 @@ move <- function(rep.move=NULL) {
 }
 
 #' Calculates descriptive stats from the HexSim generated report 'ranges'
-#'
-#' \code{ranges} also calculates the mean number of groups and the mean size of
-#'   territory in ha and sqkm 
-#'   
+#' 
+#' \code{ranges} calculates descriptive stats, for each year, from the HexSim
+#' generated report 'ranges'. In addition to HexSim items, \code{ranges} also
+#' calculates the mean number of groups and the mean size of territory in ha and
+#' sqkm based on the value passed with \code{hx}. From this table \code{ranges}
+#' then calculates the mean across all years in the window of years 
+#' \code{start} - \code{end}.
+#' 
 #' @param rep.ranges The fully qualified (i.e. including the path) name of the 
 #'   report
-#' @param hx The size of one hexagon in hectares 
+#' @param hx The size of one hexagon in hectares
 #' @param events A character vector with the name of the events for which the 
-#'   descriptive statistics needs to be calculated
+#'   mean and standard deviation across years needs to be calculated. If NULL 
+#'   (default), all events are considered
 #' @param start The first time step to be included in the summary statistics
 #' @param end The last time step to be include in the summary statistics
-#' @return A data.table with summary statistics, and a .csv with the same data is 
-#'   also saved to disk
+#' @return A list with three elements:
+#'   \itemize{ 
+#'       \item $descriptive: A \code{data.frame} (\code{data.table}) with the 
+#'              summary statistics with the yearly mean for each event
+#'        \item $means: A \code{data.frame} (\code{data.table}) with the mean 
+#'              across years
+#'        \item $sds: A \code{data.frame} (\code{data.table}) with the standard 
+#'              deviation across years      
+#'          }
+#'    These results are also saved to disk in two files:
+#'    \itemize{ 
+#'       \item $descriptive_ranges.csv:  The summary statistics with the yearly 
+#'              mean for each event     
+#'        \item $summary_ranges.xlsx:  the mean and standard deviation across 
+#'               years (in two separate tabs)
+#'            }
+#'              
 #' @import data.table
 #' @import XLConnect
 #' @export
