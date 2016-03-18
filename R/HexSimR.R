@@ -561,7 +561,7 @@ SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL,
   wb <- loadWorkbook(wb.name, create=TRUE)
   lapply(seq_along(scenarios), ssmd2xlsx, scenarios, ssmds, pvalues, wb)
   
-  return(list(ssmds, pvalues))
+  return(list(SSMD=ssmds, pvalues=pvalues))
 }
 
 #' Generate summary statistics for multiple reports
