@@ -49,18 +49,17 @@ make.plot <- function(ngroup, nscens_group, means, sds, traits, scenarios,
 #' @inheritParams make.plot
 #' @inheritParams SSMD.census
 #' @inheritParams census.plot
-#' @importFrom reshape2 melt
 #' @import data.table
 #' @export
 prep.data <- function(i, means, sds, traits, scenarios, rm.T0) {
   scen_means <- data.table(means[[i]][if(rm.T0 == TRUE) -1, ])
   scen_sds <- data.table(sds[[i]][if(rm.T0 == TRUE) -1, ])
   
-  scen_m.melted <- reshape2::melt(scen_means, id.vars="Time.Step", measure.vars=traits,
+  scen_m.melted <- melt(scen_means, id.vars="Time.Step", measure.vars=traits,
                         variable.name="Trait", value.name="Mean")
   scen_m.melted[, Scenario := scenarios[i]]
   
-  scen_sd.melted <- reshape2::melt(scen_sds, id.vars="Time.Step", measure.vars=traits,
+  scen_sd.melted <- melt(scen_sds, id.vars="Time.Step", measure.vars=traits,
                          variable.name="Trait", value.name="SD")
 
   d <- cbind(scen_m.melted, SD=scen_sd.melted[, SD])
