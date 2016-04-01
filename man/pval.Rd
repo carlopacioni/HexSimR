@@ -6,9 +6,11 @@
 \usage{
 pval(x)
 }
+\arguments{
+\item{x}{The data.frame of quantiles}
+}
 \description{
 \code{pval} calculates one-tailed p values from a data.frame that contains 
   quantiles and it is used internally from SSMD functions.
-  @param x The data.frame of quantiles
 }
 

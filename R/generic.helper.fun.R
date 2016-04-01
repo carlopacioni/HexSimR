@@ -74,7 +74,7 @@ calc.ssmd <- function(mdata, mbase, sddata, sdbase, scenario) {
 #' 
 #' \code{pval} calculates one-tailed p values from a data.frame that contains 
 #'   quantiles and it is used internally from SSMD functions.
-#'   @param x The data.frame of quantiles
+#' @param x The data.frame of quantiles
 pval <- function(x) pnorm(abs(as.matrix(x)), lower.tail=FALSE)
 
 #' Read means values from output of collate.census
