@@ -35,7 +35,7 @@ make.plot <- function(ngroup, nscens_group, means, sds, traits, scenarios,
   save(p, file=paste0(path.results, "/", "plots_census.", ncensus, ".group.",
                       ngroup, ".rda"))
   ggsave(paste0(path.results, "/", "plots_census.", ncensus, ".group.",
-             ngroup, ".pdf"), plot=p, heigh=297, width=210, unit="mm")
+             ngroup, ".pdf"), plot=p, height=297, width=210, units="mm")
   return(p)
 }
 
@@ -126,7 +126,7 @@ invasion.plot <- function(fname=NULL) {
     geom_errorbar(limits)
   save(p, file=paste0(dirname(fname), "/", "plot_invasion", ".rda"))
   ggsave(paste0(dirname(fname), "/", "plot_invasion", ".pdf"), plot=p, 
-         heigh=297, width=210, unit="mm")
+         height=297, width=210, units="mm")
   return(p)
 }
 
@@ -187,6 +187,6 @@ gen.plot <- function(path.results=NULL, scenarios="all", pop.name=NULL,
             row.names=FALSE)
   save(p, file=paste0(path.results, "/", "plot_gen_distance", ".rda"))
   ggsave(paste0(path.results, "/", "plot_gen_distance", ".pdf"), plot=p, 
-         heigh=297, width=210, unit="mm")
+         height=297, width=210, units="mm")
   return(p)
 }

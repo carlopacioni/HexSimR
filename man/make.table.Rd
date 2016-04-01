@@ -17,6 +17,9 @@ make.table(path.results = NULL, scenarios = "all", fnames, SSMD = FALSE,
 \item{fnames}{The name(s) of the output file(s) to be processed. If more the 
 one scenario is passed, the output file names have to be all equal}
 
+\item{SSMD}{Whether the data being processed are SSMD comparisons 
+(default: FALSE)}
+
 \item{colh}{A list with as many elements as the length of fnames. Each 
 element is a character vector with the names of the column headings to be 
 considered for the relative fnames (default: ranges' headings)}

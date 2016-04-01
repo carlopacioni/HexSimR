@@ -46,6 +46,8 @@
 #'   one scenario is passed, the output file names have to be all equal
 #' @param ts If census data are being processed, a numeric vector with the time 
 #'   steps to include. If NULL (default), all time steps are included
+#' @param SSMD Whether the data being processed are SSMD comparisons 
+#'   (default: FALSE)
 #' @param colh A list with as many elements as the length of fnames. Each 
 #'   element is a character vector with the names of the column headings to be 
 #'   considered for the relative fnames (default: ranges' headings)
