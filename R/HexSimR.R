@@ -1,12 +1,12 @@
 
-#' Combine together HexSim census output across iterations.
+#' Combine together HexSim census outputs across iterations.
 #'
-#' Combine together HexSim census output across iterations. If the scenarios have 
+#' Combine together HexSim census outputs across iterations. If the scenarios have 
 #' multiple census events, all census files are processed (separately). Mean values 
 #' are reported in the final file which is located in Results/scenario_name
-#' folder. 
+#' folder and returned as a list. 
 #'
-#' If there are several scenarios and the argument scenarios="all" (default), all
+#' If there are several scenarios and \code{scenarios="all"} (default), all
 #' scenarios are processed, otherwise it is possible to select a subset of scenarios
 #' using a character vector, e.g. scenarios=c("scen1", "scen2").
 #'
@@ -18,7 +18,8 @@
 #' @param path.results The path to the 'Results' folder 
 #' @param scenarios A character vector with the scenarios to be processed or "all"
 #' @return A list with three elements: the combined data, the mean and standard
-#'   deviation 
+#'   deviation. An xls file is also saved with the descriptive statistics and a 
+#'   .rda file is saved with the combined data 
 #' @import data.table
 #' @import XLConnect
 #' @export
@@ -110,6 +111,8 @@ collate.census <- function(path.results=NULL, scenarios="all") {
   scen.sds <- lapply(data.comb, census.sd)
   
   lapply(nscens, save2disk, dir.path=path.results, scen.means, scen.sds, scenarios)
+  save(data.comb, file=paste(path.results, "collated.census.rda", sep="/"), 
+       compress="xz")
   
   return(list(data=data.comb, means=scen.means, sds=scen.sds))
 }
