@@ -106,6 +106,7 @@ collate.census <- function(path.results=NULL, scenarios="all") {
   # elements
   data.comb <- lapply(nscens, byscen, scenarios=scenarios, 
                       l.iter.folders=l.iter.folders)
+  names(data.comb) <- scenarios
   
   scen.means <- lapply(data.comb, census.mean)
   scen.sds <- lapply(data.comb, census.sd)
