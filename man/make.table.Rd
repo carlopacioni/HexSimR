@@ -6,8 +6,9 @@
 \usage{
 make.table(path.results = NULL, scenarios = "all", fnames, SSMD = FALSE,
   colh = list(c("GroupSize", "Resources", "nGroups", "ha", "sqkm")),
-  vround = 1, sdround = 1, ts = NULL, table.name = "Tables.xlsx",
-  tab.name = NULL, save2disk = TRUE, dir.out = NULL)
+  vround = 1, sdround = 1, time.steps = NULL,
+  table.name = "Tables.xlsx", tab.name = NULL, save2disk = TRUE,
+  dir.out = NULL)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
@@ -30,7 +31,7 @@ should be rounded to}
 \item{sdround}{If SSMD=FALSE, the number of digits the standard deviation 
 should be rounded to}
 
-\item{ts}{If census data are being processed, a numeric vector with the time 
+\item{time.steps}{If census data are being processed, a numeric vector with the time 
 steps to include. If NULL (default), all time steps are included}
 
 \item{table.name}{The name of the file where to save the table}

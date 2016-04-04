@@ -44,7 +44,7 @@
 #' 
 #' @param fnames The name(s) of the output file(s) to be processed. If more the 
 #'   one scenario is passed, the output file names have to be all equal
-#' @param ts If census data are being processed, a numeric vector with the time 
+#' @param time.steps If census data are being processed, a numeric vector with the time 
 #'   steps to include. If NULL (default), all time steps are included
 #' @param SSMD Whether the data being processed are SSMD comparisons 
 #'   (default: FALSE)
@@ -73,7 +73,7 @@
 #' @export
 make.table <- function(path.results=NULL, scenarios="all", fnames, SSMD=FALSE, 
                 colh=list(c("GroupSize", "Resources",	"nGroups", "ha", "sqkm")), 
-                vround=1, sdround=1, ts=NULL, table.name="Tables.xlsx", 
+                vround=1, sdround=1, time.steps=NULL, table.name="Tables.xlsx", 
                 tab.name=NULL, save2disk=TRUE, 
                 dir.out=NULL) {
   #----------------------------------------------------------------------------#
@@ -85,7 +85,7 @@ make.table <- function(path.results=NULL, scenarios="all", fnames, SSMD=FALSE,
     return(comb)
   }
   
-  read_res <- function(scenario, path.results, fname, SSMD, ts, colh, vround, 
+  read_res <- function(scenario, path.results, fname, SSMD, time.steps, colh, vround, 
                         sdround, dir.out) {
     nC_fname <- nchar(fname)
     ext <- substr(fname, nC_fname - 3, nC_fname)
@@ -118,18 +118,18 @@ make.table <- function(path.results=NULL, scenarios="all", fnames, SSMD=FALSE,
         }
         tab <- data.table(readWorksheet(wb, sheet=paste0("pval_", scen_short)))
       }
-      if(is.null(ts)) {
+      if(is.null(time.steps)) {
         data <- tab[, colh, with=FALSE]
       } else {
-        data <- tab[(ts + 1), colh, with=FALSE]
+        data <- tab[(time.steps + 1), colh, with=FALSE]
       }
       
       if(SSMD == FALSE) {
         tab <- data.table(readWorksheet(wb, sheet="sd"))
-        if(is.null(ts)) {
+        if(is.null(time.steps)) {
           data_sd <- tab[, colh, with=FALSE]
         } else {
-          data_sd <- tab[(ts + 1), colh, with=FALSE]
+          data_sd <- tab[(time.steps + 1), colh, with=FALSE]
         }
         
         sds <- paste0(colh, "_sd")
@@ -147,9 +147,9 @@ make.table <- function(path.results=NULL, scenarios="all", fnames, SSMD=FALSE,
     }
 
     data_r[, Scenario := scenario]
-    if(!is.null(ts))  data_r[, TimeStep := ts]
+    if(!is.null(time.steps))  data_r[, TimeStep := time.steps]
     
-    setcolorder(data_r, c("Scenario", if(!is.null(ts)) "TimeStep",  colh))
+    setcolorder(data_r, c("Scenario", if(!is.null(time.steps)) "TimeStep",  colh))
     
     return(data_r)
   }
@@ -169,7 +169,7 @@ make.table <- function(path.results=NULL, scenarios="all", fnames, SSMD=FALSE,
   for(fname in fnames) {
     i <- i + 1
     ldat[[i]] <- lapply(scenarios, read_res, path.results, fname=fname, SSMD, 
-                        ts, colh[[i]], vround, sdround, dir.out)
+                        time.steps, colh[[i]], vround, sdround, dir.out)
     ldat[[i]] <- rbindlist(ldat[[i]], use.names=T)
   }
   data <- do.call(cbind, ldat)
