@@ -26,9 +26,9 @@ processed}
 mean and standard deviation across years needs to be calculated. If NULL 
 (default), all events are considered}
 
-\item{start}{The first time step to be included in the summary statistics}
+\item{start}{The first time step to be included}
 
-\item{end}{The last time step to be include in the summary statistics}
+\item{end}{The last time step to be include}
 }
 \value{
 A list where each element is the output from either \code{move} or

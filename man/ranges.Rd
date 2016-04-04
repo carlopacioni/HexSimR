@@ -17,26 +17,26 @@ report}
 mean and standard deviation across years needs to be calculated. If NULL 
 (default), all events are considered}
 
-\item{start}{The first time step to be included in the summary statistics}
+\item{start}{The first time step to be included}
 
-\item{end}{The last time step to be include in the summary statistics}
+\item{end}{The last time step to be include}
 }
 \value{
 A list with three elements:
   \itemize{ 
       \item $descriptive: A \code{data.frame} (\code{data.table}) with the 
-             summary statistics with the yearly mean for each event
+             summary statistics with mean for each time step, for each event
        \item $means: A \code{data.frame} (\code{data.table}) with the mean 
-             across years
+             across the selected time steps
        \item $sds: A \code{data.frame} (\code{data.table}) with the standard 
-             deviation across years      
+             deviation across the selected time steps      
          }
    These results are also saved to disk in two files:
    \itemize{ 
-      \item $descriptive_ranges.csv:  The summary statistics with the yearly 
-             mean for each event     
+      \item $descriptive_ranges.csv:  The summary statistics for each time 
+              step, for each event     
        \item $summary_ranges.xlsx:  the mean and standard deviation across 
-              years (in two separate tabs)
+              the selected time steps (in two separate tabs)
            }
 }
 \description{

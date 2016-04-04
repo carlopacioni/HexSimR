@@ -395,23 +395,23 @@ move <- function(rep.move=NULL) {
 #' @param events A character vector with the name of the events for which the 
 #'   mean and standard deviation across years needs to be calculated. If NULL 
 #'   (default), all events are considered
-#' @param start The first time step to be included in the summary statistics
-#' @param end The last time step to be include in the summary statistics
+#' @param start The first time step to be included
+#' @param end The last time step to be include
 #' @return A list with three elements:
 #'   \itemize{ 
 #'       \item $descriptive: A \code{data.frame} (\code{data.table}) with the 
-#'              summary statistics with the yearly mean for each event
+#'              summary statistics with mean for each time step, for each event
 #'        \item $means: A \code{data.frame} (\code{data.table}) with the mean 
-#'              across years
+#'              across the selected time steps
 #'        \item $sds: A \code{data.frame} (\code{data.table}) with the standard 
-#'              deviation across years      
+#'              deviation across the selected time steps      
 #'          }
 #'    These results are also saved to disk in two files:
 #'    \itemize{ 
-#'       \item $descriptive_ranges.csv:  The summary statistics with the yearly 
-#'              mean for each event     
+#'       \item $descriptive_ranges.csv:  The summary statistics for each time 
+#'               step, for each event     
 #'        \item $summary_ranges.xlsx:  the mean and standard deviation across 
-#'               years (in two separate tabs)
+#'               the selected time steps (in two separate tabs)
 #'            }
 #'              
 #' @import data.table
