@@ -2,7 +2,7 @@
 % Please edit documentation in R/HexSimR.R
 \name{collate.census}
 \alias{collate.census}
-\title{Combine together HexSim census output across iterations.}
+\title{Combine together HexSim census outputs across iterations.}
 \usage{
 collate.census(path.results = NULL, scenarios = "all")
 }
@@ -13,16 +13,17 @@ collate.census(path.results = NULL, scenarios = "all")
 }
 \value{
 A list with three elements: the combined data, the mean and standard
-  deviation
+  deviation. An xls file is also saved with the descriptive statistics and a 
+  .rda file is saved with the combined data
 }
 \description{
-Combine together HexSim census output across iterations. If the scenarios have 
+Combine together HexSim census outputs across iterations. If the scenarios have 
 multiple census events, all census files are processed (separately). Mean values 
 are reported in the final file which is located in Results/scenario_name
-folder.
+folder and returned as a list.
 }
 \details{
-If there are several scenarios and the argument scenarios="all" (default), all
+If there are several scenarios and \code{scenarios="all"} (default), all
 scenarios are processed, otherwise it is possible to select a subset of scenarios
 using a character vector, e.g. scenarios=c("scen1", "scen2").
 
