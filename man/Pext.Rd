@@ -24,6 +24,9 @@ file where the output from \code{collate.census} is saved}
 
 \item{end}{The last time step to be include}
 
+\item{headers}{A character vector matching exactly the headers of the census 
+file columns that are to be used by \code{bin.f}}
+
 \item{base}{A character vector with the name of the scenario to be used as 
 term of comparison}
 }
@@ -93,5 +96,8 @@ It is \strong{also important to note} that if both standard deviations of the
 \references{
 Zhang, X. D. 2007. A pair of new statistical parameters for quality control
   in RNA interference high-throughput screening assays. Genomics 89:552-561.
+}
+\seealso{
+\code{\link{collate.census}}
 }
 

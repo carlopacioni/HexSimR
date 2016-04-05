@@ -40,6 +40,10 @@
 #' @param data The output from \code{collate.census}
 #' @param rda.in The fully qualified (i.e. including the path) name of the .rda 
 #'   file where the output from \code{collate.census} is saved
+#' @inheritParams ranges  
+#' @inheritParams SSMD.census
+#' @inheritParams census.calc
+#' @seealso \code{\link{collate.census}}
 #' @return A list with four elements:
 #'   \itemize{ 
 #'       \item $extTable.means: A \code{data.frame} (\code{data.table}) with the 
@@ -65,10 +69,7 @@
 #' @references
 #'   Zhang, X. D. 2007. A pair of new statistical parameters for quality control
 #'   in RNA interference high-throughput screening assays. Genomics 89:552-561.
-#' @inheritParams ranges  
-#' @inheritParams SSMD.census
-#' @inheritParams census.calc
-#' #' @seealso \code{\link{collate.census}}
+
 #' @import data.table
 #' @import XLConnect
 #' @export
