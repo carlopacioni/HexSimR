@@ -5,8 +5,8 @@
 \title{Copy \code{HexSimR} results}
 \usage{
 copy.results(path.results, out = getwd(), copy.invasion = TRUE,
-  inv.name = "Invasion.front.xlsx", comp.census = TRUE, comp.move = TRUE,
-  move.name = "SSMD_move.xlsx", comp.ranges = TRUE,
+  inv.name = "Invasion.front.xlsx", Pext = TRUE, comp.census = TRUE,
+  comp.move = TRUE, move.name = "SSMD_move.xlsx", comp.ranges = TRUE,
   ranges.name = "SSMD_ranges.xlsx", plots = TRUE, scen.results = TRUE,
   scenarios = "all")
 }
@@ -18,6 +18,8 @@ copy.results(path.results, out = getwd(), copy.invasion = TRUE,
 \item{copy.invasion}{Whether to copy data saved from \code{invasion.front}}
 
 \item{inv.name}{The name of file with results from   \code{invasion.front}}
+
+\item{Pext}{Whether to save results from \code{Pext}}
 
 \item{comp.census}{Whether to copy data saved from \code{SSMD_census}}
 
@@ -39,16 +41,26 @@ copy.results(path.results, out = getwd(), copy.invasion = TRUE,
 This function is used to copy/back up  \code{HexSimR} results maintaining the
  same directory structure.
   
-\code{copy.results} will duplicate all folders present within the 'Results' folder.
+\code{copy.results} will duplicate all folders present within the 'Results' 
+  folder when \code{scen.results=TRUE}. Note that only the first level of 
+  results will be copied (i.e. no individual replicate results are copied). 
+  All .xlsx files present in scenarios' folders will be copied (even 
+  those with manually modified names) assuming that these are results to keep. 
+  These include genetic mean distances.
 }
 \details{
 It assummes that file names of plots start with "plot" as for   \code{HexSimR} 
-  default. All .xlsx files present in scenarios' folders will be copied (even 
-  those with manually modified names) assuming that these are results to keep. 
+  default. If exists, the file "gen.plot.data.csv" (if the name was not 
+  modified) will be copied as part of this option because considered part of 
+  the plot files.
   
 With \code{comp.census}, \code{comp.move}, and \code{comp.ranges} can be set 
   whether to copy results of statistical comparisons (output from \code{SSMD_census},
   \code{SSMD_move}, \code{SSMD_ranges}).
+  
+The SSMD file generated with \code{Pext} is copied automatically (if exists 
+   and if the name was not modified), along with the other results from this
+   function, when the option \code{Pext=TRUE} is selected.
   
 When \code{comp.census=TRUE}, all files whose name starts with "SSMD_census"
    will be copied (note that if some file names has been modified and does  
