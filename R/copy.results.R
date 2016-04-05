@@ -120,5 +120,8 @@ copy.results  <-  function(path.results, out=getwd(),
       lapply(ssmd_Pext, copy.files, path.results, root=out)
     }
   }
+  if(file.exists(paste(path.results, "collated.census.rda", sep="/"))) {
+    copy.files(path.results, fname="collated.census.rda", root=out)
+  }
 }
 
