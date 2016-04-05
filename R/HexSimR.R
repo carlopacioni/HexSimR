@@ -374,6 +374,7 @@ move <- function(rep.move=NULL) {
   message(paste("Parsing the report", basename(rep.move)))
   mov <- fread(rep.move)
   setnames(mov,  names(mov),  gsub(" ",  "",  names(mov)))
+  message("Done!")
   groups <- mov[,  unique(EventName)]
   l <- sapply(X = groups,  descr,  data=mov)
   write.csv(l, file=paste(dirname(rep.move), "summary_move.csv", sep="/"))
@@ -459,6 +460,7 @@ ranges <- function(rep.ranges=NULL, hx=NULL, events=NULL, start="min", end="max"
                  "numeric", "integer", rep("NULL", ncols - 9))
   range <- read.csv(rep.ranges, header=FALSE, skip=1, colClasses=col.class, 
                     col.names=h)
+  message("Done!")
   range <- data.table(range)
   summary <- range[, lapply(.SD, mean), .SDcol=h[7:9], by=list(EventName,TimeStep)]
   summary[, nGroups := range[, length(GroupID), by=list(EventName,TimeStep)][, V1]]
