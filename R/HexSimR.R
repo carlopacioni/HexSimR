@@ -463,7 +463,9 @@ ranges <- function(rep.ranges=NULL, hx=NULL, events=NULL, start="min", end="max"
   message("Done!")
   range <- data.table(range)
   summary <- range[, lapply(.SD, mean), .SDcol=h[7:9], by=list(EventName,TimeStep)]
-  summary[, nGroups := range[, length(GroupID), by=list(EventName,TimeStep)][, V1]]
+  nGroups <- range[, .N, by=list(EventName,TimeStep, Replicate)]
+  nGroups <- nGroups[, mean(N, na.rm = TRUE), by=list(EventName,TimeStep)]
+  summary[, nGroups := nGroups[, V1]]
   summary[, Events := gsub(" ", "", EventName)]
   summary[, ha := NumberofHexagons * hx]
   summary[, sqkm := ha * 0.01]
