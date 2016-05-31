@@ -11,7 +11,7 @@
 #' equal, the new sheet is added to the existing file. \strong{ATTENTION:} If
 #' the name of the new sheet is the same of an existing one, the data will be
 #' pasted over in the existing sheet, possibly making the results
-#' comprehensible.
+#' incomprehensible.
 #' 
 #' When processing census data, several files can be passed at once by passing a
 #' character vector of length > 1 to \code{fnames}. Note that the extension 
