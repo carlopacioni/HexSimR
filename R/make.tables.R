@@ -161,7 +161,7 @@ make.table <- function(path.results=NULL, scenarios="all", fnames, SSMD=FALSE,
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   
   if(is.null(tab.name)) {
-    if(SSMD) tab.name <- "SSMD" else tab.name <- "resriptive"
+    if(SSMD) tab.name <- "SSMD" else tab.name <- "descriptive"
     }
 
   ldat <- list()
