@@ -2,7 +2,7 @@
 % Please edit documentation in R/HexSimR.R
 \name{SSMD.ranges}
 \alias{SSMD.ranges}
-\title{Compare census values against a baseline scenario.}
+\title{Compare ranges descriptive statistics against a baseline scenario.}
 \usage{
 SSMD.ranges(path.results = NULL, scenarios = "all", base = NULL,
   sum.ranges = "summary_ranges.xlsx")
@@ -22,11 +22,12 @@ A list with SSMD in the first element and p-values in the second.
   These results are also saved to disk as two tabs in an excel file.
 }
 \description{
-\code{SSMD.census} carries out pairwise comparisons of the census values 
+\code{SSMD.ranges} carries out pairwise comparisons of the descriptive 
+statistics calculated froma Ranges report 
   against a baseline scenario using Strictly Standardised Mean Difference 
   (SSMD, Zhang 2007).  
   
-It takes as data input the output from \code{collate.census} (it reads data
+It takes as data input the output from \code{ranges} (it reads data
   directly from xls files).
 }
 \references{

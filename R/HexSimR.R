@@ -494,13 +494,14 @@ ranges <- function(rep.ranges=NULL, hx=NULL, events=NULL, start="min", end="max"
 }
 
 
-#' Compare census values against a baseline scenario.
+#' Compare ranges descriptive statistics against a baseline scenario.
 #' 
-#' \code{SSMD.census} carries out pairwise comparisons of the census values 
+#' \code{SSMD.ranges} carries out pairwise comparisons of the descriptive 
+#' statistics calculated froma Ranges report 
 #'   against a baseline scenario using Strictly Standardised Mean Difference 
 #'   (SSMD, Zhang 2007).  
 #'   
-#' It takes as data input the output from \code{collate.census} (it reads data
+#' It takes as data input the output from \code{ranges} (it reads data
 #'   directly from xls files). 
 #'   
 #' @param sum.ranges The name of the file where the data are (including the extension).
