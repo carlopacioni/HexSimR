@@ -34,7 +34,8 @@
 #'   probabilities 
 #'   used to calculate the SSMD are zero (this may happen, for example, when the
 #'   populations never go extinct, or always go extinct), it is impossible to 
-#'   calculate the SSMD (the denominator is zero), while if the mean
+#'   calculate the SSMD (the denominator is zero) and the cells in the result 
+#'   file will be blank, while if the mean
 #'   probabilities are the same, then SSMD=0 and p-value=0.5. 
 #'   
 #' @param data The output from \code{collate.census}
@@ -65,7 +66,10 @@
 #'        \item $Cumulative_Pext_census:  the mean and standard deviation across 
 #'               the selected time steps (in two separate tabs)
 #'            }
-#'        The census number is appended to the name of the xls file.    
+#'        The results for the SSMD comparisons are saved in the file starting
+#'        with "SSMD_Cumul_Pext_census".  
+#'        The census number is appended to the name of all xls file. 
+#'           
 #' @references
 #'   Zhang, X. D. 2007. A pair of new statistical parameters for quality control
 #'   in RNA interference high-throughput screening assays. Genomics 89:552-561.
@@ -97,7 +101,6 @@ Pext <- function(data=NULL, path.results, rda.in="collated.census.rda",
   data <- data[[1]]
   if(scenarios != "all") data <- data[[scenarios]]
   if(scenarios == "all") scenarios <- names(data)
-  if(start == "min") start <- 1
   headers <- make.names(headers)
   
   extTable <- list()
@@ -108,6 +111,13 @@ Pext <- function(data=NULL, path.results, rda.in="collated.census.rda",
   cumul.ext.sds <- list()
   for (scenario in scenarios) {
     census <- data[[scenario]][[ncensus + 1]]
+    if(start == "min") {
+      if(census[, min(Time.Step)] == 0) {
+        start <- 1
+        } else {
+          start <- census[, min(Time.Step)]
+          }
+    }
     if(end == "max") end <- census[, max(Time.Step)]
     extTable[[scenario]] <- cbind(census[, .(Run, Time.Step)], 
                       census[, headers, with=FALSE] == 0)
