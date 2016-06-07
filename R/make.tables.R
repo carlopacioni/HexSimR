@@ -5,13 +5,13 @@
 #' 
 #' \code{make.table} can process either descriptive statistics (generated using 
 #' \code{collate.census}, \code{ranges} or \code{move}) or statistical 
-#' comparisons generated using \code{SSMD.census}, \code{SSMD.ranges} or
-#' \code{SSMD.move}), but only one type of result in any one time. For each run
-#' of \code{make.table} a sheet is created. If the name of the xls file is kept
-#' equal, the new sheet is added to the existing file. \strong{ATTENTION:} If
-#' the name of the new sheet is the same of an existing one, the data will be
-#' pasted over in the existing sheet, possibly making the results
-#' incomprehensible.
+#' comparisons generated using \code{SSMD.census}, \code{SSMD.ranges} or 
+#' \code{SSMD.move}), but only one type of result in any one time. For each run 
+#' of \code{make.table} a sheet is created as output in a .xls file. If the name
+#' of the xls file is kept equal, the new sheet is added to the existing file.
+#' \strong{ATTENTION:} If the name of the new sheet is the same of an existing
+#' one, the data will be pasted over in the existing sheet, possibly making the
+#' results incomprehensible.
 #' 
 #' When processing census data, several files can be passed at once by passing a
 #' character vector of length > 1 to \code{fnames}. Note that the extension 
@@ -22,20 +22,30 @@
 #' When more than one scenario is processed, then \code{make.table} assumes 
 #' that, within each scenario, the result file name is the same. The only 
 #' exception is when processing the descriptive statistics of census data. In 
-#' this case, the name of scenario is automatically added to the suffix. In
+#' this case, the name of scenario is automatically added to the suffix. In 
 #' these cases, the suffix of the files has to be passed to \code{fnames} (i.e. 
-#' \emph{"[ncensus].all.xlsx"}, where \emph{"ncensus"} is the number of the
+#' \emph{"[ncensus].all.xlsx"}, where \emph{"ncensus"} is the number of the 
 #' census event, and \emph{".all.xlsx"} is the standard suffix that HexSimR adds
 #' to all files generated with \code{collate.census}.
 #' 
 #' \code{colh} is used to pass the headings of the columns to be processed. It 
-#' \strong{MUST} be passed as a list, with an element for each file that was
+#' \strong{MUST} be passed as a list, with an element for each file that was 
 #' passed with \code{fnames}.
 #' 
-#' If \code{SSMD=TRUE} and \code{scenarios="all"} R will throw an error because 
-#' the base scenario is included in \code{scenarios} but it is not present in the
-#' result file. When \code{SSMD=TRUE} a character vector has to be passed to 
-#' \code{scenarios}.
+#' If \code{SSMD=TRUE} and \code{scenarios="all"}, R may throw an error because 
+#' the base scenario is included in \code{scenarios} (unless it was manually 
+#' removed) but it is not present in the result file. When \code{SSMD=TRUE} a
+#' character vector has to be passed to \code{scenarios}.
+#' 
+#' When \code{SSMD=TRUE}, currently, only p-values are reported in the table.
+#' 
+#' Note that when \code{SSMD=TRUE}, and the function is pointed to a SSMD 
+#' comparison of ranges report statistics, the appropriate setting for the time
+#' step is \code{time.steps=NULL} (default) because these are already subsetted
+#' when the SSMD comparison is done, unless all time steps were kept when calling 
+#' \code{ranges} or \code{multi.reports}. Also, unless issue #3 has been resolved,
+#' the argument  \code{time.steps} only works correctly if all time steps were 
+#' logged.
 #' 
 #' By default, the sheet in the xls file takes name "Descriptive" or "SSMD", 
 #' depending on whether \code{SSMD=FALSE} or \code{SSMD=TRUE} respectively. This
@@ -44,10 +54,10 @@
 #' 
 #' @param fnames The name(s) of the output file(s) to be processed. If more the 
 #'   one scenario is passed, the output file names have to be all equal
-#' @param time.steps If census data are being processed, a numeric vector with the time 
-#'   steps to include. If NULL (default), all time steps are included
-#' @param SSMD Whether the data being processed are SSMD comparisons 
-#'   (default: FALSE)
+#' @param time.steps A numeric vector with the time steps to include. If NULL
+#'   (default), all time steps are included. See details for more information
+#' @param SSMD Whether the data being processed are SSMD comparisons (default:
+#'   FALSE)
 #' @param colh A list with as many elements as the length of fnames. Each 
 #'   element is a character vector with the names of the column headings to be 
 #'   considered for the relative fnames (default: ranges' headings)
@@ -57,7 +67,7 @@
 #'   should be rounded to
 #' @param table.name The name of the file where to save the table
 #' @param tab.name The name of the tab to be saved in the xls file. By default, 
-#'   "Descriptive" or "SSMD", depending on whether \code{SSMD=FALSE} or
+#'   "Descriptive" or "SSMD", depending on whether \code{SSMD=FALSE} or 
 #'   \code{SSMD=TRUE} respectively.
 #' @param save2disk Whether to save to disk the table
 #' @param dir.out The directory where to save the table. If NULL (default), the 
