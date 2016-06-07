@@ -112,10 +112,11 @@ collate.census <- function(path.results=NULL, scenarios="all") {
   scen.sds <- lapply(data.comb, census.sd)
   
   lapply(nscens, save2disk, dir.path=path.results, scen.means, scen.sds, scenarios)
-  save(data.comb, file=paste(path.results, "collated.census.rda", sep="/"), 
+  coll.census <- list(data=data.comb, means=scen.means, sds=scen.sds)
+  save(coll.census, file=paste(path.results, "collated.census.rda", sep="/"), 
        compress="xz")
   
-  return(list(data=data.comb, means=scen.means, sds=scen.sds))
+  return(coll.census)
 }
 
 #' Carry out calculations on a subset of variables in a specific census file
