@@ -2,10 +2,7 @@
 % Please edit documentation in R/plots.R
 \name{census.plot}
 \alias{census.plot}
-\title{Plots census means across simulated time steps
-  
-It takes as data input the output from \code{collate.census} (it reads data
-  directly from xls files).}
+\title{Plots census means across simulated time steps}
 \usage{
 census.plot(path.results = NULL, scenarios = "all", traits, ncensus = 0,
   ngroups = 1, rm.T0 = TRUE)
@@ -21,16 +18,20 @@ census.plot(path.results = NULL, scenarios = "all", traits, ncensus = 0,
 
 \item{ngroups}{The number of groups in which the scenarios are to be divided}
 
-\item{rm.T0}{Whether to remove the Time Step '0' (default=TRUE)}
+\item{rm.T0}{Whether to remove the first row of data. Relevant when it is 
+Time Step '0' (default=TRUE)}
 }
 \value{
 Save to disk ggplot objects (with extension .rda) and pdf with the 
   plots (one for each group). Return a list of plots
 }
 \description{
-Plots census means across simulated time steps
-  
-It takes as data input the output from \code{collate.census} (it reads data
-  directly from xls files).
+It takes as data input the output from \code{collate.census} (it reads data 
+directly from xls files).
+}
+\details{
+\code{rm.T0} is generally used to remove the the first row of data. This
+makes sense when all time steps were logged, but there is little meaning in 
+keeping in time zero as this is the initialization step.
 }
 

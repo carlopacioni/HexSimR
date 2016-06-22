@@ -17,7 +17,8 @@ prep.data(i, means, sds, traits, scenarios, rm.T0)
 
 \item{scenarios}{A character vector with the scenarios' names}
 
-\item{rm.T0}{Whether to remove the Time Step '0' (default=TRUE)}
+\item{rm.T0}{Whether to remove the first row of data. Relevant when it is 
+Time Step '0' (default=TRUE)}
 }
 \description{
 This function is used by other \code{HexSimR}'s functions. It combines mean 

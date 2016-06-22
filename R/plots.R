@@ -70,12 +70,17 @@ prep.data <- function(i, means, sds, traits, scenarios, rm.T0) {
 
 
 #' Plots census means across simulated time steps
-#'   
-#' It takes as data input the output from \code{collate.census} (it reads data
-#'   directly from xls files). 
-#'   
+#' 
+#' It takes as data input the output from \code{collate.census} (it reads data 
+#' directly from xls files).
+#' 
+#' \code{rm.T0} is generally used to remove the the first row of data. This
+#' makes sense when all time steps were logged, but there is little meaning in 
+#' keeping in time zero as this is the initialization step.
+#' 
 #' @param ngroups The number of groups in which the scenarios are to be divided
-#' @param rm.T0 Whether to remove the Time Step '0' (default=TRUE)
+#' @param rm.T0 Whether to remove the first row of data. Relevant when it is 
+#'   Time Step '0' (default=TRUE)
 #' @inheritParams collate.census
 #' @inheritParams SSMD.census
 #' @inheritParams w.genepop.batch

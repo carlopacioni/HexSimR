@@ -52,7 +52,9 @@ A list with four elements:
        \item $Cumulative_Pext_census:  the mean and standard deviation across 
               the selected time steps (in two separate tabs)
            }
-       The census number is appended to the name of the xls file.
+       The results for the SSMD comparisons are saved in the file starting
+       with "SSMD_Cumul_Pext_census".  
+       The census number is appended to the name of all xls file.
 }
 \description{
 Calculates the probability of extinction for each time step and a cumulative 
@@ -90,7 +92,8 @@ It is \strong{also important to note} that if both standard deviations of the
   probabilities 
   used to calculate the SSMD are zero (this may happen, for example, when the
   populations never go extinct, or always go extinct), it is impossible to 
-  calculate the SSMD (the denominator is zero), while if the mean
+  calculate the SSMD (the denominator is zero) and the cells in the result 
+  file will be blank, while if the mean
   probabilities are the same, then SSMD=0 and p-value=0.5.
 }
 \references{

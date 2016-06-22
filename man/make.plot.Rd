@@ -21,7 +21,8 @@ make.plot(ngroup, nscens_group, means, sds, traits, scenarios, ncensus, rm.T0)
 
 \item{ncensus}{The number of the census to be considered}
 
-\item{rm.T0}{Whether to remove the Time Step '0' (default=TRUE)}
+\item{rm.T0}{Whether to remove the first row of data. Relevant when it is 
+Time Step '0' (default=TRUE)}
 }
 \description{
 \code{make.plot} groups together \code{nscens_group} scenarios and plot them
