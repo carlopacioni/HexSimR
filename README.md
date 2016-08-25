@@ -40,8 +40,7 @@ Use `help(HexSimR)` `?HexSimR` or `??HexSimR` to see a broad description of the 
 Use `help(package = "HexSimR")` to see the documentations available. 
 
 ## Questions and problems
-You can use [HexSim google group](https://groups.google.com/forum/m/#!forum/hexsim) if you have questions or doubt. Use the [issue tracker](https://github.com/carlopacioni/HexSimR/issues) if you have feature requests, enhancement or found a bug
-BugReports: 
+You can use [HexSim google group](https://groups.google.com/forum/m/#!forum/hexsim) if you have questions or doubts. Use the [issue tracker](https://github.com/carlopacioni/HexSimR/issues) if you have feature/enhancement requests, or found a bug.
 
 ## Citation
 If you use `HexSimR`, please cite:
