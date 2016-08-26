@@ -1,7 +1,7 @@
 # HexSimR
 An R package for Post HexSim Simulation Analysis.  
 
-Using this package, data of population viability analysis (PVA) that were generated with the software HexSim (Schumaker N, HexSim (Version 3). US Environmental Protection Agency. Environmental Research Laboratory, Corvallis, Oregon. [http://www.epa.gov/hexsim](http://www.epa.gov/hexsim)), can be collated, plotted and analysed.
+Using this package, data of population viability analysis (PVA) that were generated with the software HexSim (Schumaker N, HexSim (Version 3 & 4). US Environmental Protection Agency. Environmental Research Laboratory, Corvallis, Oregon. [http://www.epa.gov/hexsim](http://www.epa.gov/hexsim)), can be collated, plotted and analysed.
 
 ## Quickstart
 Install the package from version control from within R:
@@ -36,8 +36,7 @@ install_github("carlopacioni/HexSimR")
 ```
 
 ## Documentation
-Use `help(HexSimR)` `?HexSimR` or `??HexSimR` to see a broad description of the package.
-Use `help(package = "HexSimR")` to see the documentations available. 
+Use `help(package = "HexSimR")` to see the documentations available. For help on specific functions use `?function_name`, where function_name is the name of the function you are seeking information for.
 
 ## Questions and problems
 You can use [HexSim google group](https://groups.google.com/forum/m/#!forum/hexsim) if you have questions or doubts. Use the [issue tracker](https://github.com/carlopacioni/HexSimR/issues) if you have feature/enhancement requests, or found a bug.
