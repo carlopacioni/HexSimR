@@ -2,7 +2,11 @@
 title: "HexSimR user tutorial" 
 author: "Carlo Pacioni" 
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette 
+output: 
+   rmarkdown::html_vignette: 
+         fig_caption: yes
+   rmarkdown::pdf_document:
+         fig_caption: yes
 vignette: > 
   %\VignetteIndexEntry{Vignette Title} 
   %\VignetteEngine{knitr::rmarkdown} 
