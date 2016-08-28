@@ -38,6 +38,9 @@ install_github("carlopacioni/HexSimR")
 ## Documentation
 Use `help(package = "HexSimR")` to see the documentations available. For help on specific functions use `?function_name`, where function_name is the name of the function you are seeking information for.
 
+The [manual](https://www.researchgate.net/publication/306911593_HexSimR_tutorial) and a short [tutorial](https://www.researchgate.net/publication/306911593_HexSimR_tutorial) can also be downloaded as PDF.
+
+
 ## Questions and problems
 You can use [HexSim google group](https://groups.google.com/forum/m/#!forum/hexsim) if you have questions or doubts. Use the [issue tracker](https://github.com/carlopacioni/HexSimR/issues) if you have feature/enhancement requests, or found a bug.
 
