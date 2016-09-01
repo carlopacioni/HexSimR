@@ -15,7 +15,7 @@ install.packages("devtools")
 ```
 
 **NOTE (August 2016)**
-At the time of writing, the current official release of devtools (1.12.0) has an issue with R 3.3.1 on windows, which results in the dependencies of the package not being installed. This problem is resolved in the dev version. If you have problem installing `HexSimR` try the following (from devtools manual for the function `build_github_devtools`):
+At the time of writing, the current official release of devtools (1.12.0) has an issue with R 3.3.1 on windows, which results in the dependencies of the package not being installed. This problem is resolved in the dev version. If you have problems installing `HexSimR` try the following (from devtools manual for the function `build_github_devtools`):
 
 ```
 # Install devtools from CRAN if you haven't already
