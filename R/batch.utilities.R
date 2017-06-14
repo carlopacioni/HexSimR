@@ -42,7 +42,7 @@ w.combine.log.batch <- function(path.results=NULL, scenarios="all", dir.out=NULL
   writeLines(unlist(l.coms), con=paste0(dir.out, "/", "comb_log_files.bat")) 
 }
 
-#' Write a .xml file to be passed to HexSim to queued 'movements' and/or 'ranges'
+#' Write a .xml file to be passed to HexSim to queue 'movements' and/or 'ranges'
 #'  reports
 #' 
 #' Generate a batch .xml file in the workspace directory that will instruct 
