@@ -16,4 +16,3 @@ read.sds(scenario, path.results, ncensus)
 \description{
 This function is internally used by other \code{HexSimR} functions
 }
-

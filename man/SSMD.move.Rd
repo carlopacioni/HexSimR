@@ -34,4 +34,3 @@ It directly reads the .csv files written with \code{move}. It assumes that all
 Zhang, X. D. 2007. A pair of new statistical parameters for quality control
 in RNA interference high-throughput screening assays. Genomics 89:552-561.
 }
-

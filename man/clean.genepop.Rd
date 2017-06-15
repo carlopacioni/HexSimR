@@ -27,4 +27,3 @@ HexSim includes a 'structure block' at the end of its genepop input file
   the HexSim generated files, which are then re-saved with the same name,  
   a suffix "cleaned" and an extensin ".gen".
 }
-

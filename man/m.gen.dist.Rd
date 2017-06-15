@@ -25,4 +25,3 @@ This function calculates the mean and standard deviation of the genetic
   distance (calculated with \code{gen.dist}) across all replicates for the same
   scenario.
 }
-

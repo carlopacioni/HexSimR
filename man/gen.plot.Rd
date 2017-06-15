@@ -30,4 +30,3 @@ be included}
   with \code{m.gen.dist} are as for \code{HexSimR}
   defaults.
 }
-

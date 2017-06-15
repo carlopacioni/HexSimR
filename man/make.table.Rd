@@ -107,4 +107,3 @@ behaviour can be altered by passing a character vector to \code{tab.name}.
   \code{\link{move}}, \code{\link{SSMD.census}}, \code{\link{SSMD.ranges}}, 
   \code{\link{SSMD.move}}
 }
-

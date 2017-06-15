@@ -28,4 +28,3 @@ See \code{gen.dist} for each scenario
 \seealso{
 gen.dist
 }
-

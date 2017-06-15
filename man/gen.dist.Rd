@@ -39,4 +39,3 @@ Winter, D.J., 2012. mmod: an R library for the calculation of
   population differentiation statistics. Molecular Ecology Resources 12, 
   1158-1160.
 }
-

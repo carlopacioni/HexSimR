@@ -66,4 +66,3 @@ When \code{comp.census=TRUE}, all files whose name starts with "SSMD_census"
    will be copied (note that if some file names has been modified and does  
    not start with "SSMD_census" anymore, these files will not be copied).
 }
-

@@ -25,4 +25,3 @@ This function is used by other \code{HexSimR}'s functions. It combines mean
   and standard deviation values in one data.table and add a column with the 
   scenario name. It operates on one scenario at the time.
 }
-

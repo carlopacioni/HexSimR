@@ -16,4 +16,3 @@ read.means(scenario, path.results, ncensus)
 \description{
 #' This function is internally used by other \code{HexSimR} functions
 }
-

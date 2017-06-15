@@ -17,4 +17,3 @@ A data.frame where each column is a HexSim's Event (and it is saved
 \description{
 Calculates descriptive stats from the HexSim generated report 'movement'
 }
-

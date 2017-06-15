@@ -33,4 +33,3 @@ Time Step '0' (default=TRUE)}
   \code{ngroup=1:4}, the scenarios 1 to 5 will be processed first, then 6 to 
   10, then 11 to 15 and lastly 16 to 20.
 }
-

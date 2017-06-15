@@ -20,4 +20,3 @@ ssmd2xlsx(i, scenarios, ssmds, pvalues, wb)
 \description{
 Two tabs are saved for each scenarios: SSMD and p values.
 }
-

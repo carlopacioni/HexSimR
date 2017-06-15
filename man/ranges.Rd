@@ -47,4 +47,3 @@ sqkm based on the value passed with \code{hx}. From this table \code{ranges}
 then calculates the mean across all years in the window of years 
 \code{start} - \code{end}.
 }
-

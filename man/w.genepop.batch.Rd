@@ -28,4 +28,3 @@ Generate a batch .xml file in the workspace directory that will instruct
   the scenario(s) passed with \code{scenarios}. If \code{scenarios="all"} is
   used, then all the scenarios will be included.
 }
-

@@ -18,4 +18,3 @@ A list where each element is the path to the replicates of a scenario
 This function is used by a number of HexSimR functions to create a list of 
   path where results for each iterations are saved.
 }
-

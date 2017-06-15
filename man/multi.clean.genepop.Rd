@@ -40,4 +40,3 @@ When using \code{multi.clean.genepop} there is no option to choose the title
 \seealso{
 clean.genepop
 }
-

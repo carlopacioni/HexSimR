@@ -19,4 +19,3 @@ Save to disk ggplot objects (with extension .rda), a pdf with the
   scenario included in the output of \code{invasion.front} (it reads data
   directly from xls files).
 }
-

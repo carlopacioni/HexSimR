@@ -33,4 +33,3 @@ The file is saved in the path indicated by \code{dir.out}, typically where
 To run the batch file, open the command prompt, navigate where
   HexSimCommandLine.exe is located and type "comb_log_files.bat".
 }
-

@@ -61,4 +61,3 @@ If more then one calculations needs to be performed, of the same calculations
   needs to be performed on different groups of variables (headers), then 
   \code{census.calc} needs to be run multiple times.
 }
-

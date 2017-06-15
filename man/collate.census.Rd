@@ -32,4 +32,3 @@ If \code{path.results=NULL} an interactive dialog box is used to select the
 
 Note, when there is a large number of files, this function may be memory hungry
 }
-

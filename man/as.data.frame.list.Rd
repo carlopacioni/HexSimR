@@ -55,10 +55,9 @@ will print a warning if this condition occurs.
     HexSimR:::as.data.frame.list(test5)
     
 }
-\author{
-Jason Bryer <<jason@bryer.org>>
-}
 \references{
 \url{http://stackoverflow.com/questions/4227223/r-list-to-data-frame}
 }
-
+\author{
+Jason Bryer <<jason@bryer.org>>
+}

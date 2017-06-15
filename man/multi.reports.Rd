@@ -51,4 +51,3 @@ If the reports file is generated from each iteration's log file, then the
 \seealso{
 \code{\link{move}}, \code{\link{ranges}}
 }
-

@@ -34,4 +34,3 @@ directly from xls files).
 makes sense when all time steps were logged, but there is little meaning in 
 keeping in time zero as this is the initialization step.
 }
-

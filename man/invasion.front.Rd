@@ -41,4 +41,3 @@ The census file where the data is stored is identified with the argument
   location data is the one that need to be passed to \code{ncensus} so that 
   \code{HexSimR} knows which one to pick to carry out the calculations.
 }
-

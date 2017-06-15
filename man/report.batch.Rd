@@ -2,7 +2,7 @@
 % Please edit documentation in R/batch.utilities.R
 \name{report.batch}
 \alias{report.batch}
-\title{Write a .xml file to be passed to HexSim to queued 'movements' and/or 'ranges'
+\title{Write a .xml file to be passed to HexSim to queue 'movements' and/or 'ranges'
  reports}
 \usage{
 report.batch(path.results = NULL, scenarios = "all", ranges = TRUE,
@@ -30,4 +30,3 @@ It assumes that a combined log file have been generated from all replicates
   
 If \code{scenarios="all"}, then all the scenarios will be included.
 }
-

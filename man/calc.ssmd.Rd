@@ -24,4 +24,3 @@ Calculate SSMDs given a df (or equivalent) of means and stds.
 Checks whether the two dfs have same column names and attempt to re-order the 
   columns if not.
 }
-

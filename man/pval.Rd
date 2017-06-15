@@ -13,4 +13,3 @@ pval(x)
 \code{pval} calculates one-tailed p values from a data.frame that contains 
   quantiles and it is used internally from SSMD functions.
 }
-
