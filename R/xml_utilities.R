@@ -3,102 +3,101 @@
 #' Modify several scenarios at once by replacing, deleting or adding nodes (e.g.
 #' events) in scenario .xml files.
 #' 
-#' To use this function some understanding of the xml file structure in HexSim 
-#' is necessary. Briefly, each of the settings and parameter in HexSim is set by
-#' a node in the xml file. Some nodes have a unique identifier, which can be an 
-#' attribute (generally name="\emph{node_name}"), or a text element value (e.g. 
+#' If several scenarios have been developed in HexSim and later the user 
+#' realises that there are some modifications that need to be applied to several
+#' or all of them, this function can help automate this task. It involves 
+#' generating an scenario with the correct/new events and parameters. This 
+#' scanrio is used then as template and the nodes that needs to be added, 
+#' replaced or deleted are identified using a .csv. Some setting up is required 
+#' and it may not be worthwhile for only one or two scenarios. To use this 
+#' function some understanding of the xml file structure in HexSim is necessary.
+#' The easiest is to open the xml file and have a look at the structure. Using a
+#' source code editor like Notepad++ (that colour-code different element of the 
+#' text based on the language used) can help to understand the structure. 
+#' Briefly, each of the settings and parameters in HexSim is set by a node in 
+#' the xml file. Some nodes have a unique identifier, which can be an attribute 
+#' (generally name="\emph{attribute_value}"), or a text element value (e.g. 
 #' <name> \emph{node_name} </name>). To this end, identifiers are considered 
 #' element that make the node unique. For example, accumulate events have all 
 #' the same structure, but they can be identified by the value given to the node
-#' <name>. On the contrary, there are node that are unique and can be simply 
-#' identified by the node's name. One example of such node is 
+#' <name>. On the contrary, there are nodes that are unique and can be simply 
+#' identified by the node's name. One example of such nodes is 
 #' <initializationSpatialData>, which is unique, so a search in the xml file for
-#' the path: /scenario/population/initializationSpatialData will return one node
-#' only.  See the tutorial if you need help with this.
+#' the path: "/scenario/population/initializationSpatialData" will return one 
+#' node only. From a practical point of view, the easier is to create or modify 
+#' a scenario with the correct events/parameters. Save it and then comparing 
+#' this with one of the one that needs to be modified using, for example, the 
+#' plug in "compare" in Notepad++, or Winmerge (on Windows).
 #' 
-#' If \code{path.scenarios=NULL} an interactive dialog box is used to select the
-#' path where the scenario xml files are located.
+#' If \code{path.scenarios=NULL}, an interactive dialog box is used to select 
+#' the path where the scenario xml files are located.
 #' 
 #' If \code{scenarios="all"} (default), all scenarios are processed, otherwise 
 #' it is possible to select a subset of scenarios using a character vector, e.g.
-#' scenarios=c("scen1", "scen2"). \bold{TODO remove xml.template from list of 
-#' scenarios}
+#' scenarios=c("scen1", "scen2"). \bold{Note:} when a \code{xml.template} is 
+#' passed, this is assumed to be in the \code{path.scenarios} directory and it 
+#' is removed from the list of scenarios to be modified.
 #' 
-#' \code{nodes} is used to pass the new nodes, which can be constructed by 
-#' searching for a given node-path in a xml template file, in which case these 
-#' paths are store in a .csv and the name of the .csv is passed to \code{nodes},
-#' or can be manually constructed and passed as a list of nodes, or nodesets 
-#' created with \code{\link[xml2]{read_cml}}. If a .csv is used, it must be 
-#' located in the scenario folder and the name should be passed as character 
-#' vector. The file must have the following headings: nodes, mode, ref, 
-#' ref_identifier,	ref_attribute, identifier, and attribute. 
-#' \code{scenarios.batch.modifier} will parse the file and use these columns as 
-#' relevant arguments, so these do not need to be passed in the function call. 
-#' If \code{nodes} is passed as a list, then clearly mode, ref, identifier, and 
-#' attribute need to be passed. When a .csv file is used, the column with 
-#' heading "nodes" is the path to the node to be searched in the xml template 
-#' file. If the node has an identifier, then this is not part of the path, but 
-#' it must be included in the column "identifier". The found nodes are then 
-#' retrived and added or replaced to the scenario file. When the \code{mode} is 
-#' "delete", the nodes are clearly searched in the scenario file and then 
-#' deleted.
+#' A back up of the folder \code{path.scenarios} is copied in the the folder 
+#' "Scenarios_bkup", one level up from \code{path.scenarios}.
 #' 
-#' \code{mode} indicates the type of action that need to be performed. It has to
-#' be of same length as \code{nodes}. If shorter, the last item is recycled. If 
-#' "add" the node is added as last child of the parent node. If the node needs 
-#' to be added in a specific position (events generally do), "before" and 
-#' "after" can be used to indicate the position respect to the \code{ref} node 
-#' (i.e. whether before or after the node \code{ref}. Note that the \code{ref} 
-#' node is searched in the scenario file, not the xml.template. If the option 
-#' "delete" is used, the node is deleted from the scenario file. When "same" is 
-#' used, the node is assumed to have the same identifier as the one passed with 
-#' \code{nodes} and it is replaced in the scenario file. If the identifier (e.g.
-#' the name) is being changed, then "replace" must be used and the original node
-#' in the scenario file need to be indicated. When \code{nodes} is a .csv, 
-#' \code{ref} values is taken from the homonimous column.
+#' The .csv file essentially provides the infromation on how to locate the nodes
+#' that need to be modified, and what type of actions need to be carried out.The
+#' .csv must be located in the scenario folder and the name should be passed 
+#' with \code{csv.in} as a character vector. The file must have the following 
+#' headings: nodes, identifier, attribute, mode, ref, ref_identifier,	and 
+#' ref_attribute. \code{scenarios.batch.modifier} will parse the file and use 
+#' these columns as arguments.
 #' 
-#' \code{ref} needs to be passed when the options "before", "after" or "replace"
-#' are used. When not relevant, \code{NA} is used. It has to be of same length 
-#' as \code{nodes}. If shorter, the last item is recycled. When \code{nodes} is 
-#' a .csv, \code{ref} values are taken from the homonimous column. When a ,csv 
-#' file is passed to \code{nodes}, then a search is performed in the scenario 
-#' xml file and the fields ref_identifier and	ref_attribute mustalso be passed
-#' as for \code{nodes} to allow correct construction of the node path.
+#' The column with heading \bold{nodes} is the path to the node to be searched 
+#' in the \code{xml.template} file, except when the \bold{mode} is "delete", in 
+#' which case the nodes are searched in the scenario file and then deleted. The 
+#' path starts at the root of the xml file ("scenario") and progresses until the
+#' node's name or identifier. It must start with a "/", and must not have a "/" 
+#' at the end. For example, for an accumulator, the path in the column "nodes" 
+#' would be: "/scenario/population/accumulators/accumulator/name".
 #' 
-#' \code{identifier} is used to indicate whether the element node has an 
-#' identifier. If it does, the name of the identifier needs to be passed, 
-#' otherwise FALSE must be used. It has to be of same length as \code{nodes}. If
-#' shorter, the last item is recycled. When \code{nodes} is a .csv, \code{ref} 
-#' values is taken from the homonimous column.
+#' \bold{identifier} is used to indicate whether the node has an identifier. If 
+#' it does (e.g. name="\emph{attribute_value}"), the name (or the value if an 
+#' atribute) of the identifier needs to be in this column (e.g. 
+#' \emph{attribute_value}), otherwise FALSE must be used.
 #' 
-#' \code{attribute} indicates whether the identifier is an attribute (TRUE) or 
-#' not (FALSE).It has to be of same length as \code{nodes}. If shorter, the last
-#' item is recycled. When \code{nodes} is a .csv, \code{ref} values is taken from
-#' the homonimous column.
+#' \bold{attribute} indicates whether the identifier is an attribute (TRUE) or 
+#' not (FALSE).
+#' 
+#' \bold{mode} indicates the type of action that need to be performed. Possible 
+#' options are "add", "before", "after", "replace" or "delete". If "add" the 
+#' node is added as last child of the parent node. If the node needs to be added
+#' in a specific position (events generally do), "before" and "after" should be 
+#' used to indicate the position respect to the \bold{ref} node (i.e. whether 
+#' the new node goes before or after the node \bold{ref}. Note that the 
+#' \bold{ref} node is searched in the scenario file, not the 
+#' \code{xml.template}. If the option "delete" is used, the node is searched and
+#' deleted from the scenario file. When "replace" is used, the \bold{ref} node 
+#' must be provided, even when the node is the same. This is because there might
+#' be situations where what it is being changed is the name of the node. In
+#' these cases, \code{scenarios.batch.modifier} would not find the original node
+#' in the scenario file.
+#' 
+#' \bold{ref} needs to be passed when the options "before", "after" or "replace"
+#' are used in \bold{mode}. When not relevant, \code{NA} is used. When \bold{ref} is used, then
+#' a search is performed in the scenario xml file and the fields 
+#' \bold{ref_identifier} and	\bold{ref_attribute} must also be passed when 
+#' relevant. \bold{ref_identifier} and	\bold{ref_attribute} have the same 
+#' meaning as \bold{identifier} and \bold{attribute}, but they refer to the 
+#' \bold{ref} node. Use FALSE when these are not relevant.
 #' 
 #' @param path.scenarios The path to the 'Scenarios' folder
 #' @param xml.template The name of the xml file to use as template for the new 
 #'   nodes
-#' @param nodes The (new) nodes to be replaced, deleted or inserted in the xml 
-#'   file
-#' @param mode The mode in which the modification should operate (i.e. whether 
-#'   to replace, delete or add). See details
-#' @param ref The reference node in the original (i.e. the one to be modified) 
-#'   xml file. See details
-#' @param identifier The element node or attibute that is the identifier or 
-#'   FALSE
-#' @param attribute Whether the identifier of the node is an attribute or not
+#' @param csv.in The name of the .csv file in the "Scenarios" folder
 #' @inheritParams collate.census
 #' @export
 scenarios.batch.modifier <- function(
   path.scenarios=NULL,
   scenarios="all", 
   xml.template=NULL,
-  csv.in,
-  mode=c("add", "before", "after", "delete", "replace", "same"),
-  ref=NA,
-  identifier=FALSE,
-  attribute=FALSE) {
+  csv.in) {
   
   #### Setting arguments ####
   txt <- "Please, select the 'Scenarios' folder within the workspace"
@@ -122,45 +121,50 @@ scenarios.batch.modifier <- function(
   #### Creating new nodes and ref Xpaths ####
   nodes <- vector("list", length(node_paths))
   Xpaths <- vector("character", length(node_paths))
-  if(sum(is.na(ref))) ref_Xpaths <- vector("character", length(node_paths))
+  if(sum(is.na(refs))) ref_Xpaths <- vector("character", length(node_paths))
   if(!is.null(xml.template)) 
     xml_template <- read_xml(file.path(path.scenarios, xml.template), options="")
   
   for(i in seq_along(node_paths)) {
     
-    if(!is.na(identifiers[i])) {
+    if(!is.logical(identifiers[i])) {
       last_slash <- gregexpr("/", node_paths[i])
       indentifier_name <- substr(node_paths[i], start=max(last_slash[[1]]) + 1, 
                                  stop=nchar(node_paths[i]))
       Xpaths[i] <- paste0(sub(pattern=paste0("/", indentifier_name), 
                           replacement="", 
                           x=node_paths[i]),
-                      paste0("[", if(!is.na(attribs[i])) "@", indentifier_name, 
+                      paste0("[", if(attribs[i]) "@", indentifier_name, 
                              "='", identifiers[i], "']"))
     } else {
       Xpaths[i] <- node_paths[i]
     }
     
-    if(modes[i] == "delete") next
-    nodes[[i]] <- xml_find_all(xml_template, Xpaths[i])  
-    if(xml_length(nodes[[i]]) > 1) {
+    if(modes[i] != "delete") {
+      nodes[[i]] <- xml_find_all(xml_template, Xpaths[i])  
+      if(grepl(pattern = "Event", x = xml_path(nodes[[i]]))) {
+        nodes[[i]] <- xml_parent(nodes[[i]]) 
+      }
+    } 
+    
+    if(length(nodes[[i]]) > 1) {
       stop(paste(
         "More than one node identified with the node path:", 
         node_paths[[i]], "in the file", xml.template))
     }
     # ref Xpaths
-    if(!is.na(ref[i])) {
-      if(!is.na(ref_identifier[i])) {
-        last_slash <- gregexpr("/", ref[i])
-        indentifier_name <- substr(ref[i], start=max(last_slash[[1]]) + 1, 
-                                   stop=nchar(ref[i]))
+    if(!is.na(refs[i])) {
+      if(!is.na(ref_identifiers[i])) {
+        last_slash <- gregexpr("/", refs[i])
+        indentifier_name <- substr(refs[i], start=max(last_slash[[1]]) + 1, 
+                                   stop=nchar(refs[i]))
         ref_Xpaths[i] <- paste0(sub(pattern=paste0("/", indentifier_name), 
                             replacement="", 
-                            x=ref[i]),
-                        paste0("[", if(!is.na(attribs[i])) "@", indentifier_name, 
-                               "='", ref_identifier[i], "']"))
+                            x=refs[i]),
+                        paste0("[", if(ref_attribs[i]) "@", indentifier_name, 
+                               "='", ref_identifiers[i], "']"))
       } else {
-        ref_Xpaths[i] <- ref[i]
+        ref_Xpaths[i] <- refs[i]
       }
     }
   }
@@ -173,21 +177,24 @@ scenarios.batch.modifier <- function(
   #### Processing modifications ####
   for(scenario in scenarios) {
     xml_scenario <- read_xml(file.path(path.scenarios, scenario))
-    if(sum(is.na(ref))) ref_nodes <- vector("list", length(node_paths))
+    if(sum(is.na(refs))) ref_nodes <- vector("list", length(node_paths))
 
     for(i in seq_along(node_paths)) {
       if(modes[i] == "add") {
         p <- xml_find_all(xml_scenario, xml_path(xml_parent(nodes[[i]])))
         xml_add_child(p, nodes[[i]])
       } else {
-        if(modes[i] == "before" | "after" | "replace") {
-          ref_nodes[[i]] <- xml_find_all(xml_scenario, ref_Xpaths[i])  
-          if(xml_length(ref_nodes[[i]]) > 1) {
+        if(modes[i] %in% c("before", "after", "replace")) {
+          ref_nodes[[i]] <- xml_find_all(xml_scenario, ref_Xpaths[i]) 
+          if(grepl(pattern = "Event", x = xml_path( ref_nodes[[i]]))) {
+            ref_nodes[[i]] <- xml_parent( ref_nodes[[i]]) 
+          }
+          if(length(ref_nodes[[i]]) > 1) {
             stop(paste(
               "More than one node identified with the node path:", 
-              ref[[i]], "in the file", scenario))
+              refs[[i]], "in the file", scenario))
           }
-          if(modes[i] == "before" | "after") {
+          if(modes[i] %in% c("before", "after")) {
             xml_add_sibling(ref_nodes[[i]], nodes[[i]], .where=modes[i])
           } else {
             xml_replace(ref_nodes[[i]], nodes[[i]])
@@ -202,6 +209,6 @@ scenarios.batch.modifier <- function(
         } 
       }
     }
-    write_xml(x = xml_scenario, file=scenario)
+    write_xml(x = xml_scenario, file=file.path(path.scenarios, scenario))
   }
 }
