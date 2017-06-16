@@ -92,6 +92,7 @@
 #'   nodes
 #' @param csv.in The name of the .csv file in the "Scenarios" folder
 #' @inheritParams collate.census
+#' @import xml2
 #' @export
 scenarios.batch.modifier <- function(
   path.scenarios=NULL,
@@ -177,7 +178,7 @@ scenarios.batch.modifier <- function(
   #### Processing modifications ####
   for(scenario in scenarios) {
     xml_scenario <- read_xml(file.path(path.scenarios, scenario))
-    if(sum(is.na(refs))) ref_nodes <- vector("list", length(node_paths))
+    if(sum(!is.na(refs))) ref_nodes <- vector("list", length(node_paths))
 
     for(i in seq_along(node_paths)) {
       if(modes[i] == "add") {
