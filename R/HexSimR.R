@@ -296,6 +296,8 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
 #' Zhang, X. D. 2007. A pair of new statistical parameters for quality control
 #' in RNA interference high-throughput screening assays. Genomics 89:552-561.
 #'
+#' @importFrom stats pnorm sd
+#' @importFrom utils choose.dir choose.files count.fields read.csv write.csv
 #' @import XLConnect
 #' @export
 SSMD.move <- function(path.results=NULL, scenarios="all", base=NULL, 
