@@ -13,12 +13,12 @@ workspace.path.modifier(path.scenarios = NULL, scenarios = "all",
 \item{scenarios}{A character vector with the scenarios to be processed or "all"}
 
 \item{new.grid.path}{The fully qualified (i.e. including the full path) of 
-the grid file, including extensio}
+the grid file, including extension}
 }
 \description{
 When a HexSim workspace is copied to a new location, the path to the root of 
 the workspace and the grid file that is stored in the scenario files need to 
-be updated. When the simulations are run manually via the GUI, hexSim picks 
+be updated. When the simulations are run manually via the GUI, HexSim picks 
 this up and asks the user to re-save the scenario. However, when simulations 
 are run via command-line, an error occurs unless the path and the grid file 
 exist. This function updates all the xml scenario files with the new path

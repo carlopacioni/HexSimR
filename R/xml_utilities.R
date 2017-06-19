@@ -7,7 +7,7 @@
 #' realises that there are some modifications that need to be applied to several
 #' or all of them, this function can help automate this task. It involves 
 #' generating an scenario with the correct/new events and parameters. This 
-#' scanrio is used then as template and the nodes that needs to be added, 
+#' scenario is used then as template and the nodes that needs to be added, 
 #' replaced or deleted are identified using a .csv. Some setting up is required 
 #' and it may not be worthwhile for only one or two scenarios. To use this 
 #' function some understanding of the xml file structure in HexSim is necessary.
@@ -41,7 +41,7 @@
 #' A back up of the folder \code{path.scenarios} is copied in the the folder 
 #' "Scenarios_bkup", one level up from \code{path.scenarios}.
 #' 
-#' The .csv file essentially provides the infromation on how to locate the nodes
+#' The .csv file essentially provides the information on how to locate the nodes
 #' that need to be modified, and what type of actions need to be carried out.The
 #' .csv must be located in the scenario folder and the name should be passed 
 #' with \code{csv.in} as a character vector. The file must have the following 
@@ -59,7 +59,7 @@
 #' 
 #' \bold{identifier} is used to indicate whether the node has an identifier. If 
 #' it does (e.g. name="\emph{attribute_value}"), the name (or the value if an 
-#' atribute) of the identifier needs to be in this column (e.g. 
+#' attribute) of the identifier needs to be in this column (e.g. 
 #' \emph{attribute_value}), otherwise FALSE must be used.
 #' 
 #' \bold{attribute} indicates whether the identifier is an attribute (TRUE) or 
@@ -218,7 +218,7 @@ scenarios.batch.modifier <- function(
 #' 
 #' When a HexSim workspace is copied to a new location, the path to the root of 
 #' the workspace and the grid file that is stored in the scenario files need to 
-#' be updated. When the simulations are run manually via the GUI, hexSim picks 
+#' be updated. When the simulations are run manually via the GUI, HexSim picks 
 #' this up and asks the user to re-save the scenario. However, when simulations 
 #' are run via command-line, an error occurs unless the path and the grid file 
 #' exist. This function updates all the xml scenario files with the new path
@@ -231,7 +231,7 @@ scenarios.batch.modifier <- function(
 #' batchRunner.exe)
 #' 
 #' @param new.grid.path The fully qualified (i.e. including the full path) of 
-#'   the grid file, including extensio
+#'   the grid file, including extension
 #' @inheritParams collate.census
 #' @inheritParams scenarios.batch.modifier
 #' @import xml2
