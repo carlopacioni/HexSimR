@@ -213,3 +213,45 @@ scenarios.batch.modifier <- function(
     write_xml(x = xml_scenario, file=file.path(path.scenarios, scenario))
   }
 }
+
+#' Modify the path of the workspace and grid file in all scenario files
+#' 
+#' When a HexSim workspace is copied to a new location, the path to the root of 
+#' the workspace and the grid file that is stored in the scenario files need to 
+#' be updated. When the simulations are run manually via the GUI, hexSim picks 
+#' this up and asks the user to re-save the scenario. However, when simulations 
+#' are run via command-line, an error occurs unless the path and the grid file 
+#' exist. This function updates all the xml scenario files with the new path
+#' passed with: \code{new.grid.path}.
+#' 
+#' \bold{WARNING:} Currently, xml scenario files saved by \code{HexSimR} trigger 
+#' a request by HexSim to re-save the files. This is due to very minor 
+#' differences in the file formatting, which do not affect the simulations. 
+#' These files run with no problems when run via the command-line (i.e. 
+#' batchRunner.exe)
+#' 
+#' @param new.grid.path The fully qualified (i.e. including the full path) of 
+#'   the grid file, including extensio
+#' @inheritParams collate.census
+#' @inheritParams scenarios.batch.modifier
+#' @import xml2
+#' @export
+workspace.path.modifier <- function(
+  path.scenarios=NULL,
+  scenarios="all", 
+  new.grid.path) {
+  txt <- "Please, select the 'Scenarios' folder within the workspace"
+  if(is.null(path.scenarios)) path.scenarios <- choose.dir(caption=txt)
+  suppressWarnings(if(scenarios == "all") 
+    scenarios <- list.files(path=path.scenarios, pattern=".xml$", 
+                            full.names=FALSE, recursive=FALSE))
+  for(scenario in scenarios) {
+    xml_scenario <- read_xml(file.path(path.scenarios, scenario))
+    workspace <- xml_find_all(xml_scenario, "/scenario/workspace")
+    grid <- xml_find_all(xml_scenario, "/scenario/hexagonGrid/filename")
+    xml_text(workspace) <- dirname(new.grid.path)
+    xml_text(grid) <- new.grid.path
+    write_xml(x = xml_scenario, file=file.path(path.scenarios, scenario))
+  }
+}
+  
