@@ -21,7 +21,8 @@ Imports:
     data.table,
     ggplot2,
     mmod,
-    XLConnect
+    XLConnect,
+    xml2
 Suggests:
     knitr,
     rmarkdown,
