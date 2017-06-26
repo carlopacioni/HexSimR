@@ -1,0 +1,4044 @@
+<?xml version="1.0"?>
+<scenario>
+  <population>
+    <name>Dingoes</name>
+    <description />
+    <type>terrestrial</type>
+    <accumulators>
+      <accumulator name="Acquired Resources" lowerBound="100" upperBound="100" birthLower="100" birthUpper="100" min="0" max="100" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="Age" lowerBound="0" upperBound="3" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="Alpha fem count" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="Alpha fem status" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="Alpha male count" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="Alpha male status" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="BaitRate" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="BaitRegion" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="Birth_location" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="Density" lowerBound="1" upperBound="1" birthLower="1" birthUpper="1" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="Gender" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="GMaleStatus" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="Group Size" lowerBound="0" upperBound="0" birthLower="1" birthUpper="1" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="GroupCensus" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="GTagCount" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="GTagStatus" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="Mate" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="nonAbreeder Count" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="nonAbreeder Status" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="PopId" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+      <accumulator name="ShootingReg" lowerBound="0" upperBound="0" birthLower="0" birthUpper="0" holdsId="False" inherit="False">
+        <description />
+      </accumulator>
+    </accumulators>
+    <traits>
+      <accumulatedTrait name="Age" accumulator="Age">
+        <value name="Pups" threshold="-INF" />
+        <value name="Juveniles" threshold="1" />
+        <value name="Adults" threshold="2" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="Alpha female" accumulator="Alpha fem status">
+        <value name="non-alpha female" threshold="-INF" />
+        <value name="alpha female" threshold="1" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="Alpha male" accumulator="Alpha male status">
+        <value name="non-alpha male" threshold="-INF" />
+        <value name="alpha male" threshold="1" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="BaitRates" accumulator="BaitRate">
+        <value name="NoBaits" threshold="-INF" />
+        <value name="Bait3km" threshold="33" />
+        <value name="Bait10km" threshold="66" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="BaitReg" accumulator="BaitRegion">
+        <value name="NoBaiting" threshold="-INF" />
+        <value name="Baiting" threshold="1" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="Birth_location" accumulator="Birth_location">
+        <value name="NoPop" threshold="-INF" />
+        <value name="BornIn" threshold="1" />
+        <value name="BornOut" threshold="2" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="Density" accumulator="Density">
+        <value name="NoIndividual" threshold="-INF" />
+        <value name="Individual" threshold="1" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="G has alpha fem" accumulator="Alpha fem count">
+        <value name="G_without_alpha_fem" threshold="-INF" />
+        <value name="G_has_alpha_fem" threshold="1" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="G has alpha male" accumulator="Alpha male count">
+        <value name="G_without_alpha_male" threshold="-INF" />
+        <value name="G_has_alpha_male" threshold="1" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="G has nonAbreeder" accumulator="nonAbreeder Count">
+        <value name="G_without_NonAbreeder" threshold="-INF" />
+        <value name="G_has_nonAbreeder" threshold="1" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="GTag" accumulator="GTagStatus">
+        <value name="Untagged" threshold="-INF" />
+        <value name="Tagged" threshold="1" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="GhasTag" accumulator="GTagCount">
+        <value name="GhasNoTag" threshold="-INF" />
+        <value name="GhasTag" threshold="1" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="Gmale" accumulator="GMaleStatus">
+        <value name="GwithoutMale" threshold="-INF" />
+        <value name="GhasMale" threshold="1" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="GroupCensusTrait" accumulator="GroupCensus">
+        <value name="0" threshold="-INF" />
+        <value name="loner" threshold="1" />
+        <value name="less5" threshold="2" />
+        <value name="less13" threshold="12" />
+        <value name="more13" threshold="13" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="Has_Mate" accumulator="Mate">
+        <value name="Unpaired" threshold="-INF" />
+        <value name="Paired" threshold="1" />
+        <description />
+      </accumulatedTrait>
+      <probabilisticTrait name="Intro">
+        <value name="NoIntro" init="100" birth="100" />
+        <value name="Intro" init="0" birth="0" />
+        <description />
+      </probabilisticTrait>
+      <accumulatedTrait name="PopID" accumulator="PopId">
+        <value name="NoPop" threshold="-INF" />
+        <value name="PopIn" threshold="1" />
+        <value name="PopOut" threshold="2" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="Resource Acquisition" accumulator="Acquired Resources">
+        <value name="Resource Low" threshold="-INF" />
+        <value name="Resource Medium" threshold="33.3333" />
+        <value name="Resource High" threshold="66.6667" />
+        <description />
+      </accumulatedTrait>
+      <probabilisticTrait name="Sex">
+        <value name="Female" init="50" birth="50" />
+        <value name="Male" init="50" birth="50" />
+        <description />
+      </probabilisticTrait>
+      <accumulatedTrait name="ShootingReg" accumulator="ShootingReg">
+        <value name="NoShooting" threshold="-INF" />
+        <value name="Shooting_05" threshold="5" />
+        <value name="Shooting_10" threshold="10" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="Status" accumulator="Group Size">
+        <value name="Floater" threshold="-INF" />
+        <value name="Group Member" threshold="1" />
+        <description />
+      </accumulatedTrait>
+      <accumulatedTrait name="nonAlphaBreeder" accumulator="nonAbreeder Status">
+        <value name="nonBreeder" threshold="-INF" />
+        <value name="Breeder" threshold="1" />
+        <description />
+      </accumulatedTrait>
+    </traits>
+    <initialSize>5000</initialSize>
+    <initializationSpatialData>InitDistIn</initializationSpatialData>
+    <exclusionLayer>resource_town_lake_30down</exclusionLayer>
+    <excludeIfZero>true</excludeIfZero>
+    <rangeParameters>
+      <resourcesTarget>0</resourcesTarget>
+      <rangeThreshold>1</rangeThreshold>
+      <maxIndivInGroup>13</maxIndivInGroup>
+      <maxRangeDistance>14400.000000000002</maxRangeDistance>
+      <maxRangeHectares>11300</maxRangeHectares>
+      <rangeSpatialData>resource_town_lake_30down</rangeSpatialData>
+      <rangeBarriers>Fence_ThreeCells_2perm</rangeBarriers>
+      <minRangeResource>397</minRangeResource>
+      <floaterResourceFraction>0.1</floaterResourceFraction>
+      <resourceTargets>
+        <trait>Age</trait>
+        <trait>Alpha female</trait>
+        <trait>Alpha male</trait>
+        <trait>Sex</trait>
+        <rank>2 2 0 0 0 0 0 0 4 4 0 0 0 0 0 0 3 3 0 1 2 0 0 0</rank>
+        <target>5 5 0 0 0 0 0 0 40 40 0 0 0 0 0 0 40 40 0 40 40 0 0 0</target>
+      </resourceTargets>
+      <isCompetitive>false</isCompetitive>
+      <competitiveFraction>0</competitiveFraction>
+    </rangeParameters>
+  </population>
+  <event timestep="1">
+    <introductionEvent>
+      <name>InitPopSizeOut</name>
+      <description />
+      <qualifiedName>Introduction ( InitPopSizeOut )</qualifiedName>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <initialSize>10000</initialSize>
+      <initializeForStreamNetworks>false</initializeForStreamNetworks>
+      <forcedTraits>
+        <trait name="Intro" value="Intro" />
+      </forcedTraits>
+      <initializationSpatialData>InitDistOut</initializationSpatialData>
+    </introductionEvent>
+  </event>
+  <event timestep="1">
+    <accumulateEvent>
+      <name>Birth_location_Init</name>
+      <description />
+      <qualifiedName>Accumulate ( Birth_location_Init )</qualifiedName>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>Birth_location</accumulator>
+        <function>HexSimDomain.IndividualLocationsUpdaterFunction</function>
+        <accumulateSpatialData>PopIDs</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Increment Age</name>
+      <description />
+      <qualifiedName>Accumulate ( Increment Age )</qualifiedName>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>Age</accumulator>
+        <function>HexSimDomain.IncrementUpdaterFunction</function>
+        <parameter>1</parameter>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <moveEvent>
+      <name>Dispersal adult and juv males from pack</name>
+      <description />
+      <qualifiedName>Movement ( Dispersal adult and juv males from pack )</qualifiedName>
+      <displayColor>-8355840</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logMoveDetails="true" logDispersalDeaths="true" logDispersalBarriers="true" logExplorationDeaths="true" logExplorationRange="true" logRangeColor="true" />
+      <moveStrategy>onlyDisperse</moveStrategy>
+      <distanceAccumulator />
+      <trait>Age</trait>
+      <trait>Sex</trait>
+      <trait>Status</trait>
+      <traitCombinations>0 0 0 0 0 0 0 1 0 0 0 1</traitCombinations>
+      <dispersalSpatialData>resource_town_lake_30down</dispersalSpatialData>
+      <barrierSeries>Fence_ThreeCells_2perm</barrierSeries>
+      <walkUpGradient>false</walkUpGradient>
+      <getAutoCorrelationFromSpatialData>false</getAutoCorrelationFromSpatialData>
+      <probabilityDistribution>LogNormal</probabilityDistribution>
+      <logNormalMean>13.92</logNormalMean>
+      <logNormalStandardDeviation>11.26049</logNormalStandardDeviation>
+      <dispersalMinimum>0</dispersalMinimum>
+      <dispersalMaximum>51</dispersalMaximum>
+      <avoidExploredArea>false</avoidExploredArea>
+      <attractionCoefficients>-1.00000 -1.00000 80.00000 100.00000</attractionCoefficients>
+      <attractionMultiplier>10.00000</attractionMultiplier>
+      <dispersalAutoCorrelation>0.5</dispersalAutoCorrelation>
+      <trendPeriod>3</trendPeriod>
+      <dispersalUseAffinity />
+      <priorityExplore>false</priorityExplore>
+      <resourceThreshold>0.7</resourceThreshold>
+    </moveEvent>
+  </event>
+  <event>
+    <moveEvent>
+      <name>Adult males from pack explore</name>
+      <description />
+      <qualifiedName>Movement ( Adult males from pack explore )</qualifiedName>
+      <displayColor>-8355840</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logMoveDetails="true" logDispersalDeaths="true" logDispersalBarriers="true" logExplorationDeaths="true" logExplorationRange="true" logRangeColor="true" />
+      <moveStrategy>resetExplored</moveStrategy>
+      <zeroExplored>true</zeroExplored>
+      <distanceAccumulator />
+      <trait>Age</trait>
+      <trait>Sex</trait>
+      <trait>Status</trait>
+      <traitCombinations>0 0 0 0 0 0 0 0 0 0 0 1</traitCombinations>
+      <barrierSeries>Fence_ThreeCells_2perm</barrierSeries>
+      <walkUpGradient>false</walkUpGradient>
+      <getAutoCorrelationFromSpatialData>false</getAutoCorrelationFromSpatialData>
+      <maximumLocalSearchArea>12</maximumLocalSearchArea>
+      <explorationGoal>ExplorationOnlyFloatersAndGroups</explorationGoal>
+      <explorationAlgorithm>Adaptive</explorationAlgorithm>
+      <explorationSetAffinity />
+      <purgeAffinity>false</purgeAffinity>
+      <priorityExplore>false</priorityExplore>
+      <resourceThreshold>1</resourceThreshold>
+    </moveEvent>
+  </event>
+  <event>
+    <moveEvent>
+      <name>Juv males from pack explore</name>
+      <description />
+      <qualifiedName>Movement ( Juv males from pack explore )</qualifiedName>
+      <displayColor>-8355840</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logMoveDetails="true" logDispersalDeaths="true" logDispersalBarriers="true" logExplorationDeaths="true" logExplorationRange="true" logRangeColor="true" />
+      <moveStrategy>resetExplored</moveStrategy>
+      <zeroExplored>true</zeroExplored>
+      <distanceAccumulator />
+      <trait>Age</trait>
+      <trait>Sex</trait>
+      <trait>Status</trait>
+      <traitCombinations>0 0 0 0 0 0 0 1 0 0 0 0</traitCombinations>
+      <barrierSeries>Fence_ThreeCells_2perm</barrierSeries>
+      <walkUpGradient>false</walkUpGradient>
+      <getAutoCorrelationFromSpatialData>false</getAutoCorrelationFromSpatialData>
+      <maximumLocalSearchArea>7</maximumLocalSearchArea>
+      <explorationGoal>ExplorationOnlyFloatersAndGroups</explorationGoal>
+      <explorationAlgorithm>Adaptive</explorationAlgorithm>
+      <explorationSetAffinity />
+      <purgeAffinity>false</purgeAffinity>
+      <priorityExplore>false</priorityExplore>
+      <resourceThreshold>1</resourceThreshold>
+    </moveEvent>
+  </event>
+  <event>
+    <moveEvent>
+      <name>Dispersal male floaters</name>
+      <description />
+      <qualifiedName>Movement ( Dispersal male floaters )</qualifiedName>
+      <displayColor>-8355840</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logMoveDetails="true" logDispersalDeaths="true" logDispersalBarriers="true" logExplorationDeaths="true" logExplorationRange="true" logRangeColor="true" />
+      <moveStrategy>onlyDisperse</moveStrategy>
+      <distanceAccumulator />
+      <trait>Sex</trait>
+      <trait>Status</trait>
+      <traitCombinations>0 0 1 0</traitCombinations>
+      <dispersalSpatialData>resource_town_lake_30down</dispersalSpatialData>
+      <barrierSeries>Fence_ThreeCells_2perm</barrierSeries>
+      <walkUpGradient>false</walkUpGradient>
+      <getAutoCorrelationFromSpatialData>false</getAutoCorrelationFromSpatialData>
+      <probabilityDistribution>Uniform</probabilityDistribution>
+      <logNormalMean>2</logNormalMean>
+      <logNormalStandardDeviation>1.1</logNormalStandardDeviation>
+      <dispersalMinimum>3</dispersalMinimum>
+      <dispersalMaximum>12</dispersalMaximum>
+      <avoidExploredArea>false</avoidExploredArea>
+      <attractionCoefficients>-1.00000 -1.00000 80.00000 100.00000</attractionCoefficients>
+      <attractionMultiplier>10.00000</attractionMultiplier>
+      <dispersalAutoCorrelation>0.5</dispersalAutoCorrelation>
+      <trendPeriod>3</trendPeriod>
+      <dispersalUseAffinity />
+      <priorityExplore>false</priorityExplore>
+      <resourceThreshold>0.7</resourceThreshold>
+    </moveEvent>
+  </event>
+  <event>
+    <moveEvent>
+      <name>Males loner floaters</name>
+      <description />
+      <qualifiedName>Movement ( Males loner floaters )</qualifiedName>
+      <displayColor>-8355840</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logMoveDetails="true" logDispersalDeaths="true" logDispersalBarriers="true" logExplorationDeaths="true" logExplorationRange="true" logRangeColor="true" />
+      <moveStrategy>resetExplored</moveStrategy>
+      <zeroExplored>true</zeroExplored>
+      <distanceAccumulator />
+      <trait>Sex</trait>
+      <trait>Status</trait>
+      <traitCombinations>0 0 1 0</traitCombinations>
+      <barrierSeries>Fence_ThreeCells_2perm</barrierSeries>
+      <walkUpGradient>false</walkUpGradient>
+      <getAutoCorrelationFromSpatialData>false</getAutoCorrelationFromSpatialData>
+      <maximumLocalSearchArea>23</maximumLocalSearchArea>
+      <explorationGoal>ExplorationOnlyFloatersAndGroups</explorationGoal>
+      <explorationAlgorithm>Adaptive</explorationAlgorithm>
+      <explorationSetAffinity />
+      <purgeAffinity>false</purgeAffinity>
+      <priorityExplore>false</priorityExplore>
+      <resourceThreshold>1</resourceThreshold>
+    </moveEvent>
+  </event>
+  <event>
+    <moveEvent>
+      <name>Dispersal adult and juv females from pack</name>
+      <description />
+      <qualifiedName>Movement ( Dispersal adult and juv females from pack )</qualifiedName>
+      <displayColor>-8355840</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logMoveDetails="true" logDispersalDeaths="true" logDispersalBarriers="true" logExplorationDeaths="true" logExplorationRange="true" logRangeColor="true" />
+      <moveStrategy>disperseThenExplore</moveStrategy>
+      <maximumExploreCount>1</maximumExploreCount>
+      <distanceAccumulator />
+      <trait>Age</trait>
+      <trait>Sex</trait>
+      <trait>Status</trait>
+      <traitCombinations>0 0 0 0 0 1 0 0 0 1 0 0</traitCombinations>
+      <dispersalSpatialData>resource_town_lake_30down</dispersalSpatialData>
+      <barrierSeries>Fence_ThreeCells_2perm</barrierSeries>
+      <walkUpGradient>false</walkUpGradient>
+      <getAutoCorrelationFromSpatialData>false</getAutoCorrelationFromSpatialData>
+      <probabilityDistribution>LogNormal</probabilityDistribution>
+      <logNormalMean>13.92</logNormalMean>
+      <logNormalStandardDeviation>11.2605</logNormalStandardDeviation>
+      <dispersalMinimum>0</dispersalMinimum>
+      <dispersalMaximum>51</dispersalMaximum>
+      <avoidExploredArea>false</avoidExploredArea>
+      <attractionCoefficients>-1.00000 -1.00000 80.00000 100.00000</attractionCoefficients>
+      <attractionMultiplier>10.00000</attractionMultiplier>
+      <dispersalAutoCorrelation>0.5</dispersalAutoCorrelation>
+      <trendPeriod>3</trendPeriod>
+      <dispersalUseAffinity />
+      <maximumLocalSearchArea>7</maximumLocalSearchArea>
+      <explorationGoal>JoinThenEstablish</explorationGoal>
+      <explorationAlgorithm>Adaptive</explorationAlgorithm>
+      <explorationSetAffinity />
+      <purgeAffinity>false</purgeAffinity>
+      <priorityExplore>false</priorityExplore>
+      <resourceThreshold>0.7</resourceThreshold>
+    </moveEvent>
+  </event>
+  <event>
+    <moveEvent>
+      <name>Dispersal female floaters</name>
+      <description />
+      <qualifiedName>Movement ( Dispersal female floaters )</qualifiedName>
+      <displayColor>-8355840</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logMoveDetails="true" logDispersalDeaths="true" logDispersalBarriers="true" logExplorationDeaths="true" logExplorationRange="true" logRangeColor="true" />
+      <moveStrategy>disperseThenExplore</moveStrategy>
+      <maximumExploreCount>1</maximumExploreCount>
+      <distanceAccumulator />
+      <trait>Sex</trait>
+      <trait>Status</trait>
+      <traitCombinations>1 0 0 0</traitCombinations>
+      <dispersalSpatialData>resource_town_lake_30down</dispersalSpatialData>
+      <barrierSeries>Fence_ThreeCells_2perm</barrierSeries>
+      <walkUpGradient>false</walkUpGradient>
+      <getAutoCorrelationFromSpatialData>false</getAutoCorrelationFromSpatialData>
+      <probabilityDistribution>Uniform</probabilityDistribution>
+      <logNormalMean>2</logNormalMean>
+      <logNormalStandardDeviation>1.1</logNormalStandardDeviation>
+      <dispersalMinimum>3</dispersalMinimum>
+      <dispersalMaximum>12</dispersalMaximum>
+      <avoidExploredArea>false</avoidExploredArea>
+      <attractionCoefficients>-1.00000 -1.00000 80.00000 100.00000</attractionCoefficients>
+      <attractionMultiplier>10.00000</attractionMultiplier>
+      <dispersalAutoCorrelation>0.5</dispersalAutoCorrelation>
+      <trendPeriod>3</trendPeriod>
+      <dispersalUseAffinity />
+      <maximumLocalSearchArea>23</maximumLocalSearchArea>
+      <explorationGoal>JoinThenEstablish</explorationGoal>
+      <explorationAlgorithm>Adaptive</explorationAlgorithm>
+      <explorationSetAffinity />
+      <purgeAffinity>false</purgeAffinity>
+      <priorityExplore>false</priorityExplore>
+      <resourceThreshold>0.7</resourceThreshold>
+    </moveEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>SetBaitingRegion1</name>
+      <description />
+      <qualifiedName>Accumulate ( SetBaitingRegion1 )</qualifiedName>
+      <displayColor>-4144960</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>BaitRegion</accumulator>
+        <function>HexSimDomain.ExploredRunningMeanUpdaterFunction</function>
+        <parameter>1</parameter>
+        <accumulateSpatialData>currentbaitfreq_occurance</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>SetBaitRate1</name>
+      <description />
+      <qualifiedName>Accumulate ( SetBaitRate1 )</qualifiedName>
+      <displayColor>-4144960</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>BaitRate</accumulator>
+        <function>HexSimDomain.ExploredRunningMeanUpdaterFunction</function>
+        <parameter>1</parameter>
+        <accumulateSpatialData>BaitRate_autumn_4BaitYr</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <survivalEvent>
+      <name>Baiting_PreBreeding_Autumn</name>
+      <description />
+      <qualifiedName>Survival ( Baiting_PreBreeding_Autumn )</qualifiedName>
+      <displayColor>-4144960</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logSurvival="true" logSurvivalDeaths="true" />
+      <useAccumulator>false</useAccumulator>
+      <matrixSet transposed="false" rowsReversed="false">
+        <matrixCount>5</matrixCount>
+        <rows>54</rows>
+        <columns>1</columns>
+        <matrices>
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9621084
+0.9242169
+0.8863253
+0.9462786
+0.8925572
+0.8666963
+0.9462786
+0.8925572
+0.8666963
+0.9573147
+0.9146294
+0.8719441
+0.9394822
+0.8789645
+0.8498318
+0.9394822
+0.8789645
+0.8498318
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9675768
+0.9351535
+0.9107206
+0.9561224
+0.9122449
+0.9076262
+0.9561224
+0.9122449
+0.9076262
+0.9634749
+0.9269497
+0.8994258
+0.9505714
+0.9011428
+0.8959398
+0.9505714
+0.9011428
+0.8959398
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9707596
+0.9415193
+0.9122788
+0.9595745
+0.9191489
+0.8864451
+0.9595745
+0.9191489
+0.8864451
+0.9670604
+0.9341207
+0.9011811
+0.9544601
+0.9089203
+0.8720791
+0.9544601
+0.9089203
+0.8720791
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9627624
+0.9255247
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9580514
+0.9161027
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9580389
+0.9160779
+0.8741167
+0.9392846
+0.8785692
+0.8650769
+0.9392846
+0.8785692
+0.8650769
+0.9527304
+0.9054607
+0.8581911
+0.9316034
+0.8632068
+0.8480076
+0.9316034
+0.8632068
+0.8480076
+</matrices>
+      </matrixSet>
+      <trait>BaitReg</trait>
+      <trait>BaitRates</trait>
+      <trait>Age</trait>
+      <trait>Resource Acquisition</trait>
+    </survivalEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>SetBaitRate1_2ndRound</name>
+      <description />
+      <qualifiedName>Accumulate ( SetBaitRate1_2ndRound )</qualifiedName>
+      <displayColor>-4144960</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>BaitRate</accumulator>
+        <function>HexSimDomain.ExploredRunningMeanUpdaterFunction</function>
+        <parameter>1</parameter>
+        <accumulateSpatialData>BaitRate_autumn_2ndRound_4BaitYr</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <survivalEvent>
+      <name>Baiting_PreBreeding_Autumn2</name>
+      <description />
+      <qualifiedName>Survival ( Baiting_PreBreeding_Autumn2 )</qualifiedName>
+      <displayColor>-4144960</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logSurvival="true" logSurvivalDeaths="true" />
+      <useAccumulator>false</useAccumulator>
+      <matrixSet transposed="false" rowsReversed="false">
+        <matrixCount>5</matrixCount>
+        <rows>54</rows>
+        <columns>1</columns>
+        <matrices>
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9621084
+0.9242169
+0.8863253
+0.9462786
+0.8925572
+0.8666963
+0.9462786
+0.8925572
+0.8666963
+0.9573147
+0.9146294
+0.8719441
+0.9394822
+0.8789645
+0.8498318
+0.9394822
+0.8789645
+0.8498318
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9675768
+0.9351535
+0.9107206
+0.9561224
+0.9122449
+0.9076262
+0.9561224
+0.9122449
+0.9076262
+0.9634749
+0.9269497
+0.8994258
+0.9505714
+0.9011428
+0.8959398
+0.9505714
+0.9011428
+0.8959398
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9707596
+0.9415193
+0.9122788
+0.9595745
+0.9191489
+0.8864451
+0.9595745
+0.9191489
+0.8864451
+0.9670604
+0.9341207
+0.9011811
+0.9544601
+0.9089203
+0.8720791
+0.9544601
+0.9089203
+0.8720791
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9627624
+0.9255247
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9580514
+0.9161027
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9580389
+0.9160779
+0.8741167
+0.9392846
+0.8785692
+0.8650769
+0.9392846
+0.8785692
+0.8650769
+0.9527304
+0.9054607
+0.8581911
+0.9316034
+0.8632068
+0.8480076
+0.9316034
+0.8632068
+0.8480076
+</matrices>
+      </matrixSet>
+      <trait>BaitReg</trait>
+      <trait>BaitRates</trait>
+      <trait>Age</trait>
+      <trait>Resource Acquisition</trait>
+    </survivalEvent>
+  </event>
+  <event eventOff="True">
+    <survivalEvent>
+      <name>Baiting_PreBreeding_Autumn3</name>
+      <description />
+      <qualifiedName>Survival ( Baiting_PreBreeding_Autumn3 )</qualifiedName>
+      <displayColor>-4144960</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logSurvival="true" logSurvivalDeaths="true" />
+      <useAccumulator>false</useAccumulator>
+      <matrixSet transposed="false" rowsReversed="false">
+        <matrixCount>5</matrixCount>
+        <rows>54</rows>
+        <columns>1</columns>
+        <matrices>
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9621084
+0.9242169
+0.8863253
+0.9462786
+0.8925572
+0.8666963
+0.9462786
+0.8925572
+0.8666963
+0.9573147
+0.9146294
+0.8719441
+0.9394822
+0.8789645
+0.8498318
+0.9394822
+0.8789645
+0.8498318
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9675768
+0.9351535
+0.9107206
+0.9561224
+0.9122449
+0.9076262
+0.9561224
+0.9122449
+0.9076262
+0.9634749
+0.9269497
+0.8994258
+0.9505714
+0.9011428
+0.8959398
+0.9505714
+0.9011428
+0.8959398
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9707596
+0.9415193
+0.9122788
+0.9595745
+0.9191489
+0.8864451
+0.9595745
+0.9191489
+0.8864451
+0.9670604
+0.9341207
+0.9011811
+0.9544601
+0.9089203
+0.8720791
+0.9544601
+0.9089203
+0.8720791
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9627624
+0.9255247
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9580514
+0.9161027
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9580389
+0.9160779
+0.8741167
+0.9392846
+0.8785692
+0.8650769
+0.9392846
+0.8785692
+0.8650769
+0.9527304
+0.9054607
+0.8581911
+0.9316034
+0.8632068
+0.8480076
+0.9316034
+0.8632068
+0.8480076
+</matrices>
+      </matrixSet>
+      <trait>BaitReg</trait>
+      <trait>BaitRates</trait>
+      <trait>Age</trait>
+      <trait>Resource Acquisition</trait>
+    </survivalEvent>
+  </event>
+  <event eventOff="True">
+    <survivalEvent>
+      <name>Baiting_PreBreeding_Autumn4</name>
+      <description />
+      <qualifiedName>Survival ( Baiting_PreBreeding_Autumn4 )</qualifiedName>
+      <displayColor>-4144960</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logSurvival="true" logSurvivalDeaths="true" />
+      <useAccumulator>false</useAccumulator>
+      <matrixSet transposed="false" rowsReversed="false">
+        <matrixCount>5</matrixCount>
+        <rows>54</rows>
+        <columns>1</columns>
+        <matrices>
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9621084
+0.9242169
+0.8863253
+0.9462786
+0.8925572
+0.8666963
+0.9462786
+0.8925572
+0.8666963
+0.9573147
+0.9146294
+0.8719441
+0.9394822
+0.8789645
+0.8498318
+0.9394822
+0.8789645
+0.8498318
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9675768
+0.9351535
+0.9107206
+0.9561224
+0.9122449
+0.9076262
+0.9561224
+0.9122449
+0.9076262
+0.9634749
+0.9269497
+0.8994258
+0.9505714
+0.9011428
+0.8959398
+0.9505714
+0.9011428
+0.8959398
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9707596
+0.9415193
+0.9122788
+0.9595745
+0.9191489
+0.8864451
+0.9595745
+0.9191489
+0.8864451
+0.9670604
+0.9341207
+0.9011811
+0.9544601
+0.9089203
+0.8720791
+0.9544601
+0.9089203
+0.8720791
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9627624
+0.9255247
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9580514
+0.9161027
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9580389
+0.9160779
+0.8741167
+0.9392846
+0.8785692
+0.8650769
+0.9392846
+0.8785692
+0.8650769
+0.9527304
+0.9054607
+0.8581911
+0.9316034
+0.8632068
+0.8480076
+0.9316034
+0.8632068
+0.8480076
+</matrices>
+      </matrixSet>
+      <trait>BaitReg</trait>
+      <trait>BaitRates</trait>
+      <trait>Age</trait>
+      <trait>Resource Acquisition</trait>
+    </survivalEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Assign gender</name>
+      <description />
+      <qualifiedName>Accumulate ( Assign gender )</qualifiedName>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>Gender</accumulator>
+        <sourceTrait>Sex</sourceTrait>
+        <function>HexSimDomain.TraitIdUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Set Group Status 1</name>
+      <description />
+      <qualifiedName>Accumulate ( Set Group Status 1 )</qualifiedName>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>Group Size</accumulator>
+        <function>HexSimDomain.GroupSizeUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>GhasMale</name>
+      <description />
+      <qualifiedName>Accumulate ( GhasMale )</qualifiedName>
+      <displayColor>-1</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>GMaleStatus</accumulator>
+        <function>HexSimDomain.ClearUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+      <updaterFunction>
+        <accumulator>GMaleStatus</accumulator>
+        <sourceAccumulator>Gender</sourceAccumulator>
+        <function>HexSimDomain.GroupSumUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Group census</name>
+      <description />
+      <qualifiedName>Accumulate ( Group census )</qualifiedName>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>GroupCensus</accumulator>
+        <function>HexSimDomain.GroupSizeUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <interactionEvent>
+      <name>Males join groups</name>
+      <description />
+      <qualifiedName>Interaction ( Males join groups )</qualifiedName>
+      <displayColor>-8355776</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logInteractionDeaths="true" />
+      <presence>explored</presence>
+      <colocation type="always" />
+      <interaction>
+        <name>New Interaction with Primary Population</name>
+        <populationName>Dingoes</populationName>
+        <presence>explored</presence>
+        <colocation type="always" />
+        <encounterProbability>1</encounterProbability>
+        <outcomes>
+          <p1Traits>
+            <trait>Sex</trait>
+            <trait>Status</trait>
+          </p1Traits>
+          <p2Traits>
+            <trait>Gmale</trait>
+            <trait>GroupCensusTrait</trait>
+            <trait>Sex</trait>
+          </p2Traits>
+          <outcome>
+            <p1ComboIndex>2</p1ComboIndex>
+            <p2ComboIndex>2</p2ComboIndex>
+            <p1Changes>
+              <joinGroup />
+            </p1Changes>
+            <p2Changes>
+              <change accumulator="GMaleStatus" updater="increment" value="1" />
+            </p2Changes>
+            <outcomeProbability>1</outcomeProbability>
+          </outcome>
+          <outcome>
+            <p1ComboIndex>2</p1ComboIndex>
+            <p2ComboIndex>4</p2ComboIndex>
+            <p1Changes>
+              <joinGroup />
+            </p1Changes>
+            <p2Changes>
+              <change accumulator="GMaleStatus" updater="increment" value="1" />
+            </p2Changes>
+            <outcomeProbability>1</outcomeProbability>
+          </outcome>
+          <outcome>
+            <p1ComboIndex>2</p1ComboIndex>
+            <p2ComboIndex>6</p2ComboIndex>
+            <p1Changes>
+              <joinGroup />
+            </p1Changes>
+            <p2Changes>
+              <change accumulator="GMaleStatus" updater="increment" value="1" />
+            </p2Changes>
+            <outcomeProbability>1</outcomeProbability>
+          </outcome>
+          <outcome>
+            <p1ComboIndex>2</p1ComboIndex>
+            <p2ComboIndex>8</p2ComboIndex>
+            <p1Changes>
+              <joinGroup />
+            </p1Changes>
+            <p2Changes>
+              <change accumulator="GMaleStatus" updater="increment" value="1" />
+            </p2Changes>
+            <outcomeProbability>1</outcomeProbability>
+          </outcome>
+        </outcomes>
+      </interaction>
+    </interactionEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>GTag events</name>
+      <description />
+      <qualifiedName>Accumulate ( GTag events )</qualifiedName>
+      <displayColor>-8372224</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>GTagStatus</accumulator>
+        <function>HexSimDomain.ClearUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+      <updaterFunction>
+        <accumulator>GTagCount</accumulator>
+        <sourceAccumulator>GTagStatus</sourceAccumulator>
+        <function>HexSimDomain.GroupSumUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+      <!--Stratified Updater Functions Group 0-->
+      <stratifiedUpdaterFunctions>
+        <trait>GhasTag</trait>
+        <traitCombinations>1 0</traitCombinations>
+        <updaterFunction>
+          <accumulator>GTagStatus</accumulator>
+          <sourceAccumulator>GTagCount</sourceAccumulator>
+          <function>HexSimDomain.SubpopulationSelectorUpdaterFunction</function>
+          <parameter>1</parameter>
+          <accumulateSpatialData>DensityMap</accumulateSpatialData>
+        </updaterFunction>
+      </stratifiedUpdaterFunctions>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Gather Group census</name>
+      <description />
+      <qualifiedName>Accumulate ( Gather Group census )</qualifiedName>
+      <displayColor>-8372160</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>GroupCensus</accumulator>
+        <function>HexSimDomain.ClearUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+      <!--Stratified Updater Functions Group 0-->
+      <stratifiedUpdaterFunctions>
+        <trait>GTag</trait>
+        <traitCombinations>0 1</traitCombinations>
+        <updaterFunction>
+          <accumulator>GroupCensus</accumulator>
+          <function>HexSimDomain.GroupSizeUpdaterFunction</function>
+          <accumulateSpatialData>DensityMap</accumulateSpatialData>
+        </updaterFunction>
+      </stratifiedUpdaterFunctions>
+    </accumulateEvent>
+  </event>
+  <event>
+    <floaterCreationEvent>
+      <name>Loners float</name>
+      <description />
+      <qualifiedName>Floater Creation ( Loners float )</qualifiedName>
+      <displayColor>-8355840</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logFloaterCreation="true" />
+      <trait>GroupCensusTrait</trait>
+      <neverFloat>true false true true true</neverFloat>
+      <priority>4294967295 0 4294967295 4294967295 4294967295</priority>
+      <resource>1 1 1 1 1</resource>
+      <enforceGroupSize>false</enforceGroupSize>
+      <resourceThreshold>1</resourceThreshold>
+    </floaterCreationEvent>
+  </event>
+  <event>
+    <moveEvent>
+      <name>Loners explore</name>
+      <description />
+      <qualifiedName>Movement ( Loners explore )</qualifiedName>
+      <displayColor>-8355840</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logMoveDetails="true" logDispersalDeaths="true" logDispersalBarriers="true" logExplorationDeaths="true" logExplorationRange="true" logRangeColor="true" />
+      <moveStrategy>resetExplored</moveStrategy>
+      <zeroExplored>true</zeroExplored>
+      <distanceAccumulator />
+      <trait>GroupCensusTrait</trait>
+      <traitCombinations>0 1 0 0 0</traitCombinations>
+      <barrierSeries>Fence_ThreeCells_2perm</barrierSeries>
+      <walkUpGradient>false</walkUpGradient>
+      <getAutoCorrelationFromSpatialData>false</getAutoCorrelationFromSpatialData>
+      <maximumLocalSearchArea>23</maximumLocalSearchArea>
+      <explorationGoal>ExplorationOnlyFloatersAndGroups</explorationGoal>
+      <explorationAlgorithm>Adaptive</explorationAlgorithm>
+      <explorationSetAffinity />
+      <purgeAffinity>false</purgeAffinity>
+      <priorityExplore>false</priorityExplore>
+      <resourceThreshold>1</resourceThreshold>
+    </moveEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>GTag events 2</name>
+      <description />
+      <qualifiedName>Accumulate ( GTag events 2 )</qualifiedName>
+      <displayColor>-8372224</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>GTagStatus</accumulator>
+        <function>HexSimDomain.ClearUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+      <updaterFunction>
+        <accumulator>GTagCount</accumulator>
+        <sourceAccumulator>GTagStatus</sourceAccumulator>
+        <function>HexSimDomain.GroupSumUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+      <!--Stratified Updater Functions Group 0-->
+      <stratifiedUpdaterFunctions>
+        <trait>GhasTag</trait>
+        <traitCombinations>1 0</traitCombinations>
+        <updaterFunction>
+          <accumulator>GTagStatus</accumulator>
+          <sourceAccumulator>GTagCount</sourceAccumulator>
+          <function>HexSimDomain.SubpopulationSelectorUpdaterFunction</function>
+          <parameter>1</parameter>
+          <accumulateSpatialData>DensityMap</accumulateSpatialData>
+        </updaterFunction>
+      </stratifiedUpdaterFunctions>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Gather Group census 2</name>
+      <description />
+      <qualifiedName>Accumulate ( Gather Group census 2 )</qualifiedName>
+      <displayColor>-8372160</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>GroupCensus</accumulator>
+        <function>HexSimDomain.ClearUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+      <!--Stratified Updater Functions Group 0-->
+      <stratifiedUpdaterFunctions>
+        <trait>GTag</trait>
+        <traitCombinations>0 1</traitCombinations>
+        <updaterFunction>
+          <accumulator>GroupCensus</accumulator>
+          <function>HexSimDomain.GroupSizeUpdaterFunction</function>
+          <accumulateSpatialData>DensityMap</accumulateSpatialData>
+        </updaterFunction>
+      </stratifiedUpdaterFunctions>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Count alpha fem within Group</name>
+      <description />
+      <qualifiedName>Accumulate ( Count alpha fem within Group )</qualifiedName>
+      <displayColor>-128</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>Alpha fem count</accumulator>
+        <sourceAccumulator>Alpha fem status</sourceAccumulator>
+        <function>HexSimDomain.GroupSumUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Subpop alpha female selector</name>
+      <description />
+      <qualifiedName>Accumulate ( Subpop alpha female selector )</qualifiedName>
+      <displayColor>-128</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Stratified Updater Functions Group 0-->
+      <stratifiedUpdaterFunctions>
+        <trait>Sex</trait>
+        <trait>Age</trait>
+        <trait>G has alpha fem</trait>
+        <traitCombinations>0 0 0 0 1 0 0 0 0 0 0 0</traitCombinations>
+        <updaterFunction>
+          <accumulator>Alpha fem status</accumulator>
+          <sourceAccumulator>Alpha fem count</sourceAccumulator>
+          <function>HexSimDomain.SubpopulationSelectorUpdaterFunction</function>
+          <parameter>1</parameter>
+          <accumulateSpatialData>DensityMap</accumulateSpatialData>
+        </updaterFunction>
+      </stratifiedUpdaterFunctions>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Count alpha male within Group</name>
+      <description />
+      <qualifiedName>Accumulate ( Count alpha male within Group )</qualifiedName>
+      <displayColor>-128</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>Alpha male count</accumulator>
+        <sourceAccumulator>Alpha male status</sourceAccumulator>
+        <function>HexSimDomain.GroupSumUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Subpop alpha male selector</name>
+      <description />
+      <qualifiedName>Accumulate ( Subpop alpha male selector )</qualifiedName>
+      <displayColor>-128</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Stratified Updater Functions Group 0-->
+      <stratifiedUpdaterFunctions>
+        <trait>Sex</trait>
+        <trait>Age</trait>
+        <trait>G has alpha male</trait>
+        <traitCombinations>0 0 0 0 0 0 0 0 0 0 1 0</traitCombinations>
+        <updaterFunction>
+          <accumulator>Alpha male status</accumulator>
+          <sourceAccumulator>Alpha male count</sourceAccumulator>
+          <function>HexSimDomain.SubpopulationSelectorUpdaterFunction</function>
+          <parameter>1</parameter>
+          <accumulateSpatialData>DensityMap</accumulateSpatialData>
+        </updaterFunction>
+      </stratifiedUpdaterFunctions>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Select nonAlpha female breeder</name>
+      <description />
+      <qualifiedName>Accumulate ( Select nonAlpha female breeder )</qualifiedName>
+      <displayColor>-8355585</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>nonAbreeder Status</accumulator>
+        <function>HexSimDomain.ClearUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+      <updaterFunction>
+        <accumulator>nonAbreeder Count</accumulator>
+        <sourceAccumulator>nonAbreeder Status</sourceAccumulator>
+        <function>HexSimDomain.GroupSumUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+      <!--Stratified Updater Functions Group 0-->
+      <stratifiedUpdaterFunctions>
+        <trait>Age</trait>
+        <trait>G has nonAbreeder</trait>
+        <trait>Alpha female</trait>
+        <trait>Sex</trait>
+        <traitCombinations>0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0</traitCombinations>
+        <updaterFunction>
+          <accumulator>nonAbreeder Status</accumulator>
+          <sourceAccumulator>nonAbreeder Count</sourceAccumulator>
+          <function>HexSimDomain.SubpopulationSelectorUpdaterFunction</function>
+          <parameter>1</parameter>
+          <accumulateSpatialData>DensityMap</accumulateSpatialData>
+        </updaterFunction>
+      </stratifiedUpdaterFunctions>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Set Group Status 2</name>
+      <description />
+      <qualifiedName>Accumulate ( Set Group Status 2 )</qualifiedName>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>Group Size</accumulator>
+        <function>HexSimDomain.GroupSizeUpdaterFunction</function>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>PopLocation</name>
+      <description />
+      <qualifiedName>Accumulate ( PopLocation )</qualifiedName>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>PopId</accumulator>
+        <function>HexSimDomain.IndividualLocationsUpdaterFunction</function>
+        <accumulateSpatialData>PopIDs</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <censusEvent>
+      <name>Census Age_BRepr</name>
+      <description />
+      <qualifiedName>Census ( Census Age_BRepr )</qualifiedName>
+      <displayColor>-32768</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logCensus="true" logCensusGenomes="false" />
+      <trait>Age</trait>
+      <trait>PopID</trait>
+      <trait>Sex</trait>
+      <trait>Status</trait>
+    </censusEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Select 20% of nonAlpha breeders</name>
+      <description />
+      <qualifiedName>Accumulate ( Select 20% of nonAlpha breeders )</qualifiedName>
+      <displayColor>-8355585</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>nonAbreeder Status</accumulator>
+        <function>HexSimDomain.ExpressionUpdaterFunction</function>
+        <parameter>"nonAbreeder Status"*Floor(Rand()+0.2)</parameter>
+        <parameter>0</parameter>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <reproductionEvent>
+      <name>Reproduction group members</name>
+      <description />
+      <qualifiedName>Reproduction ( Reproduction group members )</qualifiedName>
+      <displayColor>-8355585</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logReproductionBirths="true" logReproductionFecundity="true" logReproductionGenetics="true" />
+      <natalAffinity />
+      <breedingAffinity />
+      <matrixSet transposed="false" rowsReversed="false">
+        <matrixCount>1</matrixCount>
+        <rows>24</rows>
+        <columns>8</columns>
+        <matrices>
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+2.849805E-05 0.0007452532 0.009731934 0.06346018 0.2066379 0.3359892 0.2728018 0.1106053
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+2.849805E-05 0.0007452532 0.009731934 0.06346018 0.2066379 0.3359892 0.2728018 0.1106053
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+1 0 0 0 0 0 0 0
+</matrices>
+      </matrixSet>
+      <trait>Age</trait>
+      <trait>Alpha female</trait>
+      <trait>Sex</trait>
+      <trait>nonAlphaBreeder</trait>
+      <mateTraits>
+        <withReplacement>false</withReplacement>
+        <mateTrait>Age</mateTrait>
+        <mateTrait>Sex</mateTrait>
+        <mateTrait>Alpha male</mateTrait>
+        <mateTraitCombinations>0 0 0 0 0 0 0 0 0 0 0 1</mateTraitCombinations>
+      </mateTraits>
+    </reproductionEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Birth_location</name>
+      <description />
+      <qualifiedName>Accumulate ( Birth_location )</qualifiedName>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Stratified Updater Functions Group 0-->
+      <stratifiedUpdaterFunctions>
+        <trait>Age</trait>
+        <traitCombinations>1 0 0</traitCombinations>
+        <updaterFunction>
+          <accumulator>Birth_location</accumulator>
+          <function>HexSimDomain.IndividualLocationsUpdaterFunction</function>
+          <accumulateSpatialData>PopIDs</accumulateSpatialData>
+        </updaterFunction>
+      </stratifiedUpdaterFunctions>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>SetBaitingRegion2</name>
+      <description />
+      <qualifiedName>Accumulate ( SetBaitingRegion2 )</qualifiedName>
+      <displayColor>-4144960</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>BaitRegion</accumulator>
+        <function>HexSimDomain.ExploredRunningMeanUpdaterFunction</function>
+        <parameter>1</parameter>
+        <accumulateSpatialData>currentbaitfreq_occurance</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>SetBaitRate2</name>
+      <description />
+      <qualifiedName>Accumulate ( SetBaitRate2 )</qualifiedName>
+      <displayColor>-4144960</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>BaitRate</accumulator>
+        <function>HexSimDomain.ExploredRunningMeanUpdaterFunction</function>
+        <parameter>1</parameter>
+        <accumulateSpatialData>BaitRate_spring_4BaitYr</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>SetShootingRegion</name>
+      <description />
+      <qualifiedName>Accumulate ( SetShootingRegion )</qualifiedName>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>ShootingReg</accumulator>
+        <function>HexSimDomain.ExploredRunningMeanUpdaterFunction</function>
+        <parameter>1</parameter>
+        <accumulateSpatialData>Shooting_5_10_minStd</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <survivalEvent>
+      <name>Shooting</name>
+      <description />
+      <qualifiedName>Survival ( Shooting )</qualifiedName>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logSurvival="true" logSurvivalDeaths="true" />
+      <useAccumulator>false</useAccumulator>
+      <matrixSet transposed="false" rowsReversed="false">
+        <matrixCount>5</matrixCount>
+        <rows>27</rows>
+        <columns>1</columns>
+        <matrices>
+1
+0.98445
+0.9689
+1
+0.9689
+0.9378
+1
+0.95335
+0.9067
+1
+0.9775
+0.955
+1
+0.955
+0.91
+1
+0.95
+0.9
+1
+0.9775
+0.955
+1
+0.955
+0.91
+1
+0.95
+0.9
+
+1
+0.987125
+0.97425
+1
+0.97425
+0.9485
+1
+0.961375
+0.92275
+1
+0.9822
+0.9644
+1
+0.9644
+0.9288
+1
+0.95
+0.9
+1
+0.9822
+0.9644
+1
+0.9644
+0.9288
+1
+0.95
+0.9
+
+1
+0.98045
+0.9609
+1
+0.9609
+0.9218
+1
+0.95
+0.9
+1
+0.975
+0.95
+1
+0.95
+0.9
+1
+0.95
+0.9
+1
+0.975
+0.95
+1
+0.95
+0.9
+1
+0.95
+0.9
+
+1
+0.9857875
+0.971575
+1
+0.971575
+0.94315
+1
+0.9573625
+0.914725
+1
+0.97985
+0.9597
+1
+0.9597
+0.9194
+1
+0.95
+0.9
+1
+0.97985
+0.9597
+1
+0.9597
+0.9194
+1
+0.95
+0.9
+
+1
+0.98245
+0.9649
+1
+0.9649
+0.9298
+1
+0.951675
+0.90335
+1
+0.97625
+0.9525
+1
+0.9525
+0.905
+1
+0.95
+0.9
+1
+0.97625
+0.9525
+1
+0.9525
+0.905
+1
+0.95
+0.9
+</matrices>
+      </matrixSet>
+      <trait>Age</trait>
+      <trait>Resource Acquisition</trait>
+      <trait>ShootingReg</trait>
+    </survivalEvent>
+  </event>
+  <event>
+    <survivalEvent>
+      <name>Baiting_PostBreeding_Spring</name>
+      <description />
+      <qualifiedName>Survival ( Baiting_PostBreeding_Spring )</qualifiedName>
+      <displayColor>-4144960</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logSurvival="true" logSurvivalDeaths="true" />
+      <useAccumulator>false</useAccumulator>
+      <matrixSet transposed="false" rowsReversed="false">
+        <matrixCount>5</matrixCount>
+        <rows>54</rows>
+        <columns>1</columns>
+        <matrices>
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9621084
+0.9242169
+0.8863253
+0.9462786
+0.8925572
+0.8666963
+0.9462786
+0.8925572
+0.8666963
+0.9573147
+0.9146294
+0.8719441
+0.9394822
+0.8789645
+0.8498318
+0.9394822
+0.8789645
+0.8498318
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9675768
+0.9351535
+0.9107206
+0.9561224
+0.9122449
+0.9076262
+0.9561224
+0.9122449
+0.9076262
+0.9634749
+0.9269497
+0.8994258
+0.9505714
+0.9011428
+0.8959398
+0.9505714
+0.9011428
+0.8959398
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9707596
+0.9415193
+0.9122788
+0.9595745
+0.9191489
+0.8864451
+0.9595745
+0.9191489
+0.8864451
+0.9670604
+0.9341207
+0.9011811
+0.9544601
+0.9089203
+0.8720791
+0.9544601
+0.9089203
+0.8720791
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9627624
+0.9255247
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9580514
+0.9161027
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9580389
+0.9160779
+0.8741167
+0.9392846
+0.8785692
+0.8650769
+0.9392846
+0.8785692
+0.8650769
+0.9527304
+0.9054607
+0.8581911
+0.9316034
+0.8632068
+0.8480076
+0.9316034
+0.8632068
+0.8480076
+</matrices>
+      </matrixSet>
+      <trait>BaitReg</trait>
+      <trait>BaitRates</trait>
+      <trait>Age</trait>
+      <trait>Resource Acquisition</trait>
+    </survivalEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>SetBaitRate2_2ndRound</name>
+      <description />
+      <qualifiedName>Accumulate ( SetBaitRate2_2ndRound )</qualifiedName>
+      <displayColor>-4144960</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>BaitRate</accumulator>
+        <function>HexSimDomain.ExploredRunningMeanUpdaterFunction</function>
+        <parameter>1</parameter>
+        <accumulateSpatialData>BaitRate_spring_2ndRound_4BaitYr</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <survivalEvent>
+      <name>Baiting_PostBreeding_Spring2</name>
+      <description />
+      <qualifiedName>Survival ( Baiting_PostBreeding_Spring2 )</qualifiedName>
+      <displayColor>-4144960</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logSurvival="true" logSurvivalDeaths="true" />
+      <useAccumulator>false</useAccumulator>
+      <matrixSet transposed="false" rowsReversed="false">
+        <matrixCount>5</matrixCount>
+        <rows>54</rows>
+        <columns>1</columns>
+        <matrices>
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9621084
+0.9242169
+0.8863253
+0.9462786
+0.8925572
+0.8666963
+0.9462786
+0.8925572
+0.8666963
+0.9573147
+0.9146294
+0.8719441
+0.9394822
+0.8789645
+0.8498318
+0.9394822
+0.8789645
+0.8498318
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9675768
+0.9351535
+0.9107206
+0.9561224
+0.9122449
+0.9076262
+0.9561224
+0.9122449
+0.9076262
+0.9634749
+0.9269497
+0.8994258
+0.9505714
+0.9011428
+0.8959398
+0.9505714
+0.9011428
+0.8959398
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9707596
+0.9415193
+0.9122788
+0.9595745
+0.9191489
+0.8864451
+0.9595745
+0.9191489
+0.8864451
+0.9670604
+0.9341207
+0.9011811
+0.9544601
+0.9089203
+0.8720791
+0.9544601
+0.9089203
+0.8720791
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9627624
+0.9255247
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9580514
+0.9161027
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9580389
+0.9160779
+0.8741167
+0.9392846
+0.8785692
+0.8650769
+0.9392846
+0.8785692
+0.8650769
+0.9527304
+0.9054607
+0.8581911
+0.9316034
+0.8632068
+0.8480076
+0.9316034
+0.8632068
+0.8480076
+</matrices>
+      </matrixSet>
+      <trait>BaitReg</trait>
+      <trait>BaitRates</trait>
+      <trait>Age</trait>
+      <trait>Resource Acquisition</trait>
+    </survivalEvent>
+  </event>
+  <event eventOff="True">
+    <survivalEvent>
+      <name>Baiting_PostBreeding_Spring3</name>
+      <description />
+      <qualifiedName>Survival ( Baiting_PostBreeding_Spring3 )</qualifiedName>
+      <displayColor>-4144960</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logSurvival="true" logSurvivalDeaths="true" />
+      <useAccumulator>false</useAccumulator>
+      <matrixSet transposed="false" rowsReversed="false">
+        <matrixCount>5</matrixCount>
+        <rows>54</rows>
+        <columns>1</columns>
+        <matrices>
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9621084
+0.9242169
+0.8863253
+0.9462786
+0.8925572
+0.8666963
+0.9462786
+0.8925572
+0.8666963
+0.9573147
+0.9146294
+0.8719441
+0.9394822
+0.8789645
+0.8498318
+0.9394822
+0.8789645
+0.8498318
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9675768
+0.9351535
+0.9107206
+0.9561224
+0.9122449
+0.9076262
+0.9561224
+0.9122449
+0.9076262
+0.9634749
+0.9269497
+0.8994258
+0.9505714
+0.9011428
+0.8959398
+0.9505714
+0.9011428
+0.8959398
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9707596
+0.9415193
+0.9122788
+0.9595745
+0.9191489
+0.8864451
+0.9595745
+0.9191489
+0.8864451
+0.9670604
+0.9341207
+0.9011811
+0.9544601
+0.9089203
+0.8720791
+0.9544601
+0.9089203
+0.8720791
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9627624
+0.9255247
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9580514
+0.9161027
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9580389
+0.9160779
+0.8741167
+0.9392846
+0.8785692
+0.8650769
+0.9392846
+0.8785692
+0.8650769
+0.9527304
+0.9054607
+0.8581911
+0.9316034
+0.8632068
+0.8480076
+0.9316034
+0.8632068
+0.8480076
+</matrices>
+      </matrixSet>
+      <trait>BaitReg</trait>
+      <trait>BaitRates</trait>
+      <trait>Age</trait>
+      <trait>Resource Acquisition</trait>
+    </survivalEvent>
+  </event>
+  <event eventOff="True">
+    <survivalEvent>
+      <name>Baiting_PostBreeding_Spring4</name>
+      <description />
+      <qualifiedName>Survival ( Baiting_PostBreeding_Spring4 )</qualifiedName>
+      <displayColor>-4144960</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logSurvival="true" logSurvivalDeaths="true" />
+      <useAccumulator>false</useAccumulator>
+      <matrixSet transposed="false" rowsReversed="false">
+        <matrixCount>5</matrixCount>
+        <rows>54</rows>
+        <columns>1</columns>
+        <matrices>
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9621084
+0.9242169
+0.8863253
+0.9462786
+0.8925572
+0.8666963
+0.9462786
+0.8925572
+0.8666963
+0.9573147
+0.9146294
+0.8719441
+0.9394822
+0.8789645
+0.8498318
+0.9394822
+0.8789645
+0.8498318
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9675768
+0.9351535
+0.9107206
+0.9561224
+0.9122449
+0.9076262
+0.9561224
+0.9122449
+0.9076262
+0.9634749
+0.9269497
+0.8994258
+0.9505714
+0.9011428
+0.8959398
+0.9505714
+0.9011428
+0.8959398
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9707596
+0.9415193
+0.9122788
+0.9595745
+0.9191489
+0.8864451
+0.9595745
+0.9191489
+0.8864451
+0.9670604
+0.9341207
+0.9011811
+0.9544601
+0.9089203
+0.8720791
+0.9544601
+0.9089203
+0.8720791
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9627624
+0.9255247
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9523816
+0.904763
+0.904763
+0.9580514
+0.9161027
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+0.9463573
+0.8927145
+0.8927145
+
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+1
+0.9580389
+0.9160779
+0.8741167
+0.9392846
+0.8785692
+0.8650769
+0.9392846
+0.8785692
+0.8650769
+0.9527304
+0.9054607
+0.8581911
+0.9316034
+0.8632068
+0.8480076
+0.9316034
+0.8632068
+0.8480076
+</matrices>
+      </matrixSet>
+      <trait>BaitReg</trait>
+      <trait>BaitRates</trait>
+      <trait>Age</trait>
+      <trait>Resource Acquisition</trait>
+    </survivalEvent>
+  </event>
+  <event>
+    <rangeDynamicsEvent>
+      <name>Adjust territories</name>
+      <description />
+      <qualifiedName>Range Dynamics ( Adjust territories )</qualifiedName>
+      <displayColor>-8355840</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logRangeDynamicsRange="true" logRangeColor="true" />
+      <dataChangeActivated>false</dataChangeActivated>
+      <freeExcessResources>false</freeExcessResources>
+      <improveDeficientRanges>true</improveDeficientRanges>
+    </rangeDynamicsEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Evaluate Resources</name>
+      <description />
+      <qualifiedName>Accumulate ( Evaluate Resources )</qualifiedName>
+      <displayColor>-32576</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>Acquired Resources</accumulator>
+        <function>HexSimDomain.AcquiredResourceUpdaterFunction</function>
+        <parameter>1</parameter>
+        <parameter>0</parameter>
+        <parameter>0</parameter>
+        <parameter>0</parameter>
+        <parameter>0</parameter>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <floaterCreationEvent>
+      <name>Group members</name>
+      <description />
+      <qualifiedName>Floater Creation ( Group members )</qualifiedName>
+      <displayColor>-8355840</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logFloaterCreation="true" />
+      <trait>Age</trait>
+      <trait>Alpha female</trait>
+      <trait>Alpha male</trait>
+      <trait>Sex</trait>
+      <neverFloat>true true true true true true true true false false false false false false false false false false false true true false false false</neverFloat>
+      <priority>4294967295 4294967295 4294967295 4294967295 4294967295 4294967295 4294967295 4294967295 2 2 0 0 0 0 0 0 1 1 0 4294967295 4294967295 0 0 0</priority>
+      <resource>1 1 1 1 1 1 1 1 0.8 0.8 1 1 1 1 1 1 0.8 0.8 1 1 1 1 1 1</resource>
+      <enforceGroupSize>true</enforceGroupSize>
+      <resourceThreshold>1</resourceThreshold>
+    </floaterCreationEvent>
+  </event>
+  <event>
+    <survivalEvent>
+      <name>by resources</name>
+      <description />
+      <qualifiedName>Survival ( by resources )</qualifiedName>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logSurvival="true" logSurvivalDeaths="true" />
+      <useAccumulator>false</useAccumulator>
+      <matrixSet transposed="false" rowsReversed="false">
+        <matrixCount>5</matrixCount>
+        <rows>9</rows>
+        <columns>1</columns>
+        <matrices>
+0.311
+0.622
+0.933
+0.45
+0.9
+1
+0.45
+0.9
+1
+
+0.258
+0.515
+0.773
+0.356
+0.712
+1
+0.356
+0.712
+1
+
+0.391
+0.782
+1
+0.5
+1
+1
+0.5
+1
+1
+
+0.285
+0.569
+0.853
+0.403
+0.806
+1
+0.403
+0.806
+1
+
+0.351
+0.702
+0.967
+0.475
+0.95
+1
+0.475
+0.95
+1
+</matrices>
+      </matrixSet>
+      <trait>Age</trait>
+      <trait>Resource Acquisition</trait>
+    </survivalEvent>
+  </event>
+  <event>
+    <rangeDynamicsEvent>
+      <name>Adjust territories 2</name>
+      <description />
+      <qualifiedName>Range Dynamics ( Adjust territories 2 )</qualifiedName>
+      <displayColor>-8355840</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logRangeDynamicsRange="true" logRangeColor="true" />
+      <dataChangeActivated>false</dataChangeActivated>
+      <freeExcessResources>true</freeExcessResources>
+      <improveDeficientRanges>true</improveDeficientRanges>
+    </rangeDynamicsEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>Evaluate Resources 2</name>
+      <description />
+      <qualifiedName>Accumulate ( Evaluate Resources 2 )</qualifiedName>
+      <displayColor>-32576</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>Acquired Resources</accumulator>
+        <function>HexSimDomain.AcquiredResourceUpdaterFunction</function>
+        <parameter>1</parameter>
+        <parameter>0</parameter>
+        <parameter>0</parameter>
+        <parameter>0</parameter>
+        <parameter>0</parameter>
+        <accumulateSpatialData>DensityMap</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <accumulateEvent>
+      <name>PopLocation2</name>
+      <description />
+      <qualifiedName>Accumulate ( PopLocation2 )</qualifiedName>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <!--Global Updater Functions-->
+      <updaterFunction>
+        <accumulator>PopId</accumulator>
+        <function>HexSimDomain.IndividualLocationsUpdaterFunction</function>
+        <accumulateSpatialData>PopIDs</accumulateSpatialData>
+      </updaterFunction>
+    </accumulateEvent>
+  </event>
+  <event>
+    <censusEvent>
+      <name>Census Age</name>
+      <description />
+      <qualifiedName>Census ( Census Age )</qualifiedName>
+      <displayColor>-32768</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logCensus="true" logCensusGenomes="false" />
+      <trait>Age</trait>
+      <trait>PopID</trait>
+      <trait>Sex</trait>
+      <trait>Status</trait>
+    </censusEvent>
+  </event>
+  <event>
+    <censusEvent>
+      <name>Census Pops</name>
+      <description />
+      <qualifiedName>Census ( Census Pops )</qualifiedName>
+      <displayColor>-32768</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logCensus="true" logCensusGenomes="true" />
+      <trait>PopID</trait>
+      <trait>Status</trait>
+    </censusEvent>
+  </event>
+  <event>
+    <censusEvent>
+      <name>Census birth location</name>
+      <description />
+      <qualifiedName>Census ( Census birth location )</qualifiedName>
+      <displayColor>-32704</displayColor>
+      <populationName>Dingoes</populationName>
+      <permanent>false</permanent>
+      <logParams logCensus="true" logCensusGenomes="false" />
+      <trait>Birth_location</trait>
+      <trait>PopID</trait>
+    </censusEvent>
+  </event>
+  <event>
+    <persistHexmapEvent>
+      <name>DensityMap</name>
+      <description />
+      <qualifiedName>Generated Hexmap ( DensityMap )</qualifiedName>
+      <displayColor>-65536</displayColor>
+      <populationName />
+      <permanent>false</permanent>
+      <hexmapName>DensityMap</hexmapName>
+      <persistHexmapGenerator>
+        <expression>h1</expression>
+        <hexMapName>Dingoes:accumulator:Density</hexMapName>
+      </persistHexmapGenerator>
+      <saveFrequency>5</saveFrequency>
+    </persistHexmapEvent>
+  </event>
+  <simulationParameters>
+    <timesteps>30</timesteps>
+    <startLogStep>0</startLogStep>
+    <maxMatrices>5</maxMatrices>
+    <matrixStochasticity>random</matrixStochasticity>
+    <simulationLog>true</simulationLog>
+  </simulationParameters>
+  <workspace>C:\Users\cp0d\OneDrive - Department of Environment, Land, Water and Planning\Wild dogs\Dog PVA\MRVC\MRVC_PVA\MRVC_PVA</workspace>
+  <hexagonGrid>
+    <filename>C:\Users\cp0d\OneDrive - Department of Environment, Land, Water and Planning\Wild dogs\Dog PVA\MRVC\MRVC_PVA\MRVC_PVA\MRVC_PVA.grid</filename>
+    <hexCount>13442</hexCount>
+    <rows>143</rows>
+    <columns>94</columns>
+    <narrow>false</narrow>
+    <hexagonWidth>3599.9999626251783</hexagonWidth>
+    <north>446869.1037134222</north>
+    <west>0</west>
+  </hexagonGrid>
+  <spatialDataSeries>
+    <name>BaitRate_autumn_2ndRound_4BaitYr</name>
+    <datatype>HexMap</datatype>
+    <timeSeries>1</timeSeries>
+    <ignoredTimeSteps />
+    <cycleLength>0</cycleLength>
+  </spatialDataSeries>
+  <spatialDataSeries>
+    <name>BaitRate_autumn_4BaitYr</name>
+    <datatype>HexMap</datatype>
+    <timeSeries>1</timeSeries>
+    <ignoredTimeSteps />
+    <cycleLength>0</cycleLength>
+  </spatialDataSeries>
+  <spatialDataSeries>
+    <name>BaitRate_spring_2ndRound_4BaitYr</name>
+    <datatype>HexMap</datatype>
+    <timeSeries>1</timeSeries>
+    <ignoredTimeSteps />
+    <cycleLength>0</cycleLength>
+  </spatialDataSeries>
+  <spatialDataSeries>
+    <name>BaitRate_spring_4BaitYr</name>
+    <datatype>HexMap</datatype>
+    <timeSeries>1</timeSeries>
+    <ignoredTimeSteps />
+    <cycleLength>0</cycleLength>
+  </spatialDataSeries>
+  <spatialDataSeries>
+    <name>currentbaitfreq_occurance</name>
+    <datatype>HexMap</datatype>
+    <timeSeries>1 4 6 8 9 10 11 13 14 15 17 18 19 21 22 25 26 27 28 29 30</timeSeries>
+    <ignoredTimeSteps />
+    <cycleLength>0</cycleLength>
+  </spatialDataSeries>
+  <spatialDataSeries>
+    <name>InitDistIn</name>
+    <datatype>HexMap</datatype>
+    <timeSeries>1 2</timeSeries>
+    <ignoredTimeSteps />
+    <cycleLength>0</cycleLength>
+  </spatialDataSeries>
+  <spatialDataSeries>
+    <name>InitDistOut</name>
+    <datatype>HexMap</datatype>
+    <timeSeries>1</timeSeries>
+    <ignoredTimeSteps />
+    <cycleLength>0</cycleLength>
+  </spatialDataSeries>
+  <spatialDataSeries>
+    <name>PopIDs</name>
+    <datatype>HexMap</datatype>
+    <timeSeries>1</timeSeries>
+    <ignoredTimeSteps />
+    <cycleLength>0</cycleLength>
+  </spatialDataSeries>
+  <spatialDataSeries>
+    <name>resource_town_lake_30down</name>
+    <datatype>HexMap</datatype>
+    <timeSeries>1</timeSeries>
+    <ignoredTimeSteps />
+    <cycleLength>0</cycleLength>
+  </spatialDataSeries>
+  <spatialDataSeries>
+    <name>Shooting_5_10_minStd</name>
+    <datatype>HexMap</datatype>
+    <timeSeries>1</timeSeries>
+    <ignoredTimeSteps />
+    <cycleLength>0</cycleLength>
+  </spatialDataSeries>
+  <spatialDataSeries>
+    <name>Fence_ThreeCells_2perm</name>
+    <datatype>Barrier</datatype>
+    <timeSeries>1</timeSeries>
+    <ignoredTimeSteps />
+    <cycleLength>0</cycleLength>
+  </spatialDataSeries>
+  <spatialDataSeries>
+    <name>DensityMap</name>
+    <datatype>Persisted</datatype>
+    <timeSeries>1</timeSeries>
+    <ignoredTimeSteps />
+    <cycleLength>0</cycleLength>
+  </spatialDataSeries>
+  <globalVariables />
+</scenario>

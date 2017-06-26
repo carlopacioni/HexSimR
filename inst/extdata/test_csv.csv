@@ -1,0 +1,11 @@
+nodes,identifier,attribute,mode,ref,ref_identifier,ref_attribute
+/scenario/population/accumulators/accumulator/name,ThreeCellsLocID,TRUE,add,NA,NA,NA
+/scenario/population/accumulators/accumulator/name,EightCellsLocID,TRUE,after,/scenario/population/accumulators/accumulator/name,Density,TRUE
+/scenario/population/traits/accumulatedTrait/name,ThreeCellsLocID,TRUE,before,/scenario/population/traits/accumulatedTrait/name,nonAlphaBreeder,TRUE
+/scenario/population/traits/accumulatedTrait/name,EightCellsLocID,TRUE,after,/scenario/population/traits/accumulatedTrait/name,Density,TRUE
+/scenario/event/accumulateEvent/name,ThreeCellsLocID,FALSE,after,/scenario/event/accumulateEvent/name,PopLocation2,FALSE
+/scenario/event/accumulateEvent/name,EightCellsLocID,FALSE,after,/scenario/event/accumulateEvent/name,ThreeCellsLocID,FALSE
+/scenario/event/censusEvent/name,Census ThreeCellsID,FALSE,after,/scenario/event/censusEvent/name,Census birth location,FALSE
+/scenario/event/censusEvent/name,Census EightCellsID,FALSE,after,/scenario/event/censusEvent/name,Census ThreeCellsID,FALSE
+/scenario/spatialDataSeries/name,ThreeCellPlusFencedCons,FALSE,add,NA,NA,NA
+/scenario/spatialDataSeries/name,EightCells,FALSE,add,NA,NA,NA
