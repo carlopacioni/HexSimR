@@ -1,3 +1,34 @@
+#' Buil a Xpath
+#' 
+#' This function builds a Xpath to search nodes in HexSim xml files. Is used 
+#' internally by hexSimR. When used in the LHS.scenarios function, it constructs
+#' the path "/.../name[text()='...']" when param_node is not NA and is.LHS is
+#' TRUE. Addtional details on params are in the scenarios.batch.modifier.
+#' 
+#' @param node_path The node_path
+#' @param identifier The identifier of the node
+#' @param attrib Whether the identifier is an attribute
+#' @export
+make.Xpath <- function(node_path, identifier, attrib, 
+                       param_node=NA, is.LHS=FALSE) {
+  last_slash <- gregexpr("/", node_path)
+  if(is.na(param_node) & is.LHS) {
+    Xpath <- paste0(x=node_path, "[text()='", identifier, "']")
+  } else {
+    identifier_name <- substr(node_path, start=max(last_slash[[1]]) + 1, 
+                               stop=nchar(node_path))
+    Xpath <- paste0(sub(pattern=paste0("/", identifier_name), 
+                        replacement="", 
+                        x=node_path),
+                    paste0("[", if(attrib) "@", identifier_name, 
+                           "='", identifier, "']"))
+  }
+  return(Xpath)
+}
+#----------------------------------------------------------------------------#
+
+
+
 #' Batch modification of scenarios
 #' 
 #' Modify several scenarios at once by replacing, deleting or adding nodes (e.g.
@@ -129,14 +160,7 @@ scenarios.batch.modifier <- function(
   for(i in seq_along(node_paths)) {
     
     if(is.na(as.logical(identifiers[i]))) {
-      last_slash <- gregexpr("/", node_paths[i])
-      indentifier_name <- substr(node_paths[i], start=max(last_slash[[1]]) + 1, 
-                                 stop=nchar(node_paths[i]))
-      Xpaths[i] <- paste0(sub(pattern=paste0("/", indentifier_name), 
-                          replacement="", 
-                          x=node_paths[i]),
-                      paste0("[", if(attribs[i]) "@", indentifier_name, 
-                             "='", identifiers[i], "']"))
+      Xpaths[i] <- make.Xpath(node_paths[i], identifiers[i], attribs[i])
     } else {
       Xpaths[i] <- node_paths[i]
     }
@@ -156,14 +180,7 @@ scenarios.batch.modifier <- function(
     # ref Xpaths
     if(!is.na(refs[i])) {
       if(is.na(as.logical(ref_identifiers[i]))) {
-        last_slash <- gregexpr("/", refs[i])
-        indentifier_name <- substr(refs[i], start=max(last_slash[[1]]) + 1, 
-                                   stop=nchar(refs[i]))
-        ref_Xpaths[i] <- paste0(sub(pattern=paste0("/", indentifier_name), 
-                            replacement="", 
-                            x=refs[i]),
-                        paste0("[", if(ref_attribs[i]) "@", indentifier_name, 
-                               "='", ref_identifiers[i], "']"))
+        ref_Xpaths[i] <- make.Xpath (refs[i], ref_identifiers[i], ref_attribs[i])
       } else {
         ref_Xpaths[i] <- refs[i]
       }
