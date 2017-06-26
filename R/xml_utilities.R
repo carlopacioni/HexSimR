@@ -128,7 +128,7 @@ scenarios.batch.modifier <- function(
   
   for(i in seq_along(node_paths)) {
     
-    if(!is.logical(identifiers[i])) {
+    if(is.na(as.logical(identifiers[i]))) {
       last_slash <- gregexpr("/", node_paths[i])
       indentifier_name <- substr(node_paths[i], start=max(last_slash[[1]]) + 1, 
                                  stop=nchar(node_paths[i]))
@@ -155,7 +155,7 @@ scenarios.batch.modifier <- function(
     }
     # ref Xpaths
     if(!is.na(refs[i])) {
-      if(!is.logical(ref_identifiers[i])) {
+      if(is.na(as.logical(ref_identifiers[i]))) {
         last_slash <- gregexpr("/", refs[i])
         indentifier_name <- substr(refs[i], start=max(last_slash[[1]]) + 1, 
                                    stop=nchar(refs[i]))
