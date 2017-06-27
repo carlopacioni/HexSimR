@@ -18,7 +18,8 @@ test_that("scenarios.batch.modifier", {
   test_old <- read_xml(file.path(testFolder, "MRVC_4BaitYr_ThreeCells_old.xml"))
   expect_equal(test_new, test_old)
   
-  unlink(testFolder, recursive = TRUE)
+  unlink(c(testFolder, file.path(dirname(testFolder), '/Scenarios_bkup')), 
+           recursive = TRUE)
   
 })
 
