@@ -20,6 +20,7 @@ Imports:
     reshape2,
     data.table,
     ggplot2,
+    lhs,
     mmod,
     XLConnect,
     xml2

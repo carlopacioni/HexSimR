@@ -272,3 +272,124 @@ workspace.path.modifier <- function(
   }
 }
   
+
+#' Generate LHS scenarios
+#' 
+#' @param samples The number of LHS samples (i.e. parameter combinations)
+#' @param generate Whether generate (TRUE) the xml files or stop after having
+#'   reated the hypercube matrix (FALSE)
+#' @inheritParams scenarios.batch.modifier
+#' @import xml2
+#' @importFrom lhs randomLHS 
+#' @export
+LHS.scenarios <- function(
+  path.scenarios=NULL,
+  xml.template=NULL,
+  samples, 
+  csv.in,
+  generate=TRUE) {
+  #----------------------------------------------------------------------------#
+  # Helper functions
+  #----------------------------------------------------------------------------#
+  distribute <- list(
+    uniform=function(p, argums) qunif(p, as.numeric(argums[1]), as.numeric(argums[2])),
+    beta=function(p, argums) qbeta(p, as.numeric(argums[1]), as.numeric(argums[2])),
+    binom=function(p, argums) qbinom(p, size=1, prob=as.numeric(argums[1])),
+    lnorm=function(p, argums) qlnorm(p, as.numeric(argums[1]), as.numeric(argums[2])),
+    norm=function(p, argums) qnorm(p, as.numeric(argums[1]), as.numeric(argums[2])), 
+    fixed=function(p, argums) {
+      br <- seq(0, by=1/length(argums), length.out=length(argums) + 1)
+      p <- as.numeric(argums[cut(p, br, labels=FALSE)])
+      return(p)
+    }
+  )
+  #----------------------------------------------------------------------------#
+  
+  #### Setting arguments ####
+  txt <- "Please, select the 'Scenarios' folder within the workspace"
+  if(is.null(path.scenarios)) path.scenarios <- choose.dir(caption=txt)
+  
+  csv_file <- read.csv(file=file.path(path.scenarios, csv.in), stringsAsFactors=FALSE)
+  types <- csv_file[, "type"]
+  values <- strsplit(csv_file[, "value"], ",")
+  distrbs <- csv_file[, "distribution"]
+  k <- nrow(csv_file)
+  
+  #### write hypercube matrix ####
+  hypercube <- as.data.frame(randomLHS(n=samples, k=k))
+  
+  for(i in seq_along(types)) {
+    if(types[i] == "character") {
+      br <- seq(0, by=1/length(values[[i]]), length.out=length(values[[i]]) + 1)
+      hypercube[, i] <- values[[i]][cut(hypercube[, i], br, labels=FALSE)]
+    } else {
+      hypercube[, i] <- distribute[[distrbs[[i]]]](hypercube[, i], values[[i]])
+      if(types[i] == "integer") hypercube[, i] <- round(hypercube[, i])
+    }
+    write.csv(hypercube, file=file.path(path.scenarios, "hypercube.csv"), 
+              row.names=FALSE)
+  }
+  
+  #### generate xml files ####
+  if(generate) {
+    # Setting arguments
+    node_paths <- csv_file[, "nodes"]
+    identifiers <- csv_file[, "identifier"]
+    attribs <- csv_file[, "attribute"]
+    param_nodes <- csv_file[, "param_node"]
+    param_node_identifiers <- csv_file[, "param_node_identifier"]
+    param_node_attributes <- csv_file[, "param_node_attribute"]
+    param_identifiers <- csv_file[, "param_identifier"]
+    param_attributes <- csv_file[, "param_attribute"]
+    Xpaths <- vector("character", length(node_paths))
+    param_node_Xpaths <- vector("character", length(node_paths))
+    
+    # Create Xpaths
+    for(i in seq_along(node_paths)) {
+      if(is.na(as.logical(identifiers[i]))) {
+        Xpaths[i] <- make.Xpath(node_paths[i], identifiers[i], attribs[i],
+                                param_node=param_nodes[i], is.LHS=TRUE)
+        
+        if(!is.na(param_nodes[i])) {
+          if(is.na(as.logical(param_node_identifiers[i]))) {
+            param_node_Xpaths[i] <- make.Xpath(param_nodes[i], 
+                                               param_node_identifiers[i], 
+                                               param_node_attributes[i])
+            
+          } else {
+            param_node_Xpaths[i] <- param_nodes[i]
+          }
+          
+          Xpaths[i] <- paste0(Xpaths[i], param_node_Xpaths[i])
+        }
+        
+      } else {
+        Xpaths[i] <- node_paths[i]
+      }
+    }
+    
+    xml_template <- read_xml(file.path(path.scenarios, xml.template), options="")
+    
+    #### Modify nodes ####
+    nodes <- vector("list", length(node_paths))
+    root_name <- substr(xml.template, start=1, 
+                        stop=nchar(xml.template) - 4)
+    for(i in seq_along(node_paths)) {
+      nodes[[i]] <- xml_find_all(xml_template, Xpaths[i])  
+    }
+    
+    for(r in 1:samples) {
+      for(i in seq_along(node_paths)) {
+        if(!is.na(param_nodes[i]) & is.na(as.logical(param_node_identifiers[i]))) {
+          xml_attr(nodes[[i]], param_identifiers[i]) <- as.character(hypercube[r,i]) 
+        } else {
+          xml_text(nodes[[i]]) <- as.character(hypercube[r,i])
+        }
+      }
+      
+      write_xml(x=xml_template, file=file.path(path.scenarios, 
+                                               paste0(root_name, "_LHS", r, ".xml")))
+    }
+  }
+  return(list(hypercube=hypercube, nodes=nodes))
+}

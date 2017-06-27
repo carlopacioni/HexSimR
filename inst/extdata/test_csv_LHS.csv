@@ -1,0 +1,5 @@
+nodes,identifier,attribute,param_node,param_node_identifier,param_node_attribute,param_identifier,param_attribute,type,value,distribution
+/scenario/population/initialSize,FALSE,FALSE,NA,FALSE,FALSE,FALSE,FALSE,integer,"0,5000",uniform
+/scenario/spatialDataSeries/name,Shooting_5_10_minStd,FALSE,NA,FALSE,FALSE,FALSE,FALSE,character,"Shooting_5,Shooting_5_10",NA
+/scenario/population/traits/accumulatedTrait/name,BaitRates,TRUE,/value/name,Bait3km,TRUE,threshold,TRUE,integer,"33,50",fixed
+/scenario/spatialDataSeries/name,EightCells,FALSE,/cycleLength,FALSE,FALSE,FALSE,FALSE,integer,"5,15",lnorm
