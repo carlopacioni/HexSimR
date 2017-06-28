@@ -78,7 +78,8 @@ make.Xpath <- function(node_path, identifier, attrib,
 #' with \code{csv.in} as a character vector. The file must have the following 
 #' headings: nodes, identifier, attribute, mode, ref, ref_identifier,	and 
 #' ref_attribute. \code{scenarios.batch.modifier} will parse the file and use 
-#' these columns as arguments.
+#' these columns as arguments. See \code{system.file("extdata", "test_csv.csv",
+#' package="HexSimR")} for an example file.
 #' 
 #' The column with heading \bold{nodes} is the path to the node to be searched 
 #' in the \code{xml.template} file, except when the \bold{mode} is "delete", in 
@@ -106,15 +107,15 @@ make.Xpath <- function(node_path, identifier, attrib,
 #' \code{xml.template}. If the option "delete" is used, the node is searched and
 #' deleted from the scenario file. When "replace" is used, the \bold{ref} node 
 #' must be provided, even when the node is the same. This is because there might
-#' be situations where what it is being changed is the name of the node. In
+#' be situations where what it is being changed is the name of the node. In 
 #' these cases, \code{scenarios.batch.modifier} would not find the original node
 #' in the scenario file.
 #' 
 #' \bold{ref} needs to be passed when the options "before", "after" or "replace"
-#' are used in \bold{mode}. When not relevant, \code{NA} is used. When \bold{ref} is used, then
-#' a search is performed in the scenario xml file and the fields 
-#' \bold{ref_identifier} and	\bold{ref_attribute} must also be passed when 
-#' relevant. \bold{ref_identifier} and	\bold{ref_attribute} have the same 
+#' are used in \bold{mode}. When not relevant, \code{NA} is used. When
+#' \bold{ref} is used, then a search is performed in the scenario xml file and
+#' the fields \bold{ref_identifier} and	\bold{ref_attribute} must also be passed
+#' when relevant. \bold{ref_identifier} and	\bold{ref_attribute} have the same 
 #' meaning as \bold{identifier} and \bold{attribute}, but they refer to the 
 #' \bold{ref} node. Use FALSE when these are not relevant.
 #' 
