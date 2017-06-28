@@ -276,12 +276,61 @@ workspace.path.modifier <- function(
 
 #' Generate LHS scenarios
 #' 
+#' This function is used to generate scenarios whose parameter combinations 
+#' follow a Latin Hypercupe Sampling design. Parameter values can be drawn from 
+#' normal, lognormal, binomial, beta or uniform distributions or have a set of 
+#' fixed values.
+#' 
+#' An xml file is passed (with \code{xml.template}) to build the LHS scenarios, 
+#' which are saved in the same \code{path.scenarios} where the template is.
+#' 
+#' If \code{generate} is FALSE, then the function quits after generating the 
+#' hypercube matrix.
+#' 
+#' An .csv file needs to be created, must be located in the scenario folder and 
+#' the name should be passed with \code{csv.in} as a character vector (see 
+#' \code{system.file("extdata", "test_csv_LHS.csv", package="HexSimR")} for an 
+#' example).
+#' 
+#' The .csv must have the following headings: nodes, identifier, attribute, 
+#' param_node, param_node_identifier, param_node_attribute, param_identifier, 
+#' param_attribute, param_name, type, value, distribution. See documentation for
+#' \code{scenarios.batch.modifier} on the meaning of nodes, identifier, 
+#' attribute. When \code{generate=FALSE} only the last four are mandatory. 
+#' 
+#' There might be situation where the parameter values to be changed is in an 
+#' internal node respect to the node identifier. In order to identified uniquely
+#' this parameter, the identifier of the parameter node needs to be indicated. 
+#' This is best explained with an example. An accumulateTrait is identified by 
+#' the name attribute (i.e. <accumulateTrait name="XXX">), however the parameter 
+#' values are contained in the <value> node within the accumulateTrait. The node
+#' <value> is itself identified by a name attribute, but the parameters are 
+#' stored under a "threshold" attribute. To avoid multiple hit \bold{nodes}, 
+#' \bold{identifier} and \bold{attribute} are used to identify uniquely the 
+#' parent node where the parameter is contained. 
+#' \bold{param_node},	\bold{param_node_identifier}, and 
+#' \bold{param_node_attribute} are used to identify the node where the parameter
+#' values are contained (if necessary, use NA for \bold{param_node} and FALSE 
+#' for the others columns if not relevant), and \bold{param_identifier} and 
+#' \bold{param_attribute} are used to identify the actual parameter values that 
+#' need to be changed. Use FALSE when the latter two are not relevant (e.g. if 
+#' the node identifier is the parameter that needs to be changed).
+#' 
+#' \bold{type} refers to the type of parameter. It can take exactly one of the 
+#' following: "integer", "numeric" or "character". \bold{value} refers to the 
+#' parameters of the distribution from which values are drawn (separated by a 
+#' comma) if one is used: mean and sd for normal, meanlog and sdlog for 
+#' lognormal, shape1 and shape2 for beta, prob for binomial and min and max for 
+#' uniform, otherwise a collection of values if \bold{distribution}="fixed". 
+#' When \bold{distribution}="fixed" or \bold{type}="character" the elements in
+#' \bold{value} have equal probability.
+#' 
 #' @param samples The number of LHS samples (i.e. parameter combinations)
-#' @param generate Whether generate (TRUE) the xml files or stop after having
-#'   reated the hypercube matrix (FALSE)
+#' @param generate Whether generate (TRUE) the xml files or stop after having 
+#'   created the hypercube matrix (FALSE)
 #' @inheritParams scenarios.batch.modifier
 #' @import xml2
-#' @importFrom lhs randomLHS 
+#' @importFrom lhs randomLHS
 #' @export
 LHS.scenarios <- function(
   path.scenarios=NULL,
@@ -310,7 +359,9 @@ LHS.scenarios <- function(
   txt <- "Please, select the 'Scenarios' folder within the workspace"
   if(is.null(path.scenarios)) path.scenarios <- choose.dir(caption=txt)
   
-  csv_file <- read.csv(file=file.path(path.scenarios, csv.in), stringsAsFactors=FALSE)
+  csv_file <- read.csv(file=file.path(path.scenarios, csv.in), 
+                       stringsAsFactors=FALSE)
+  pnames <- csv_file[, "param_name"]
   types <- csv_file[, "type"]
   values <- strsplit(csv_file[, "value"], ",")
   distrbs <- csv_file[, "distribution"]
@@ -327,6 +378,7 @@ LHS.scenarios <- function(
       hypercube[, i] <- distribute[[distrbs[[i]]]](hypercube[, i], values[[i]])
       if(types[i] == "integer") hypercube[, i] <- round(hypercube[, i])
     }
+    names(hypercube) <- pnames
     write.csv(hypercube, file=file.path(path.scenarios, "hypercube.csv"), 
               row.names=FALSE)
   }
@@ -392,5 +444,5 @@ LHS.scenarios <- function(
                                                paste0(root_name, "_LHS", r, ".xml")))
     }
   }
-  return(list(hypercube=hypercube, nodes=nodes))
+  return(list(hypercube=hypercube, if(generate) nodes=nodes))
 }
