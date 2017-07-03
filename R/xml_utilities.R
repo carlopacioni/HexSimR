@@ -8,6 +8,8 @@
 #' @param node_path The node_path
 #' @param identifier The identifier of the node
 #' @param attrib Whether the identifier is an attribute
+#' @param param_node Whether the parameter is contained in an internal node
+#' @param is.LHS Whether the Xpath being built is for a LHS
 #' @export
 make.Xpath <- function(node_path, identifier, attrib, 
                        param_node=NA, is.LHS=FALSE) {
@@ -331,6 +333,7 @@ workspace.path.modifier <- function(
 #' @inheritParams scenarios.batch.modifier
 #' @import xml2
 #' @importFrom lhs randomLHS
+#' @importFrom stats qbeta qbinom qlnorm qnorm qunif
 #' @export
 LHS.scenarios <- function(
   path.scenarios=NULL,

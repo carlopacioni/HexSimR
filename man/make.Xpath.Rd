@@ -12,6 +12,10 @@ make.Xpath(node_path, identifier, attrib, param_node = NA, is.LHS = FALSE)
 \item{identifier}{The identifier of the node}
 
 \item{attrib}{Whether the identifier is an attribute}
+
+\item{param_node}{Whether the parameter is contained in an internal node}
+
+\item{is.LHS}{Whether the Xpath being built is for a LHS}
 }
 \description{
 This function builds a Xpath to search nodes in HexSim xml files. Is used 
