@@ -449,3 +449,187 @@ LHS.scenarios <- function(
   }
   return(list(hypercube=hypercube, if(generate) nodes=nodes))
 }
+
+#' Conditional replacement of xml elements
+#' 
+#' This function replaces values in specific element nodes of xml scenario files
+#' if a condition is satisfied. This may be useful when, for example, a few 
+#' resource maps have been used to generate scenarios for a LHS analysis. When
+#' this occur, all the nodes that use the resource map need to match the value
+#' in the node that was used to generate the LHS matrix.
+#' 
+#' The file \code{csv.in}, which is constructed in the same way as in 
+#' \code{LHS.scenarios}, identifies element nodes whose value needs to be 
+#' satisfied. That is, a search is performed to identify a node and its values 
+#' is compared to the value reported in the column 'value' in \code{csv.in}. For
+#' each row in \code{csv.in}, a \code{lookup} csv file needs to be present, 
+#' where a list of nodes that need to be modified and their new values is 
+#' stored. These values are applied in the xml files where the condition in the 
+#' relevant row of \code{csv.in} is met.
+#' 
+#' @inheritParams scenarios.batch.modifier
+#' @param lookup character vector with the csv file names of the element values
+#'   to changed. One file for each row of csv.in
+#' @import xml2
+#' @export
+xml.cond.replacement <- function (path.scenarios=NULL,
+                                  scenarios="all",
+                                  csv.in,
+                                  lookup) {
+  #### Setting arguments ####
+  txt <- "Please, select the 'Scenarios' folder within the workspace"
+  if(is.null(path.scenarios)) path.scenarios <- choose.dir(caption=txt)
+  suppressWarnings(if(scenarios == "all") 
+    scenarios <- list.files(path=path.scenarios, pattern=".xml$", 
+                            full.names=FALSE, recursive=FALSE))
+  csv_file <- read.csv(file=file.path(path.scenarios, csv.in), 
+                       stringsAsFactors=FALSE)
+  
+  node_paths <- csv_file[, "nodes"]
+  identifiers <- csv_file[, "identifier"]
+  attribs <- csv_file[, "attribute"]
+  param_nodes <- csv_file[, "param_node"]
+  param_node_identifiers <- csv_file[, "param_node_identifier"]
+  param_node_attributes <- csv_file[, "param_node_attribute"]
+  param_identifiers <- csv_file[, "param_identifier"]
+  param_attributes <- csv_file[, "param_attribute"]
+  Xpaths <- vector("character", length(node_paths))
+  param_node_Xpaths <- vector("character", length(node_paths))
+  values <- csv_file[, "value"]
+  
+  # Create Xpaths
+  for(i in seq_along(node_paths)) {
+    if(is.na(as.logical(identifiers[i]))) {
+      Xpaths[i] <- make.Xpath(node_paths[i], identifiers[i], attribs[i],
+                              param_node=param_nodes[i], is.LHS=TRUE)
+      
+      if(!is.na(param_nodes[i])) {
+        if(is.na(as.logical(param_node_identifiers[i]))) {
+          param_node_Xpaths[i] <- make.Xpath(param_nodes[i], 
+                                             param_node_identifiers[i], 
+                                             param_node_attributes[i])
+        } else {
+          param_node_Xpaths[i] <- param_nodes[i]
+        }
+        Xpaths[i] <- paste0(Xpaths[i], param_node_Xpaths[i])
+      }
+    } else {
+      Xpaths[i] <- node_paths[i]
+    }
+  }
+  
+  for(scenario in scenarios) {
+    xml_scenario <- read_xml(file.path(path.scenarios, scenario))
+    nodes <- vector("list", length(node_paths))
+    for(i in seq_along(node_paths)) {
+      lookup_file <- read.csv(file=file.path(path.scenarios, lookup[i]), 
+                              stringsAsFactors=FALSE)
+      nodes[[i]] <- xml_find_all(xml_scenario, Xpaths[i])
+      if(length(nodes[[i]]) > 0) {
+        if(!is.na(param_nodes[i]) & is.na(as.logical(param_node_identifiers[i]))) {
+          chk <-  xml_attr(nodes[[i]], param_identifiers[i]) 
+        } else {
+          chk <- xml_text(nodes[[i]])
+        }
+        if(chk == values[i]) {
+          message(paste("Found a node for", Xpaths[i], "in", scenario))
+          message(paste("The node value is", chk))
+          rep_node_paths <- lookup_file[, "nodes"]
+          rep_identifiers <- lookup_file[, "identifier"]
+          rep_attribs <- lookup_file[, "attribute"]
+          rep_param_nodes <- lookup_file[, "param_node"]
+          rep_param_node_identifiers <- lookup_file[, "param_node_identifier"]
+          rep_param_node_attributes <- lookup_file[, "param_node_attribute"]
+          rep_param_identifiers <- lookup_file[, "param_identifier"]
+          rep_param_attributes <- lookup_file[, "param_attribute"]
+          rep_Xpaths <- vector("character", length(rep_node_paths))
+          rep_param_node_Xpaths <- vector("character", length(rep_node_paths))
+          rep_nodes <- vector("list", length(rep_node_paths))
+          rep_values <- lookup_file[, "value"]
+          
+          for(r in seq_along(rep_node_paths)) {
+            if(is.na(as.logical(rep_identifiers[r]))) {
+              rep_Xpaths[r] <- make.Xpath(rep_node_paths[r], rep_identifiers[r], 
+                                          rep_attribs[r],
+                                          param_node=rep_param_nodes[r], 
+                                          is.LHS=TRUE)
+              
+              if(!is.na(rep_param_nodes[r])) {
+                if(is.na(as.logical(rep_param_node_identifiers[r]))) {
+                  rep_param_node_Xpaths[r] <- make.Xpath(rep_param_nodes[r], 
+                                                  rep_param_node_identifiers[r], 
+                                                  rep_param_node_attributes[r])
+                } else {
+                  rep_param_node_Xpaths[r] <- rep_param_nodes[r]
+                }
+                rep_Xpaths[r] <- paste0(rep_Xpaths[r], rep_param_node_Xpaths[r])
+              }
+            } else {
+              rep_Xpaths[r] <- rep_node_paths[r]
+            }
+          }
+          rep_nodes[[r]] <- xml_find_all(xml_scenario, rep_Xpaths[r])
+          
+          
+          
+          if(!is.na(rep_param_nodes[r]) & 
+             is.na(as.logical(rep_param_node_identifiers[r]))) {
+            message(paste("Found node", rep_Xpaths[r], "in", scenario))
+            message(paste("Replacing the value", 
+                          xml_attr(rep_nodes[[r]], rep_param_identifiers[r]),
+                          "with",
+                          as.character(rep_values[r])))
+            xml_attr(rep_nodes[[r]], rep_param_identifiers[r]) <- as.character(rep_values[r]) 
+          } else {
+            message(paste("Found node", rep_Xpaths[r], "in", scenario))
+            message(paste("Replacing the value", 
+                          xml_text(rep_nodes[[r]]),
+                          "with",
+                          as.character(rep_values[r])))
+            xml_text(rep_nodes[[r]]) <- as.character(rep_values[r])
+          }
+          write_xml(x = xml_scenario, file=file.path(path.scenarios, scenario))
+        }
+      }
+    }
+    
+  }
+}
+
+    
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
