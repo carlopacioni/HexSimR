@@ -12,17 +12,23 @@ xml.cond.replacement(path.scenarios = NULL, scenarios = "all", csv.in,
 
 \item{scenarios}{A character vector with the scenarios to be processed or "all"}
 
-\item{csv.in}{The name of the .csv file in the "Scenarios" folder}
+\item{csv.in}{The name of the .csv file in the "Scenarios" folder with the
+information on the nodes that need to be modified (or checked in case of
+xml.cond.replacement)}
 
-\item{lookup}{character vector with the csv file names of the element values
+\item{lookup}{character vector with the csv file names of the element values 
 to changed. One file for each row of csv.in}
 }
 \description{
 This function replaces values in specific element nodes of xml scenario files
 if a condition is satisfied. This may be useful when, for example, a few 
-resource maps have been used to generate scenarios for a LHS analysis. When
-this occur, all the nodes that use the resource map need to match the value
-in the node that was used to generate the LHS matrix.
+resource maps have been used to generate scenarios for a LHS analysis. When 
+this occurs, all the nodes (events) that use the resource map need to match 
+the value in the node that was used to generate the LHS matrix. If the name 
+of the map is unique, it may be possible to simply search and replace for a 
+text string within all files. However, this approach will cause problem if 
+the same string is used in different components of the xml file (for example,
+if there is a trait that is named as the resource map is).
 }
 \details{
 The file \code{csv.in}, which is constructed in the same way as in 

@@ -15,10 +15,16 @@ nodes}
 
 \item{samples}{The number of LHS samples (i.e. parameter combinations)}
 
-\item{csv.in}{The name of the .csv file in the "Scenarios" folder}
+\item{csv.in}{The name of the .csv file in the "Scenarios" folder with the
+information on the nodes that need to be modified (or checked in case of
+xml.cond.replacement)}
 
 \item{generate}{Whether generate (TRUE) the xml files or stop after having 
 created the hypercube matrix (FALSE)}
+}
+\value{
+A list where the first element is the hyercube matrix and the second
+  are the nodes found in the template (if generate = TRUE)
 }
 \description{
 This function is used to generate scenarios whose parameter combinations 
@@ -48,7 +54,7 @@ There might be situation where the parameter values to be changed is in an
 internal node respect to the node identifier. In order to identified uniquely
 this parameter, the identifier of the parameter node needs to be indicated. 
 This is best explained with an example. An accumulateTrait is identified by 
-the name attribute (i.e. <accumulateTrait name="XXX">), however the parameter 
+the name attribute (i.e. <accumulateTrait name="XXX">), however the parameter
 values are contained in the <value> node within the accumulateTrait. The node
 <value> is itself identified by a name attribute, but the parameters are 
 stored under a "threshold" attribute. To avoid multiple hit \bold{nodes}, 
@@ -68,6 +74,6 @@ parameters of the distribution from which values are drawn (separated by a
 comma) if one is used: mean and sd for normal, meanlog and sdlog for 
 lognormal, shape1 and shape2 for beta, prob for binomial and min and max for 
 uniform, otherwise a collection of values if \bold{distribution}="fixed". 
-When \bold{distribution}="fixed" or \bold{type}="character" the elements in
+When \bold{distribution}="fixed" or \bold{type}="character" the elements in 
 \bold{value} have equal probability.
 }

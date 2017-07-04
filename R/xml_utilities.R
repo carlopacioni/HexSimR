@@ -80,7 +80,7 @@ make.Xpath <- function(node_path, identifier, attrib,
 #' with \code{csv.in} as a character vector. The file must have the following 
 #' headings: nodes, identifier, attribute, mode, ref, ref_identifier,	and 
 #' ref_attribute. \code{scenarios.batch.modifier} will parse the file and use 
-#' these columns as arguments. See \code{system.file("extdata", "test_csv.csv",
+#' these columns as arguments. See \code{system.file("extdata", "test_csv.csv", 
 #' package="HexSimR")} for an example file.
 #' 
 #' The column with heading \bold{nodes} is the path to the node to be searched 
@@ -114,8 +114,8 @@ make.Xpath <- function(node_path, identifier, attrib,
 #' in the scenario file.
 #' 
 #' \bold{ref} needs to be passed when the options "before", "after" or "replace"
-#' are used in \bold{mode}. When not relevant, \code{NA} is used. When
-#' \bold{ref} is used, then a search is performed in the scenario xml file and
+#' are used in \bold{mode}. When not relevant, \code{NA} is used. When 
+#' \bold{ref} is used, then a search is performed in the scenario xml file and 
 #' the fields \bold{ref_identifier} and	\bold{ref_attribute} must also be passed
 #' when relevant. \bold{ref_identifier} and	\bold{ref_attribute} have the same 
 #' meaning as \bold{identifier} and \bold{attribute}, but they refer to the 
@@ -124,7 +124,9 @@ make.Xpath <- function(node_path, identifier, attrib,
 #' @param path.scenarios The path to the 'Scenarios' folder
 #' @param xml.template The name of the xml file to use as template for the new 
 #'   nodes
-#' @param csv.in The name of the .csv file in the "Scenarios" folder
+#' @param csv.in The name of the .csv file in the "Scenarios" folder with the
+#'   information on the nodes that need to be modified (or checked in case of
+#'   xml.cond.replacement)
 #' @inheritParams collate.census
 #' @import xml2
 #' @export
@@ -298,13 +300,13 @@ workspace.path.modifier <- function(
 #' param_node, param_node_identifier, param_node_attribute, param_identifier, 
 #' param_attribute, param_name, type, value, distribution. See documentation for
 #' \code{scenarios.batch.modifier} on the meaning of nodes, identifier, 
-#' attribute. When \code{generate=FALSE} only the last four are mandatory. 
+#' attribute. When \code{generate=FALSE} only the last four are mandatory.
 #' 
 #' There might be situation where the parameter values to be changed is in an 
 #' internal node respect to the node identifier. In order to identified uniquely
 #' this parameter, the identifier of the parameter node needs to be indicated. 
 #' This is best explained with an example. An accumulateTrait is identified by 
-#' the name attribute (i.e. <accumulateTrait name="XXX">), however the parameter 
+#' the name attribute (i.e. <accumulateTrait name="XXX">), however the parameter
 #' values are contained in the <value> node within the accumulateTrait. The node
 #' <value> is itself identified by a name attribute, but the parameters are 
 #' stored under a "threshold" attribute. To avoid multiple hit \bold{nodes}, 
@@ -324,13 +326,15 @@ workspace.path.modifier <- function(
 #' comma) if one is used: mean and sd for normal, meanlog and sdlog for 
 #' lognormal, shape1 and shape2 for beta, prob for binomial and min and max for 
 #' uniform, otherwise a collection of values if \bold{distribution}="fixed". 
-#' When \bold{distribution}="fixed" or \bold{type}="character" the elements in
+#' When \bold{distribution}="fixed" or \bold{type}="character" the elements in 
 #' \bold{value} have equal probability.
 #' 
 #' @param samples The number of LHS samples (i.e. parameter combinations)
 #' @param generate Whether generate (TRUE) the xml files or stop after having 
 #'   created the hypercube matrix (FALSE)
 #' @inheritParams scenarios.batch.modifier
+#' @return A list where the first element is the hyercube matrix and the second
+#'   are the nodes found in the template (if generate = TRUE)
 #' @import xml2
 #' @importFrom lhs randomLHS
 #' @importFrom stats qbeta qbinom qlnorm qnorm qunif
@@ -454,9 +458,13 @@ LHS.scenarios <- function(
 #' 
 #' This function replaces values in specific element nodes of xml scenario files
 #' if a condition is satisfied. This may be useful when, for example, a few 
-#' resource maps have been used to generate scenarios for a LHS analysis. When
-#' this occur, all the nodes that use the resource map need to match the value
-#' in the node that was used to generate the LHS matrix.
+#' resource maps have been used to generate scenarios for a LHS analysis. When 
+#' this occurs, all the nodes (events) that use the resource map need to match 
+#' the value in the node that was used to generate the LHS matrix. If the name 
+#' of the map is unique, it may be possible to simply search and replace for a 
+#' text string within all files. However, this approach will cause problem if 
+#' the same string is used in different components of the xml file (for example,
+#' if there is a trait that is named as the resource map is).
 #' 
 #' The file \code{csv.in}, which is constructed in the same way as in 
 #' \code{LHS.scenarios}, identifies element nodes whose value needs to be 
@@ -468,7 +476,7 @@ LHS.scenarios <- function(
 #' relevant row of \code{csv.in} is met.
 #' 
 #' @inheritParams scenarios.batch.modifier
-#' @param lookup character vector with the csv file names of the element values
+#' @param lookup character vector with the csv file names of the element values 
 #'   to changed. One file for each row of csv.in
 #' @import xml2
 #' @export

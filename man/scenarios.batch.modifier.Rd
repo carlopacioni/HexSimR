@@ -15,7 +15,9 @@ scenarios.batch.modifier(path.scenarios = NULL, scenarios = "all",
 \item{xml.template}{The name of the xml file to use as template for the new 
 nodes}
 
-\item{csv.in}{The name of the .csv file in the "Scenarios" folder}
+\item{csv.in}{The name of the .csv file in the "Scenarios" folder with the
+information on the nodes that need to be modified (or checked in case of
+xml.cond.replacement)}
 }
 \description{
 Modify several scenarios at once by replacing, deleting or adding nodes (e.g.
@@ -66,7 +68,7 @@ that need to be modified, and what type of actions need to be carried out.The
 with \code{csv.in} as a character vector. The file must have the following 
 headings: nodes, identifier, attribute, mode, ref, ref_identifier,	and 
 ref_attribute. \code{scenarios.batch.modifier} will parse the file and use 
-these columns as arguments. See \code{system.file("extdata", "test_csv.csv",
+these columns as arguments. See \code{system.file("extdata", "test_csv.csv", 
 package="HexSimR")} for an example file.
 
 The column with heading \bold{nodes} is the path to the node to be searched 
@@ -100,8 +102,8 @@ these cases, \code{scenarios.batch.modifier} would not find the original node
 in the scenario file.
 
 \bold{ref} needs to be passed when the options "before", "after" or "replace"
-are used in \bold{mode}. When not relevant, \code{NA} is used. When
-\bold{ref} is used, then a search is performed in the scenario xml file and
+are used in \bold{mode}. When not relevant, \code{NA} is used. When 
+\bold{ref} is used, then a search is performed in the scenario xml file and 
 the fields \bold{ref_identifier} and	\bold{ref_attribute} must also be passed
 when relevant. \bold{ref_identifier} and	\bold{ref_attribute} have the same 
 meaning as \bold{identifier} and \bold{attribute}, but they refer to the 
