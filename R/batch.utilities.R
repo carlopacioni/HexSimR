@@ -104,3 +104,37 @@ report.batch <- function(path.results=NULL, scenarios="all", ranges=TRUE,
   if(move == TRUE) w.report.batch(path.results, scenarios, report="movement", 
                                   suf="-[all].log")
 }
+
+#' Write a .bat file to generate hexmap from a list of csv files
+#' 
+#' The .bat file is saved in the path indicated by \code{dir.out}. If NULL 
+#' (default), the working directory is used. Ultimately, the batch file needs to
+#' be copied where the HexMapConverter.exe is located.
+#' 
+#' The output folder where the hxn are saved will be a subfolder within 
+#' \code{dir.out}. These subfolders are named from the csv file name, without
+#' the extension.
+#' 
+#' To run the batch file, open the command prompt, navigate where 
+#' HexMapConverter.exe is located and type "csvmap.batch.bat".
+#' 
+#' @param file.list A character vector with the fully qualified name of the csv 
+#'   files
+#' @param header,hexID,rows,cols,narrow arguments to be passed to 
+#'   HexMapConverter.exe, see HexSim guide for details
+#' @inheritParams w.combine.log.batch
+#' @return A .bat file named comb_log_files.bat
+#' @export
+w.csvmap.batch <- function(file.list, header="true", hexID="true", rows, cols, 
+                           narrow="false", dir.out=NULL) {
+  if(is.null(dir.out)) dir.out <- getwd()
+  outputs <- sub(".csv$", replacement = "", basename(file.list))
+  outputs <- file.path(dir.out, outputs)
+  batch_lines <- vector("character", length = length(file.list))
+  for(i in seq_along(file.list)) {
+    batch_lines[i] <- paste("HexMapConverter.exe", paste0('"', file.list[i], '"'), 
+                            header, hexID, rows, cols, 
+                            narrow, paste0('"', outputs[i], '"'))
+  }
+  writeLines(batch_lines, file.path(dir.out, "csvmap.batch.bat"))
+}
