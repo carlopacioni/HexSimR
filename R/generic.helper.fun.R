@@ -107,3 +107,32 @@ read.sds <- function(scenario, path.results, ncensus) {
     sheet="sd")
   return(std_data)
 }
+#' Modify a csv with hexmap data
+#' 
+#' This function searches for a value and replaces it with \code{new.values}. When
+#' \code{length(new.values) > 1}, \code{suffs} needs to be passed to append a 
+#' suffix to the file name, otehrwise the file is overwritten.
+#' 
+#' 
+#' @param template The full name of the csv map file to use as template
+#' @param new.values is the vectori of values that are replaced
+#' @param old.value is the value that is searched and replaced in the csv file
+#' @param file.name A character vector with the output file name
+#' @param sufs A character vector with suffix(es)
+#' @inheritParams w.combine.log.batch
+#' @export
+make.map <- function(template, new.values, old.value, file.name, sufs=NULL, 
+                     dir.out=NULL) {
+  if(is.null(dir.out)) dir.out <- getwd()
+  f <- read.csv(template)
+  sel <- f$Score == old.value
+  i <- 0
+  for(new.value in new.values) {
+    i <- i + 1
+    fmod <- f
+    fmod[sel, 2] <- new.values
+    write.csv(fmod, file = 
+                file.path(dir.out, paste0(file.name, sufs[i], ".csv")), 
+              row.names = FALSE)
+  }
+}
