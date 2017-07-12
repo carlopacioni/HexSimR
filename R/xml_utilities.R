@@ -158,7 +158,7 @@ scenarios.batch.modifier <- function(
   #### Creating new nodes and ref Xpaths ####
   nodes <- vector("list", length(node_paths))
   Xpaths <- vector("character", length(node_paths))
-  if(sum(is.na(refs))) ref_Xpaths <- vector("character", length(node_paths))
+  if(sum(!is.na(refs))) ref_Xpaths <- vector("character", length(node_paths))
   if(!is.null(xml.template)) 
     xml_template <- read_xml(file.path(path.scenarios, xml.template), options="")
   
