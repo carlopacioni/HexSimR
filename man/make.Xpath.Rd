@@ -4,7 +4,8 @@
 \alias{make.Xpath}
 \title{Buil a Xpath}
 \usage{
-make.Xpath(node_path, identifier, attrib, param_node = NA, is.LHS = FALSE)
+make.Xpath(node_path, identifier, attrib, param_node = NA,
+  param_identifier = FALSE, is.LHS = FALSE)
 }
 \arguments{
 \item{node_path}{The node_path}

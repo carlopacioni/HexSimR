@@ -12,9 +12,9 @@
 #' @param is.LHS Whether the Xpath being built is for a LHS
 #' @export
 make.Xpath <- function(node_path, identifier, attrib, 
-                       param_node=NA, is.LHS=FALSE) {
+                    param_node=NA, param_identifier=FALSE, is.LHS=FALSE) {
   last_slash <- gregexpr("/", node_path)
-  if(is.na(param_node) & is.LHS) {
+  if(is.na(param_node) & is.LHS & !is.na(as.logical(param_identifier))) {
     Xpath <- paste0(x=node_path, "[text()='", identifier, "']")
   } else {
     identifier_name <- substr(node_path, start=max(last_slash[[1]]) + 1, 
@@ -408,13 +408,17 @@ LHS.scenarios <- function(
     for(i in seq_along(node_paths)) {
       if(is.na(as.logical(identifiers[i]))) {
         Xpaths[i] <- make.Xpath(node_paths[i], identifiers[i], attribs[i],
-                                param_node=param_nodes[i], is.LHS=TRUE)
+                                param_node=param_nodes[i], 
+                                param_identifier=param_identifiers[i], 
+                                is.LHS=TRUE)
         
         if(!is.na(param_nodes[i])) {
           if(is.na(as.logical(param_node_identifiers[i]))) {
             param_node_Xpaths[i] <- make.Xpath(param_nodes[i], 
                                                param_node_identifiers[i], 
-                                               param_node_attributes[i])
+                                               param_node_attributes[i],
+                                               param_identifier=param_identifiers[i], 
+                                               is.LHS=TRUE)
             
           } else {
             param_node_Xpaths[i] <- param_nodes[i]
@@ -440,7 +444,7 @@ LHS.scenarios <- function(
     
     for(r in 1:samples) {
       for(i in seq_along(node_paths)) {
-        if(!is.na(param_nodes[i]) & is.na(as.logical(param_node_identifiers[i]))) {
+        if(is.na(as.logical(param_identifiers[i])) & param_attributes[i]) {
           xml_attr(nodes[[i]], param_identifiers[i]) <- as.character(hypercube[r,i]) 
         } else {
           xml_text(nodes[[i]]) <- as.character(hypercube[r,i])
