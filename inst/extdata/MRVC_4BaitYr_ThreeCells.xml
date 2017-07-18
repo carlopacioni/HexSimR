@@ -4136,5 +4136,7 @@
     <ignoredTimeSteps/>
     <cycleLength>0</cycleLength>
   </spatialDataSeries>
-  <globalVariables/>
+  <globalVariables>
+    <globalVariable Name="SurvMeanPups" Value="0.794681297043455"/>
+  </globalVariables>
 </scenario>

@@ -1,15 +1,17 @@
-#' Buil a Xpath
+#' Build a Xpath
 #' 
-#' This function builds a Xpath to search nodes in HexSim xml files. Is used 
+#' This function builds a Xpath to search nodes in HexSim xml files. It is used 
 #' internally by hexSimR. When used in the LHS.scenarios function, it constructs
-#' the path "/.../name[text()='...']" when param_node is not NA and is.LHS is
-#' TRUE. Addtional details on params are in the scenarios.batch.modifier.
+#' the path "/.../name[text()='...']" when param_node is not NA, 
+#' param_identifier is FALSE and is.LHS is TRUE. Addtional details on arguments
+#' are in the scenarios.batch.modifier.
 #' 
 #' @param node_path The node_path
 #' @param identifier The identifier of the node
 #' @param attrib Whether the identifier is an attribute
 #' @param param_node Whether the parameter is contained in an internal node
 #' @param is.LHS Whether the Xpath being built is for a LHS
+#' @return A character vector with the Xpath
 #' @export
 make.Xpath <- function(node_path, identifier, attrib, 
                     param_node=NA, param_identifier=FALSE, is.LHS=FALSE) {
@@ -29,7 +31,100 @@ make.Xpath <- function(node_path, identifier, attrib,
 }
 #----------------------------------------------------------------------------#
 
+#' Check conditions and pass the right arguments to make.Xpath
+#' 
+#' See scenarios.batch.modifier for addtional details on arguments
+#' 
+#' @param node_paths A character vector of node_paths
+#' @param Xpaths A empty list of length = length(node_paths)
+#' @param identifiers A character vector of node identifiers
+#' @param attribs A logical vector as to whether the identifiers are attributes
+#' @param param_nodes A character vector if the parameters are contained in 
+#'   internal nodes, NA otherwise
+#' @param param_node_identifiers A character vector if the param_nodes have
+#'   identifiers, FALSE otherwise
+#' @param param_identifiers A character vector if the params have identifiers
+#'   (it is assumed these are attributes), FALSE otherwise
+#' @param is.LHS A logical vector whether the Xpaths being built are for a LHS
+#' @return A list (Xpaths) of character vectors with the Xpaths
+#' @export
+make.Xpaths <- function(node_paths, Xpaths, identifiers, attribs, 
+                        param_nodes=NA, param_node_identifiers=FALSE,
+                        param_node_attributes=FALSE,
+                        param_identifiers=FALSE, is.LHS=FALSE) {
+  
+  suppressWarnings(
+    if(is.na(param_nodes) & length(param_nodes) == 1) 
+                                      param_nodes <- rep(NA, length(node_paths))
+  )
+  suppressWarnings(
+    if(is.na(param_identifiers) & length(param_identifiers) == 1) 
+                                param_identifiers <- rep(FALSE, length(node_paths))
+  )
+  suppressWarnings(
+    if(is.na(param_node_identifiers) & length(param_node_identifiers) == 1) 
+      param_node_identifiers <- rep(FALSE, length(node_paths))
+  )
+  suppressWarnings(
+    if(is.na(param_node_attributes) & length(param_node_attributes) == 1) 
+      param_node_attributes <- rep(FALSE, length(node_paths))
+  )
+  param_node_Xpaths <- vector("character", length(node_paths))
+  
+  for(i in seq_along(node_paths)) {
+    if(is.na(as.logical(identifiers[i]))) {
+      Xpaths[i] <- make.Xpath(node_paths[i], identifiers[i], attribs[i],
+                              param_node=param_nodes[i], 
+                              param_identifier=param_identifiers[i], 
+                              is.LHS=TRUE)
+      
+      if(!is.na(param_nodes[i])) {
+        if(is.na(as.logical(param_node_identifiers[i]))) {
+          param_node_Xpaths[i] <- make.Xpath(param_nodes[i], 
+                                             param_node_identifiers[i], 
+                                             param_node_attributes[i],
+                                             param_identifier=param_identifiers[i], 
+                                             is.LHS=TRUE)
+          
+        } else {
+          param_node_Xpaths[i] <- param_nodes[i]
+        }
+        
+        Xpaths[i] <- paste0(Xpaths[i], param_node_Xpaths[i])
+      }
+      
+    } else {
+      Xpaths[i] <- node_paths[i]
+    }
+  }
+  return(Xpaths)
+}
+#----------------------------------------------------------------------------#
 
+#' Check whether the param is an attribute or a node
+#' 
+#' Check whether the param being changed by LHS.scenarios or 
+#' xml.cond.replacement is an attribute or a node. This function is used 
+#' internally by HexSimR.
+#' 
+#' @param attrib Whether the identifier is an attribute
+#' @param param_node_identifier Whether param_node has an identifier
+#' @param param_node_attribute Whether the param_node identifier is an attribute
+#' @param param_identifier Whether the param has an identifier (it is assumed
+#'   this is an attribute)
+#' @return A logical vector with the Xpathof length=1
+#' @export
+is.attribs <- function(attrib, 
+                       param_node_attribute, param_node_identifier, 
+                       param_identifier){
+  chk <- is.na(as.logical(param_identifier)) |
+    (!is.na(as.logical(param_identifier)) & param_node_attribute) |
+    (!is.na(as.logical(param_identifier)) & 
+       !is.na(as.logical(param_node_identifier)) &
+       attrib)
+  return(chk)
+}
+#----------------------------------------------------------------------------#
 
 #' Batch modification of scenarios
 #' 
@@ -373,6 +468,11 @@ LHS.scenarios <- function(
   values <- strsplit(csv_file[, "value"], ",")
   distrbs <- csv_file[, "distribution"]
   k <- nrow(csv_file)
+  if(!is.null(xml.template)) {
+    root_name <- substr(xml.template, start=1, stop=nchar(xml.template) - 4)
+  } else {
+    root_name <- NULL
+  }
   
   #### write hypercube matrix ####
   hypercube <- as.data.frame(randomLHS(n=samples, k=k))
@@ -385,10 +485,14 @@ LHS.scenarios <- function(
       hypercube[, i] <- distribute[[distrbs[[i]]]](hypercube[, i], values[[i]])
       if(types[i] == "integer") hypercube[, i] <- round(hypercube[, i])
     }
-    names(hypercube) <- pnames
-    write.csv(hypercube, file=file.path(path.scenarios, "hypercube.csv"), 
-              row.names=FALSE)
   }
+  names(hypercube) <- pnames
+  write.csv(hypercube, row.names=FALSE,
+            file=file.path(path.scenarios, 
+                           paste0(root_name, 
+                                  if(!is.null(xml.template)) "_", 
+                                  "hypercube.csv")) 
+            )
   
   #### generate xml files ####
   if(generate) {
@@ -400,51 +504,31 @@ LHS.scenarios <- function(
     param_node_identifiers <- csv_file[, "param_node_identifier"]
     param_node_attributes <- csv_file[, "param_node_attribute"]
     param_identifiers <- csv_file[, "param_identifier"]
-    param_attributes <- csv_file[, "param_attribute"]
     Xpaths <- vector("character", length(node_paths))
-    param_node_Xpaths <- vector("character", length(node_paths))
     
     # Create Xpaths
-    for(i in seq_along(node_paths)) {
-      if(is.na(as.logical(identifiers[i]))) {
-        Xpaths[i] <- make.Xpath(node_paths[i], identifiers[i], attribs[i],
-                                param_node=param_nodes[i], 
-                                param_identifier=param_identifiers[i], 
-                                is.LHS=TRUE)
-        
-        if(!is.na(param_nodes[i])) {
-          if(is.na(as.logical(param_node_identifiers[i]))) {
-            param_node_Xpaths[i] <- make.Xpath(param_nodes[i], 
-                                               param_node_identifiers[i], 
-                                               param_node_attributes[i],
-                                               param_identifier=param_identifiers[i], 
-                                               is.LHS=TRUE)
-            
-          } else {
-            param_node_Xpaths[i] <- param_nodes[i]
-          }
-          
-          Xpaths[i] <- paste0(Xpaths[i], param_node_Xpaths[i])
-        }
-        
-      } else {
-        Xpaths[i] <- node_paths[i]
-      }
-    }
+    Xpaths <- make.Xpaths(node_paths, Xpaths, identifiers, attribs, 
+                            param_nodes=param_nodes, 
+                            param_node_identifiers=param_node_identifiers,
+                            param_node_attributes=param_node_attributes,
+                            param_identifiers=param_identifiers, is.LHS=TRUE)
     
     xml_template <- read_xml(file.path(path.scenarios, xml.template), options="")
     
     #### Modify nodes ####
     nodes <- vector("list", length(node_paths))
-    root_name <- substr(xml.template, start=1, 
-                        stop=nchar(xml.template) - 4)
+    
     for(i in seq_along(node_paths)) {
       nodes[[i]] <- xml_find_all(xml_template, Xpaths[i])  
     }
     
     for(r in 1:samples) {
       for(i in seq_along(node_paths)) {
-        if(is.na(as.logical(param_identifiers[i])) & param_attributes[i]) {
+        if(is.attribs(attrib=attribs[i],
+                      param_node_attribute=param_node_attributes[i], 
+                      param_node_identifier=param_node_identifiers[i], 
+                                  param_identifier=param_identifiers[i])
+           ) {
           xml_attr(nodes[[i]], param_identifiers[i]) <- as.character(hypercube[r,i]) 
         } else {
           xml_text(nodes[[i]]) <- as.character(hypercube[r,i])
@@ -506,29 +590,14 @@ xml.cond.replacement <- function (path.scenarios=NULL,
   param_identifiers <- csv_file[, "param_identifier"]
   param_attributes <- csv_file[, "param_attribute"]
   Xpaths <- vector("character", length(node_paths))
-  param_node_Xpaths <- vector("character", length(node_paths))
   values <- csv_file[, "value"]
   
   # Create Xpaths
-  for(i in seq_along(node_paths)) {
-    if(is.na(as.logical(identifiers[i]))) {
-      Xpaths[i] <- make.Xpath(node_paths[i], identifiers[i], attribs[i],
-                              param_node=param_nodes[i], is.LHS=TRUE)
-      
-      if(!is.na(param_nodes[i])) {
-        if(is.na(as.logical(param_node_identifiers[i]))) {
-          param_node_Xpaths[i] <- make.Xpath(param_nodes[i], 
-                                             param_node_identifiers[i], 
-                                             param_node_attributes[i])
-        } else {
-          param_node_Xpaths[i] <- param_nodes[i]
-        }
-        Xpaths[i] <- paste0(Xpaths[i], param_node_Xpaths[i])
-      }
-    } else {
-      Xpaths[i] <- node_paths[i]
-    }
-  }
+  Xpaths <- make.Xpaths(node_paths, Xpaths, identifiers, attribs, 
+                        param_nodes=param_nodes, 
+                        param_node_identifiers=param_node_identifiers,
+                        param_node_attributes=param_node_attributes,
+                        param_identifiers=param_identifiers, is.LHS=TRUE)
   
   for(scenario in scenarios) {
     xml_scenario <- read_xml(file.path(path.scenarios, scenario))
@@ -553,39 +622,29 @@ xml.cond.replacement <- function (path.scenarios=NULL,
           rep_param_node_identifiers <- lookup_file[, "param_node_identifier"]
           rep_param_node_attributes <- lookup_file[, "param_node_attribute"]
           rep_param_identifiers <- lookup_file[, "param_identifier"]
-          rep_param_attributes <- lookup_file[, "param_attribute"]
           rep_Xpaths <- vector("character", length(rep_node_paths))
-          rep_param_node_Xpaths <- vector("character", length(rep_node_paths))
           rep_nodes <- vector("list", length(rep_node_paths))
           rep_values <- lookup_file[, "value"]
           
+          # Create rep_Xpaths
+          rep_Xpaths <- make.Xpaths(node_paths=rep_node_paths, 
+                                    Xpaths=rep_Xpaths, 
+                                    identifiers=rep_identifiers, 
+                                    attribs=rep_attribs,
+                                    param_nodes=rep_param_nodes, 
+                                    param_identifiers=rep_param_identifiers, 
+                                    param_node_identifiers=rep_param_node_identifiers,
+                                    param_node_attributes=rep_param_node_attributes,
+                                    is.LHS=TRUE)
+          
           for(r in seq_along(rep_node_paths)) {
-            if(is.na(as.logical(rep_identifiers[r]))) {
-              rep_Xpaths[r] <- make.Xpath(rep_node_paths[r], rep_identifiers[r], 
-                                          rep_attribs[r],
-                                          param_node=rep_param_nodes[r], 
-                                          is.LHS=TRUE)
-              
-              if(!is.na(rep_param_nodes[r])) {
-                if(is.na(as.logical(rep_param_node_identifiers[r]))) {
-                  rep_param_node_Xpaths[r] <- make.Xpath(rep_param_nodes[r], 
-                                                  rep_param_node_identifiers[r], 
-                                                  rep_param_node_attributes[r])
-                } else {
-                  rep_param_node_Xpaths[r] <- rep_param_nodes[r]
-                }
-                rep_Xpaths[r] <- paste0(rep_Xpaths[r], rep_param_node_Xpaths[r])
-              }
-            } else {
-              rep_Xpaths[r] <- rep_node_paths[r]
-            }
-          }
           rep_nodes[[r]] <- xml_find_all(xml_scenario, rep_Xpaths[r])
           
-          
-          
-          if(!is.na(rep_param_nodes[r]) & 
-             is.na(as.logical(rep_param_node_identifiers[r]))) {
+          if(is.attribs(attrib=rep_attribs[r],
+                        param_node_attribute=rep_param_node_attributes[r], 
+                        param_node_identifier=rep_param_node_identifiers[r], 
+                        param_identifier=rep_param_identifiers[r])
+             ) {
             message(paste("Found node", rep_Xpaths[r], "in", scenario))
             message(paste("Replacing the value", 
                           xml_attr(rep_nodes[[r]], rep_param_identifiers[r]),
@@ -600,11 +659,11 @@ xml.cond.replacement <- function (path.scenarios=NULL,
                           as.character(rep_values[r])))
             xml_text(rep_nodes[[r]]) <- as.character(rep_values[r])
           }
+          }
           write_xml(x = xml_scenario, file=file.path(path.scenarios, scenario))
         }
       }
     }
-    
   }
 }
 

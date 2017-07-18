@@ -1,5 +1,8 @@
-nodes,identifier,attribute,param_node,param_node_identifier,param_node_attribute,param_identifier,param_attribute,param_name,type,value,distribution
-/scenario/population/initialSize,FALSE,FALSE,NA,FALSE,FALSE,FALSE,FALSE,InitPopSize,integer,"0,5000",uniform
-/scenario/spatialDataSeries/name,Shooting_5_10_minStd,FALSE,NA,FALSE,FALSE,FALSE,FALSE,Shooting,character,"Shooting_5,Shooting_5_10",NA
-/scenario/population/traits/accumulatedTrait/name,BaitRates,TRUE,/value/name,Bait3km,TRUE,threshold,TRUE,BaitRate,integer,"33,50",fixed
-/scenario/spatialDataSeries/name,EightCells,FALSE,/cycleLength,FALSE,FALSE,FALSE,FALSE,Fencing,integer,"5,15",lnorm
+nodes,identifier,attribute,param_node,param_node_identifier,param_node_attribute,param_identifier,param_name,type,value,distribution
+/scenario/simulationParameters/timesteps,FALSE,FALSE,NA,FALSE,FALSE,FALSE,TimeSteps,integer,"10,1",norm
+/scenario/population/name,Dingoes,FALSE,/initialSize,FALSE,FALSE,FALSE,InitPopSize,integer,"0,5000",uniform
+/scenario/population/name,Dingoes,FALSE,/rangeParameters/rangeSpatialData,FALSE,FALSE,FALSE,ResourceInRange,character,TestResourceInRange,NA
+/scenario/spatialDataSeries/name,Shooting_5_10_minStd,FALSE,NA,FALSE,FALSE,FALSE,Shooting,character,"Shooting_5,Shooting_5_10",NA
+/scenario/population/traits/accumulatedTrait/name,BaitRates,TRUE,/value/name,Bait3km,TRUE,threshold,BaitRate,integer,"33,50",fixed
+/scenario/spatialDataSeries/name,EightCells,FALSE,/cycleLength,FALSE,FALSE,FALSE,Fencing,integer,"5,15",lnorm
+/scenario/globalVariables/globalVariable/Name,SurvMeanPups,TRUE,NA,FALSE,FALSE,Value,SurvMeanPups,numeric,"5,2",beta

@@ -2,7 +2,7 @@
 % Please edit documentation in R/xml_utilities.R
 \name{make.Xpath}
 \alias{make.Xpath}
-\title{Buil a Xpath}
+\title{Build a Xpath}
 \usage{
 make.Xpath(node_path, identifier, attrib, param_node = NA,
   param_identifier = FALSE, is.LHS = FALSE)
@@ -18,9 +18,13 @@ make.Xpath(node_path, identifier, attrib, param_node = NA,
 
 \item{is.LHS}{Whether the Xpath being built is for a LHS}
 }
+\value{
+A character vector with the Xpath
+}
 \description{
-This function builds a Xpath to search nodes in HexSim xml files. Is used 
+This function builds a Xpath to search nodes in HexSim xml files. It is used 
 internally by hexSimR. When used in the LHS.scenarios function, it constructs
-the path "/.../name[text()='...']" when param_node is not NA and is.LHS is
-TRUE. Addtional details on params are in the scenarios.batch.modifier.
+the path "/.../name[text()='...']" when param_node is not NA, 
+param_identifier is FALSE and is.LHS is TRUE. Addtional details on arguments
+are in the scenarios.batch.modifier.
 }

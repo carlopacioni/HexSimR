@@ -25,25 +25,62 @@ test_that("scenarios.batch.modifier", {
 })
 
 test_that("make.Xpath", {
-  nodes_paths <- c("/scenario/population/initialSize", 
-                   "/scenario/spatialDataSeries/name",                 
-                   "/scenario/spatialDataSeries/name", 
-                   "/scenario/population/traits/accumulatedTrait/name",
-                   "/scenario/spatialDataSeries/name")
-  identifiers <- c("FALSE", "Fence_sections_2perm", "Shooting_5", 
-                   "BaitRates", "EightCells" )
-  attribs <- c(FALSE, FALSE, FALSE,  TRUE, FALSE)
+  nodes_paths <- c("/scenario/spatialDataSeries/name", 
+                   "/scenario/population/traits/accumulatedTrait/name")
+  identifiers <- c("Shooting_5", "BaitRates")
+  attribs <- c(FALSE, TRUE)
   test_norm <- list()
-  for(i in 1:5) {
-    test_norm[[i]] <- make.Xpath(nodes_paths[i], identifiers[i], attribs[i])
+  for(i in seq_along(nodes_paths)) {
+    test_norm[[i]] <- make.Xpath(nodes_paths[i], identifiers[i], attrib=attribs[i])
   }
   
+  expect_equal(test_norm[[1]], 
+               "/scenario/spatialDataSeries[name='Shooting_5']")
   expect_equal(test_norm[[2]], 
-               "/scenario/spatialDataSeries[name='Fence_sections_2perm']")
-  expect_equal(test_norm[[4]], 
                "/scenario/population/traits/accumulatedTrait[@name='BaitRates']")
 })
 
+test_that("make.Xpaths", {
+  nodes_paths <- c("/scenario/simulationParameters/timesteps", 
+                   "/scenario/population/name",
+                   "/scenario/spatialDataSeries/name", 
+                   "/scenario/population/traits/accumulatedTrait/name",
+                   "/scenario/globalVariables/globalVariable/Name")
+  identifiers <- c("FALSE", "Dingoes", "Shooting_5", "BaitRates", "SurvMeanPups")
+  attribs <- c(FALSE, FALSE, FALSE, TRUE, TRUE)
+  param_nodes <- c(NA, "/initialSize", NA, "/value/name", NA)
+  param_node_identifiers <- c(FALSE, FALSE, FALSE, "Bait3km", FALSE)
+  param_node_attributes <- c(FALSE, FALSE, FALSE, TRUE, FALSE)
+  param_identifiers <- c(FALSE, FALSE, FALSE, "Threshold", "Value")
+  test_norm <- list()
+  Xpaths <- vector("list", length(nodes_paths))
+  test_norm <- make.Xpaths(nodes_paths, Xpaths, identifiers, attrib=attribs)
+  
+  expect_equal(test_norm[[1]], "/scenario/simulationParameters/timesteps")
+  expect_equal(test_norm[[2]], "/scenario/population[name='Dingoes']")
+  expect_equal(test_norm[[3]], "/scenario/spatialDataSeries[name='Shooting_5']")
+  expect_equal(test_norm[[4]], 
+               "/scenario/population/traits/accumulatedTrait[@name='BaitRates']")
+  
+  test_LHS <- make.Xpaths(nodes_paths, Xpaths, identifiers, attrib=attribs, 
+                          param_nodes = param_nodes,
+                          param_node_identifiers = param_node_identifiers, 
+                          param_node_attributes = param_node_attributes,
+                          param_identifiers = param_identifiers, is.LHS = TRUE)
+  
+  expect_equal(test_LHS[[1]], "/scenario/simulationParameters/timesteps")
+  
+  expect_equal(test_LHS[[2]], "/scenario/population[name='Dingoes']/initialSize")
+  
+  expect_equal(test_LHS[[3]], 
+               "/scenario/spatialDataSeries/name[text()='Shooting_5']")
+  
+  expect_equal(test_LHS[[4]], 
+   "/scenario/population/traits/accumulatedTrait[@name='BaitRates']/value[@name='Bait3km']")
+  
+  expect_equal(test_LHS[[5]], 
+               "/scenario/globalVariables/globalVariable[@Name='SurvMeanPups']")
+})
 
 
 test_that("LHS.scenarios", {
@@ -51,6 +88,8 @@ test_that("LHS.scenarios", {
   csv.LHS.in <- system.file("extdata", "test_csv_LHS.csv", package="HexSimR")
   testFolder <- tempdir()
   file.copy(c(template, csv.LHS.in), testFolder)
+  csv_file <- read.csv(file=file.path(testFolder, "test_csv_LHS.csv"), 
+                       stringsAsFactors=FALSE)
   
   LHS <- LHS.scenarios(
     path.scenarios=testFolder,
@@ -59,27 +98,33 @@ test_that("LHS.scenarios", {
     csv.in ="test_csv_LHS.csv",
     generate=TRUE)
   
-  expect_equal(sapply(LHS[[2]], length), rep(1, 4))
+  expect_equal(sapply(LHS[[2]], length), rep(1, nrow(csv_file)))
   
-  xml_files <-list.files(testFolder, patter="LHS[0-9].xml$", full.names=TRUE)
+  xml_files <-list.files(testFolder, pattern="LHS[0-9].xml$", full.names=TRUE)
   xml_LHS <- vector(mode="list", length=length(xml_files))
   res <- vector(mode="list", length=length(xml_files))
   for (r in seq_along(xml_files)) {
     xml_LHS[[r]] <- read_xml(xml_files[r])
-    Xpaths <- c("/scenario/population/initialSize", 
-                paste0("/scenario/spatialDataSeries/name[text()='", 
-                       LHS[[1]][r, 2], "']"),
+    Xpaths <- c("/scenario/simulationParameters/timesteps",                                                      
+                "/scenario/population[name='Dingoes']/initialSize",                                      
+                "/scenario/population[name='Dingoes']/rangeParameters/rangeSpatialData",                 
+                paste0("/scenario/spatialDataSeries/name[text()='", LHS[[1]][r, 4], "']"),                       
                 "/scenario/population/traits/accumulatedTrait[@name='BaitRates']/value[@name='Bait3km']",
-                "/scenario/spatialDataSeries[name='EightCells']/cycleLength")
+                "/scenario/spatialDataSeries[name='EightCells']/cycleLength",                            
+                "/scenario/globalVariables/globalVariable[@Name='SurvMeanPups']")  
+      
     nlist <- lapply(Xpaths, xml_find_all, x=xml_LHS[[r]])
     res[[r]] <- c(xml_text(nlist[[1]]) == as.character(LHS[[1]][r,1]),
                   xml_text(nlist[[2]]) == as.character(LHS[[1]][r,2]),
-                  xml_attr(nlist[[3]], "threshold") == as.character(LHS[[1]][r,3]),
-                  xml_text(nlist[[4]]) == as.character(LHS[[1]][r,4])
+                  xml_text(nlist[[3]]) == as.character(LHS[[1]][r,3]),
+                  xml_text(nlist[[4]]) == as.character(LHS[[1]][r,4]),
+                  xml_attr(nlist[[5]], "threshold") == as.character(LHS[[1]][r,5]),
+                  xml_text(nlist[[6]]) == as.character(LHS[[1]][r,6]),
+                  xml_attr(nlist[[7]], "Value") == as.character(LHS[[1]][r,7])
     )
   }
   
-  expect_equal(sapply(res, sum), rep(4, length(xml_files)))
+  expect_equal(sapply(res, sum), rep(nrow(csv_file), length(xml_files)))
   unlink(testFolder, recursive=TRUE)
 })
 
