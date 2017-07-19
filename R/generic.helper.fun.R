@@ -138,3 +138,49 @@ make.map <- function(template, new.values, old.value, file.name, sufs=NULL,
               row.names = FALSE)
   }
 }
+
+
+
+#' Modify a hbf with HexSim barrier data
+#' 
+#' This function replaces mortality and deflection values and saves the file 
+#' with a new name. Mortality and deflection values have to be passed in pairs 
+#' for each fence section. So, if you want to generate three files, and you only
+#' have one barrier pair you have to provide six values.
+#' 
+#' Several files can be generated using mapply() to pass one \code{template} and
+#' one \code{file.name} at the time.
+#' 
+#' @param template The full name of the hbf barrier file to use as template
+#' @param mortality is the vector of new mortality values that are replaced
+#' @param deflection is the vector of new deflection values that are replaced
+#' @param npairs The number of barrier section
+#' @inheritParams w.combine.log.batch
+#' @inheritParams make.map
+#' @export
+make.barrier <- function(template, mortality, deflection, npairs, file.name, 
+                       sufs=NULL, 
+                       dir.out=NULL) {
+  if(length(mortality) != length(deflection)) 
+    stop("mortality and deflection do not have the same length")
+  
+  if(is.null(dir.out)) dir.out <- getwd()
+  groups <- length(mortality) / 2 * npairs
+  f <- readLines(template)
+  r <- regexec("([0-9]+).hbf$", template)
+  step <- regmatches(template, r)[[1]][2]
+  make.lines <- vector("character", length = 2 * npairs)
+  for(k in 0:(groups - 1)) {
+    for(i in 1:(2 * npairs)) {
+      label <- regmatches(f[i], regexpr('".*"', f[i]))
+      make.lines[i] <- paste("C", i, mortality[i + k * 2 * npairs], 
+                             deflection[i + k * 2 * npairs], label)
+    }
+    d <- file.path(dir.out, paste0(file.name, sufs[k + 1]))
+    dir.create(d)
+    f[1:(2 * npairs)] <- make.lines
+    writeLines(f, 
+               con = file.path(d, 
+                               paste0(file.name, sufs[k + 1], ".", step, ".hbf")))
+  }
+}
