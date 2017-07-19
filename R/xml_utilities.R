@@ -566,12 +566,14 @@ LHS.scenarios <- function(
 #' @inheritParams scenarios.batch.modifier
 #' @param lookup character vector with the csv file names of the element values 
 #'   to changed. One file for each row of csv.in
+#' @param verbose Whether report to screen nodes found and changed (default: TRUE)   
 #' @import xml2
 #' @export
 xml.cond.replacement <- function (path.scenarios=NULL,
                                   scenarios="all",
                                   csv.in,
-                                  lookup) {
+                                  lookup,
+                                  verbose=TRUE) {
   #### Setting arguments ####
   txt <- "Please, select the 'Scenarios' folder within the workspace"
   if(is.null(path.scenarios)) path.scenarios <- choose.dir(caption=txt)
@@ -645,25 +647,30 @@ xml.cond.replacement <- function (path.scenarios=NULL,
                         param_node_identifier=rep_param_node_identifiers[r], 
                         param_identifier=rep_param_identifiers[r])
              ) {
+            if(verbose) {
             message(paste("Found node", rep_Xpaths[r], "in", scenario))
             message(paste("Replacing the value", 
                           xml_attr(rep_nodes[[r]], rep_param_identifiers[r]),
                           "with",
                           as.character(rep_values[r])))
+            }
             xml_attr(rep_nodes[[r]], rep_param_identifiers[r]) <- as.character(rep_values[r]) 
           } else {
+            if(verbose) {
             message(paste("Found node", rep_Xpaths[r], "in", scenario))
             message(paste("Replacing the value", 
                           xml_text(rep_nodes[[r]]),
                           "with",
                           as.character(rep_values[r])))
+            }
             xml_text(rep_nodes[[r]]) <- as.character(rep_values[r])
           }
           }
-          write_xml(x = xml_scenario, file=file.path(path.scenarios, scenario))
+          
         }
       }
     }
+    write_xml(x = xml_scenario, file=file.path(path.scenarios, scenario))
   }
 }
 

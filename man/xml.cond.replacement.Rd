@@ -5,7 +5,7 @@
 \title{Conditional replacement of xml elements}
 \usage{
 xml.cond.replacement(path.scenarios = NULL, scenarios = "all", csv.in,
-  lookup)
+  lookup, verbose = TRUE)
 }
 \arguments{
 \item{path.scenarios}{The path to the 'Scenarios' folder}
@@ -18,6 +18,8 @@ xml.cond.replacement)}
 
 \item{lookup}{character vector with the csv file names of the element values 
 to changed. One file for each row of csv.in}
+
+\item{verbose}{Whether report to screen nodes found and changed (default: TRUE)}
 }
 \description{
 This function replaces values in specific element nodes of xml scenario files
