@@ -393,7 +393,7 @@ workspace.path.modifier <- function(
 #' 
 #' The .csv must have the following headings: nodes, identifier, attribute, 
 #' param_node, param_node_identifier, param_node_attribute, param_identifier, 
-#' param_attribute, param_name, type, value, distribution. See documentation for
+#' param_name, type, value, distribution. See documentation for 
 #' \code{scenarios.batch.modifier} on the meaning of nodes, identifier, 
 #' attribute. When \code{generate=FALSE} only the last four are mandatory.
 #' 
@@ -410,9 +410,9 @@ workspace.path.modifier <- function(
 #' \bold{param_node},	\bold{param_node_identifier}, and 
 #' \bold{param_node_attribute} are used to identify the node where the parameter
 #' values are contained (if necessary, use NA for \bold{param_node} and FALSE 
-#' for the others columns if not relevant), and \bold{param_identifier} and 
-#' \bold{param_attribute} are used to identify the actual parameter values that 
-#' need to be changed. Use FALSE when the latter two are not relevant (e.g. if 
+#' for the others columns if not relevant), and \bold{param_identifier} is used 
+#' to identify the actual parameter values that need to be changed, when this is
+#' stored as an attribute. Use FALSE when the latter is not relevant (e.g. if 
 #' the node identifier is the parameter that needs to be changed).
 #' 
 #' \bold{type} refers to the type of parameter. It can take exactly one of the 
@@ -424,12 +424,23 @@ workspace.path.modifier <- function(
 #' When \bold{distribution}="fixed" or \bold{type}="character" the elements in 
 #' \bold{value} have equal probability.
 #' 
+#' \bold{param_name} is the name of the parameter that is being changed. These 
+#' are used as labels (headers) in the hypercube matrix that it is saved to disk
+#' and returned as an object.
+#' 
+#' When \code{generate=TRUE}, the second element of the list returned contains 
+#' the nodes found in the template. It is probably a good idea to scan through 
+#' these to check whether these were the expected ones and most importantly that
+#' none are empty!
+#' 
 #' @param samples The number of LHS samples (i.e. parameter combinations)
 #' @param generate Whether generate (TRUE) the xml files or stop after having 
 #'   created the hypercube matrix (FALSE)
 #' @inheritParams scenarios.batch.modifier
-#' @return A list where the first element is the hyercube matrix and the second
-#'   are the nodes found in the template (if generate = TRUE)
+#' @return A list where the first element is the hyercube matrix and the second 
+#'   are the nodes found in the template (if generate = TRUE). A csv file with 
+#'   the hypercube matrix is saved to disk and,  when generate = TRUE, the LHS 
+#'   xml files are also saved to disk.
 #' @import xml2
 #' @importFrom lhs randomLHS
 #' @importFrom stats qbeta qbinom qlnorm qnorm qunif
