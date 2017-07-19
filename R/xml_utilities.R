@@ -609,7 +609,11 @@ xml.cond.replacement <- function (path.scenarios=NULL,
                               stringsAsFactors=FALSE)
       nodes[[i]] <- xml_find_all(xml_scenario, Xpaths[i])
       if(length(nodes[[i]]) > 0) {
-        if(!is.na(param_nodes[i]) & is.na(as.logical(param_node_identifiers[i]))) {
+        if(is.attribs(attrib=attribs[i],
+                      param_node_attribute=param_node_attributes[i], 
+                      param_node_identifier=param_node_identifiers[i], 
+                      param_identifier=param_identifiers[i])
+        ) {
           chk <-  xml_attr(nodes[[i]], param_identifiers[i]) 
         } else {
           chk <- xml_text(nodes[[i]])
