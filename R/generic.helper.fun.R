@@ -107,15 +107,17 @@ read.sds <- function(scenario, path.results, ncensus) {
     sheet="sd")
   return(std_data)
 }
+
+
 #' Modify a csv with hexmap data
 #' 
 #' This function searches for a value and replaces it with \code{new.values}. When
-#' \code{length(new.values) > 1}, \code{suffs} needs to be passed to append a 
-#' suffix to the file name, otehrwise the file is overwritten.
+#' \code{length(new.values) > 1}, \code{sufs} needs to be passed to append a 
+#' suffix to the file name, otherwise the file is overwritten.
 #' 
 #' 
 #' @param template The full name of the csv map file to use as template
-#' @param new.values is the vectori of values that are replaced
+#' @param new.values is the vector of values that are replaced
 #' @param old.value is the value that is searched and replaced in the csv file
 #' @param file.name A character vector with the output file name
 #' @param sufs A character vector with suffix(es)

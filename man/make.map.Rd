@@ -10,7 +10,7 @@ make.map(template, new.values, old.value, file.name, sufs = NULL,
 \arguments{
 \item{template}{The full name of the csv map file to use as template}
 
-\item{new.values}{is the vectori of values that are replaced}
+\item{new.values}{is the vector of values that are replaced}
 
 \item{old.value}{is the value that is searched and replaced in the csv file}
 
@@ -23,6 +23,6 @@ directory is used}
 }
 \description{
 This function searches for a value and replaces it with \code{new.values}. When
-\code{length(new.values) > 1}, \code{suffs} needs to be passed to append a 
-suffix to the file name, otehrwise the file is overwritten.
+\code{length(new.values) > 1}, \code{sufs} needs to be passed to append a 
+suffix to the file name, otherwise the file is overwritten.
 }
