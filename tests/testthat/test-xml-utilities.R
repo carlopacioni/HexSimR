@@ -86,8 +86,14 @@ test_that("make.Xpaths", {
 test_that("LHS.scenarios", {
   template <- system.file("extdata", "MRVC_4BaitYr_ThreeCells.xml", package="HexSimR")
   csv.LHS.in <- system.file("extdata", "test_csv_LHS.csv", package="HexSimR")
+  csv.LHS.condChangesin <- 
+    system.file("extdata", "LHS_condChanges.csv", package="HexSimR")
+  csv.LHS.condChanges_lookup01in <- 
+    system.file("extdata", "Test_LHS_condChangesLookup_01.csv", package="HexSimR")
+  
   testFolder <- tempdir()
-  file.copy(c(template, csv.LHS.in), testFolder)
+  file.copy(c(template, csv.LHS.in, 
+              csv.LHS.condChangesin, csv.LHS.condChanges_lookup01in), testFolder)
   csv_file <- read.csv(file=file.path(testFolder, "test_csv_LHS.csv"), 
                        stringsAsFactors=FALSE)
   
@@ -125,9 +131,28 @@ test_that("LHS.scenarios", {
   }
   
   expect_equal(sapply(res, sum), rep(nrow(csv_file), length(xml_files)))
+  
+  xml.cond.replacement(path.scenarios = testFolder, 
+                       scenarios = basename(xml_files), 
+                       csv.in = "LHS_condChanges.csv", 
+                       lookup = "Test_LHS_condChangesLookup_01.csv")
+  
+  res <- vector(mode="list", length=length(xml_files))
+  
+  for (r in seq_along(xml_files)) {
+    xml_LHS[[r]] <- read_xml(xml_files[r])
+    Xpaths <- c("/scenario/population[name='Dingoes']/rangeParameters/rangeSpatialData")  
+    
+    nlist <- lapply(Xpaths, xml_find_all, x=xml_LHS[[r]])
+    res[[r]] <- c(xml_text(nlist[[1]]) == "ThisIsATest"
+    )
+  }
+  
+  chk <- as.character(LHS[[1]][, 4]) == "Shooting_5"
+  expect_equal(as.logical(sapply(res, sum)), chk)
   unlink(testFolder, recursive=TRUE)
+  
 })
-
 
 
 

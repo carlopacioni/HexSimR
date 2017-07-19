@@ -1,0 +1,3 @@
+nodes,identifier,attribute,param_node,param_node_identifier,param_node_attribute,param_identifier,param_attribute,value
+/scenario/population/name,Dingoes,FALSE,/rangeParameters/rangeSpatialData,FALSE,FALSE,FALSE,FALSE,ThisIsATest
+/scenario/population/name,Dingoes,FALSE,/exclusionLayer,FALSE,FALSE,FALSE,FALSE,ThisIsATest
