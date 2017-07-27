@@ -16,7 +16,7 @@
 make.Xpath <- function(node_path, identifier, attrib, 
                     param_node=NA, param_identifier=FALSE, is.LHS=FALSE) {
   last_slash <- gregexpr("/", node_path)
-  if(is.na(param_node) & is.LHS & !is.na(as.logical(param_identifier))) {
+  if(is.na(param_node) && is.LHS && !is.na(as.logical(param_identifier))) {
     Xpath <- paste0(x=node_path, "[text()='", identifier, "']")
   } else {
     identifier_name <- substr(node_path, start=max(last_slash[[1]]) + 1, 
@@ -54,19 +54,19 @@ make.Xpaths <- function(node_paths, Xpaths, identifiers, attribs,
                         param_identifiers=FALSE, is.LHS=FALSE) {
   
   suppressWarnings(
-    if(is.na(param_nodes) & length(param_nodes) == 1) 
+    if(is.na(param_nodes) && length(param_nodes) == 1) 
                                       param_nodes <- rep(NA, length(node_paths))
   )
   suppressWarnings(
-    if(is.na(param_identifiers) & length(param_identifiers) == 1) 
+    if(is.na(param_identifiers) && length(param_identifiers) == 1) 
                                 param_identifiers <- rep(FALSE, length(node_paths))
   )
   suppressWarnings(
-    if(is.na(param_node_identifiers) & length(param_node_identifiers) == 1) 
+    if(is.na(param_node_identifiers) && length(param_node_identifiers) == 1) 
       param_node_identifiers <- rep(FALSE, length(node_paths))
   )
   suppressWarnings(
-    if(is.na(param_node_attributes) & length(param_node_attributes) == 1) 
+    if(is.na(param_node_attributes) && length(param_node_attributes) == 1) 
       param_node_attributes <- rep(FALSE, length(node_paths))
   )
   param_node_Xpaths <- vector("character", length(node_paths))
@@ -118,9 +118,9 @@ is.attribs <- function(attrib,
                        param_node_attribute, param_node_identifier, 
                        param_identifier){
   chk <- is.na(as.logical(param_identifier)) |
-    (!is.na(as.logical(param_identifier)) & param_node_attribute) |
-    (!is.na(as.logical(param_identifier)) & 
-       !is.na(as.logical(param_node_identifier)) &
+    (!is.na(as.logical(param_identifier)) && param_node_attribute) |
+    (!is.na(as.logical(param_identifier)) && 
+       !is.na(as.logical(param_node_identifier)) &&
        attrib)
   return(chk)
 }
