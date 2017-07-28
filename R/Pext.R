@@ -113,12 +113,12 @@ Pext <- function(data=NULL, path.results, rda.in="collated.census.rda",
     census <- data[[scenario]][[ncensus + 1]]
     if(start == "min") {
       if(census[, min(Time.Step)] == 0) {
-        start <- 1
+        s_start <- 1
         } else {
-          start <- census[, min(Time.Step)]
+          s_start <- census[, min(Time.Step)]
           }
     }
-    if(end == "max") end <- census[, max(Time.Step)]
+    if(end == "max") s_end <- census[, max(Time.Step)]
     extTable[[scenario]] <- cbind(census[, .(Run, Time.Step)], 
                       census[, headers, with=FALSE] == 0)
     
@@ -135,7 +135,7 @@ Pext <- function(data=NULL, path.results, rda.in="collated.census.rda",
     setcolorder(extTable.sds[[scenario]], c("Scenario", "Time.Step", headers))
     
     setkey(extTable[[scenario]], Time.Step)
-    cumul.ext[[scenario]] <- extTable[[scenario]][J(start:end), 
+    cumul.ext[[scenario]] <- extTable[[scenario]][J(s_start:s_end), 
                                                lapply(.SD, sum, na.rm=TRUE), 
                                                by="Run", .SDcols=headers]
     cumul.ext[[scenario]][, Scenario := scenario]
