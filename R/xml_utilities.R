@@ -266,7 +266,10 @@ scenarios.batch.modifier <- function(
     }
     
     if(modes[i] != "delete") {
-      nodes[[i]] <- xml_find_all(xml_template, Xpaths[i])  
+      nodes[[i]] <- xml_find_all(xml_template, Xpaths[i]) 
+      if(length(nodes[[i]]) == 0) 
+        stop(paste("Can't find the node path:", 
+                   Xpaths[i], "in the file", xml.template))
       if(grepl(pattern = "Event", x = xml_path(nodes[[i]]))) {
         nodes[[i]] <- xml_parent(nodes[[i]]) 
       }
@@ -304,13 +307,16 @@ scenarios.batch.modifier <- function(
       } else {
         if(modes[i] %in% c("before", "after", "replace")) {
           ref_nodes[[i]] <- xml_find_all(xml_scenario, ref_Xpaths[i]) 
-          if(grepl(pattern = "Event", x = xml_path( ref_nodes[[i]]))) {
+          if(length(ref_nodes[[i]]) == 0) 
+            stop(paste("Can't find the node path:", 
+                       ref_Xpaths[i], "in the file", scenario))
+          if(grepl(pattern = "Event", x = xml_path(ref_nodes[[i]]))) {
             ref_nodes[[i]] <- xml_parent( ref_nodes[[i]]) 
           }
           if(length(ref_nodes[[i]]) > 1) {
             stop(paste(
               "More than one node identified with the node path:", 
-              refs[[i]], "in the file", scenario))
+              ref_Xpaths[i], "in the file", scenario))
           }
           if(modes[i] %in% c("before", "after")) {
             xml_add_sibling(ref_nodes[[i]], nodes[[i]], .where=modes[i])
@@ -320,6 +326,12 @@ scenarios.batch.modifier <- function(
         } else {
           if(modes[i] == "delete") {
             nodes[[i]] <- xml_find_all(xml_scenario, Xpaths[i])
+            if(length(nodes[[i]]) == 0) 
+              stop(paste("Can't find the node path:", 
+                         Xpaths[i], "in the file", scenario))
+            if(grepl(pattern = "Event", x = xml_path(Xpaths[i]))) {
+              nodes[[i]] <- xml_parent(Xpaths[i]) 
+            }
             xml_remove(nodes[[i]])
           } else {
             stop(paste("Don't know what to do with mode", modes[i]))
