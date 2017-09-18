@@ -311,7 +311,7 @@ scenarios.batch.modifier <- function(
             stop(paste("Can't find the node path:", 
                        ref_Xpaths[i], "in the file", scenario))
           if(grepl(pattern = "Event", x = xml_path(ref_nodes[[i]]))) {
-            ref_nodes[[i]] <- xml_parent( ref_nodes[[i]]) 
+            ref_nodes[[i]] <- xml_parent(ref_nodes[[i]]) 
           }
           if(length(ref_nodes[[i]]) > 1) {
             stop(paste(
