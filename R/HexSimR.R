@@ -400,7 +400,7 @@ move <- function(rep.move=NULL) {
 #'   mean and standard deviation across years needs to be calculated. If NULL 
 #'   (default), all events are considered
 #' @param start The first time step to be included
-#' @param end The last time step to be include
+#' @param end The last time step to be included
 #' @return A list with three elements:
 #'   \itemize{ 
 #'       \item $descriptive: A \code{data.frame} (\code{data.table}) with the 

@@ -22,7 +22,7 @@ file where the output from \code{collate.census} is saved}
 
 \item{start}{The first time step to be included}
 
-\item{end}{The last time step to be include}
+\item{end}{The last time step to be included}
 
 \item{headers}{A character vector matching exactly the headers of the census 
 file columns that are to be used by \code{bin.f}}

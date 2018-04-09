@@ -28,7 +28,7 @@ mean and standard deviation across years needs to be calculated. If NULL
 
 \item{start}{The first time step to be included}
 
-\item{end}{The last time step to be include}
+\item{end}{The last time step to be included}
 }
 \value{
 A list where each element is the output from either \code{move} or
