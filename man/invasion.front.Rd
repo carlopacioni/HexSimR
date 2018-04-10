@@ -16,7 +16,8 @@ invasion.front(path.results = NULL, ncensus, value = 1, patch.width,
 
 \item{patch.width}{The width of the patch}
 
-\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or 
+"all"}
 }
 \value{
 A list with three elements: the mean and standard

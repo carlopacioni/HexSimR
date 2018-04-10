@@ -11,7 +11,8 @@ w.genepop.batch(path.results = NULL, scenarios = "all", time.steps = 1,
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or 
+"all"}
 
 \item{time.steps}{A numeric vector to indicate the time step to be included}
 

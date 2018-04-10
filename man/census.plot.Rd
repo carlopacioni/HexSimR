@@ -10,7 +10,8 @@ census.plot(path.results = NULL, scenarios = "all", traits, ncensus = 0,
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or 
+"all"}
 
 \item{traits}{A character vector with the name of the traits to be included}
 

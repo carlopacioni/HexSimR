@@ -10,7 +10,8 @@ workspace.path.modifier(path.scenarios = NULL, scenarios = "all",
 \arguments{
 \item{path.scenarios}{The path to the 'Scenarios' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or 
+"all"}
 
 \item{new.grid.path}{The fully qualified (i.e. including the full path) of 
 the grid file, including extension}
