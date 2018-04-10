@@ -1,61 +1,92 @@
 
 #' Combine together HexSim census outputs across iterations.
-#'
-#' Combine together HexSim census outputs across iterations. If the scenarios have 
-#' multiple census events, all census files are processed (separately). Mean values 
-#' are reported in the final file which is located in Results/scenario_name
-#' folder and returned as a list. 
-#'
-#' If there are several scenarios and \code{scenarios="all"} (default), all
-#' scenarios are processed, otherwise it is possible to select a subset of scenarios
-#' using a character vector, e.g. scenarios=c("scen1", "scen2").
-#'
+#' 
+#' Combine together HexSim census outputs across iterations. If the scenarios 
+#' have multiple census events, all census files are processed (separately). 
+#' Mean values are reported in the final file which is located in 
+#' Results/scenario_name folder and returned as a list.
+#' 
+#' If there are several scenarios and \code{scenarios="all"} (default), all 
+#' scenarios are processed, otherwise it is possible to select a subset of 
+#' scenarios using a character vector, e.g. scenarios=c("scen1", "scen2").
+#' 
 #' If \code{path.results=NULL} an interactive dialog box is used to select the 
-#'   path where the results are located
-#'
-#' Note, when there is a large number of files, this function may be memory hungry 
-#'
-#' @param path.results The path to the 'Results' folder 
-#' @param scenarios A character vector with the scenarios to be processed or "all"
-#' @return A list with three elements: the combined data, the mean and standard
+#' path where the results are located
+#' 
+#' \code{end} controls the last time step that should be considered in each
+#' iteration. This is intended to be used when populations can go extinct in
+#' some iterations. Calculation of the mean can consider only the extant
+#' populations (that is, only the ones that don't go extinct) or fill in the
+#' data with "0" when populations went extinct, so that the mean calculations
+#' will take that into account. With the default setting (i.e.
+#' \code{end="max"}), the mean values are calculated only using the extant
+#' populations. When \code{end} is a integer value (typically the number of time
+#' steps the simulation has been run for) that is larger than the maximum time
+#' step of the iteration being considered, then data for the subsequent time
+#' steps are filled in with "0".
+#' 
+#' Note, when there is a large number of files, this function may be memory 
+#' hungry
+#' 
+#' @param path.results The path to the 'Results' folder
+#' @param scenarios A character vector with the scenarios to be processed or 
+#'   "all"
+#' @inheritParams ranges
+#' @return A list with three elements: the combined data, the mean and standard 
 #'   deviation. An xls file is also saved with the descriptive statistics and a 
-#'   .rda file is saved with the combined data 
+#'   .rda file is saved with the combined data
 #' @import data.table
 #' @import XLConnect
 #' @export
 
-collate.census <- function(path.results=NULL, scenarios="all") {
+collate.census <- function(path.results=NULL, scenarios="all", end="max") {
   
   #----------------------------------------------------------------------------#
   # Helper functions
   #----------------------------------------------------------------------------#
   
-  byiter <- function(iter, l.iter.folders, census.list, census, nscen) {
+  byiter <- function(iter, l.iter.folders, census.list, census, nscen, end) {
     f <- paste(l.iter.folders[[nscen]][iter], census.list[census], sep="/")
     census.data <- fread(f)
-    setnames(census.data, make.names(names(census.data)))
+    headers <- make.names(names(census.data))
+    setnames(census.data, headers)
+    if(is.numeric(end)) {
+      if(census.data[, max(Time.Step)] < end) {
+        TS <- (census.data[, max(Time.Step)] + 1):end
+        m <- matrix(rep(0, length(TS) * (length(census.data) - 1)), 
+                    ncol=length(census.data) - 1)
+        mdt <- data.table(m)
+        setnames(mdt, headers[-match("Time.Step", headers)])
+        mdt[, Time.Step := TS]
+        census.data <- rbindlist(list(census.data, mdt), use.names = TRUE)
+      } else {
+        if(census.data[, max(Time.Step)] > end) 
+          census.data <- census.data[1:match(end, Time.Step),]
+      }
+    }
     return(census.data)
   }
   
   # Return a data.table with all iterations for one census type and one scenario
-  bycensus <- function(census, iters, l.iter.folders, file.list, nscen) {
+  bycensus <- function(census, iters, l.iter.folders, file.list, nscen, end) {
     # a list with data from one census type and one scenario for each iterations
     l.census.data <- lapply(iters, byiter, census=census, census.list=file.list, 
-                            l.iter.folders=l.iter.folders, nscen)
+                            l.iter.folders=l.iter.folders, nscen=nscen, end=end)
     census.data.comb <- rbindlist(l.census.data, use.names=TRUE)
     return(census.data.comb)
   }
   
   
   # Return a list with one scenario with each census type for element
-  byscen <- function (nscen, scenarios, l.iter.folders) {
+  byscen <- function (nscen, scenarios, l.iter.folders, end) {
     file.list <- list.files(l.iter.folders[[nscen]][1], 
                             pattern=paste0(scenarios[[nscen]], "\\.", "[0-9]+", 
                                            "\\.", "csv$"))
     iters <- seq_along(l.iter.folders[[nscen]])
     ncensus <- seq_along(file.list)
     # A list with one scenario with each census type for element
-    scen.i <- lapply(ncensus, bycensus, iters, l.iter.folders, file.list, nscen)
+    scen.i <- lapply(ncensus, bycensus, iters, l.iter.folders, file.list, nscen, 
+                     end=end)
     return(scen.i)
   }
   
@@ -105,7 +136,7 @@ collate.census <- function(path.results=NULL, scenarios="all") {
   # A list of lists, each being a scenario. Each scenario has census types for 
   # elements
   data.comb <- lapply(nscens, byscen, scenarios=scenarios, 
-                      l.iter.folders=l.iter.folders)
+                      l.iter.folders=l.iter.folders, end=end)
   names(data.comb) <- scenarios
   
   scen.means <- lapply(data.comb, census.mean)
