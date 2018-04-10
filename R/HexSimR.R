@@ -13,20 +13,25 @@
 #' If \code{path.results=NULL} an interactive dialog box is used to select the 
 #' path where the results are located
 #' 
-#' \code{end} controls the last time step that should be considered in each
-#' iteration. This is intended to be used when populations can go extinct in
-#' some iterations. Calculation of the mean can consider only the extant
-#' populations (that is, only the ones that don't go extinct) or fill in the
-#' data with "0" when populations went extinct, so that the mean calculations
-#' will take that into account. With the default setting (i.e.
-#' \code{end="max"}), the mean values are calculated only using the extant
+#' \code{start} controls the first time step that should be considered in each 
+#' iteration. This is intended to be used when the user wants to discard the
+#' first part of the simulations, for example because the model needs to reach a
+#' steady-state.
+#'  
+#' \code{end} controls the last time step that should be considered in each 
+#' iteration. This is intended to be used when populations can go extinct in 
+#' some iterations. Calculation of the mean can consider only the extant 
+#' populations (that is, only the ones that don't go extinct) or fill in the 
+#' data with "0" when populations went extinct, so that the mean calculations 
+#' will take that into account. With the default setting (i.e. 
+#' \code{end="max"}), the mean values are calculated only using the extant 
 #' populations. When \code{end} is a integer value (typically the number of time
-#' steps the simulation has been run for) that is larger than the maximum time
-#' step of the iteration being considered, then data for the subsequent time
+#' steps the simulation has been run for) that is larger than the maximum time 
+#' step of the iteration being considered, then data for the subsequent time 
 #' steps are filled in with "0".
 #' 
-#' Note, when there is a large number of files, this function may be memory 
-#' hungry
+#' Note, when there is a large number of files, this function may
+#' be memory hungry
 #' 
 #' @param path.results The path to the 'Results' folder
 #' @param scenarios A character vector with the scenarios to be processed or 
@@ -39,17 +44,20 @@
 #' @import XLConnect
 #' @export
 
-collate.census <- function(path.results=NULL, scenarios="all", end="max") {
+collate.census <- function(path.results=NULL, scenarios="all", start="min", end="max") {
   
   #----------------------------------------------------------------------------#
   # Helper functions
   #----------------------------------------------------------------------------#
   
-  byiter <- function(iter, l.iter.folders, census.list, census, nscen, end) {
+  byiter <- function(iter, l.iter.folders, census.list, census, nscen, start, end) {
     f <- paste(l.iter.folders[[nscen]][iter], census.list[census], sep="/")
     census.data <- fread(f)
     headers <- make.names(names(census.data))
     setnames(census.data, headers)
+    if(is.numeric(start)) {
+      census.data <- census.data[match(start, Time.Step):dim(census.data)[1],]
+    }
     if(is.numeric(end)) {
       if(census.data[, max(Time.Step)] < end) {
         TS <- (census.data[, max(Time.Step)] + 1):end
@@ -68,17 +76,18 @@ collate.census <- function(path.results=NULL, scenarios="all", end="max") {
   }
   
   # Return a data.table with all iterations for one census type and one scenario
-  bycensus <- function(census, iters, l.iter.folders, file.list, nscen, end) {
+  bycensus <- function(census, iters, l.iter.folders, file.list, nscen, start, end) {
     # a list with data from one census type and one scenario for each iterations
     l.census.data <- lapply(iters, byiter, census=census, census.list=file.list, 
-                            l.iter.folders=l.iter.folders, nscen=nscen, end=end)
+                            l.iter.folders=l.iter.folders, nscen=nscen, 
+                            start=start, end=end)
     census.data.comb <- rbindlist(l.census.data, use.names=TRUE)
     return(census.data.comb)
   }
   
   
   # Return a list with one scenario with each census type for element
-  byscen <- function (nscen, scenarios, l.iter.folders, end) {
+  byscen <- function (nscen, scenarios, l.iter.folders, start, end) {
     file.list <- list.files(l.iter.folders[[nscen]][1], 
                             pattern=paste0(scenarios[[nscen]], "\\.", "[0-9]+", 
                                            "\\.", "csv$"))
@@ -86,7 +95,7 @@ collate.census <- function(path.results=NULL, scenarios="all", end="max") {
     ncensus <- seq_along(file.list)
     # A list with one scenario with each census type for element
     scen.i <- lapply(ncensus, bycensus, iters, l.iter.folders, file.list, nscen, 
-                     end=end)
+                     start=start, end=end)
     return(scen.i)
   }
   
@@ -136,7 +145,7 @@ collate.census <- function(path.results=NULL, scenarios="all", end="max") {
   # A list of lists, each being a scenario. Each scenario has census types for 
   # elements
   data.comb <- lapply(nscens, byscen, scenarios=scenarios, 
-                      l.iter.folders=l.iter.folders, end=end)
+                      l.iter.folders=l.iter.folders, start=start, end=end)
   names(data.comb) <- scenarios
   
   scen.means <- lapply(data.comb, census.mean)
