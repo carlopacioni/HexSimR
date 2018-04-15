@@ -42,6 +42,7 @@
 #'   .rda file is saved with the combined data
 #' @import data.table
 #' @import XLConnect
+#' @importFrom tcltk tk_choose.dir 
 #' @export
 
 collate.census <- function(path.results=NULL, scenarios="all", start="min", end="max") {
@@ -136,7 +137,7 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
   
   #--------------------------------------------------------------------------#
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   
@@ -204,6 +205,7 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
 #' @inheritParams invasion.front 
 #' @return Save census file to disk and return a list with the new census files
 #' @import data.table
+#' @importFrom tcltk tk_choose.dir 
 #' @export
 census.calc <- function(path.results=NULL, ncensus, headers, var.name=NULL, 
                         bin.f="+", scenarios="all") {
@@ -234,7 +236,7 @@ census.calc <- function(path.results=NULL, ncensus, headers, var.name=NULL,
   if(is.function(bin.f) & is.null(var.name)) 
     stop("Please, pass a character vector to var.name")
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   headers <- make.names(headers)
@@ -269,6 +271,7 @@ census.calc <- function(path.results=NULL, ncensus, headers, var.name=NULL,
 #' in RNA interference high-throughput screening assays. Genomics 89:552-561.
 #'
 #' @import XLConnect
+#' @importFrom tcltk tk_choose.dir
 #' @export
 
 SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0) {
@@ -291,7 +294,7 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
   #----------------------------------------------------------------------------#
   if(is.null(base)) stop("Please, provide the name of the base scenario")
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") {
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
   })
@@ -337,7 +340,8 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
 #' in RNA interference high-throughput screening assays. Genomics 89:552-561.
 #'
 #' @importFrom stats pnorm sd
-#' @importFrom utils choose.dir choose.files count.fields read.csv write.csv
+#' @importFrom utils  count.fields read.csv write.csv
+#' @importFrom tcltk tk_choose.dir
 #' @import XLConnect
 #' @export
 SSMD.move <- function(path.results=NULL, scenarios="all", base=NULL, 
@@ -367,7 +371,7 @@ SSMD.move <- function(path.results=NULL, scenarios="all", base=NULL,
   
   if(is.null(base)) stop("Please, provide the name of the base scenario")
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") {
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
   })
@@ -556,6 +560,7 @@ ranges <- function(rep.ranges=NULL, hx=NULL, events=NULL, start="min", end="max"
 #' in RNA interference high-throughput screening assays. Genomics 89:552-561.
 #'
 #' @import XLConnect
+#' @importFrom tcltk tk_choose.dir
 #' @export
 
 SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL, 
@@ -590,7 +595,7 @@ SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL,
   #----------------------------------------------------------------------------#
   if(is.null(base)) stop("Please, provide the name of the base scenario")
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") {
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
   })
@@ -640,6 +645,7 @@ SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL,
 #' @seealso \code{\link{move}}, \code{\link{ranges}}
 #' @return A list where each element is the output from either \code{move} or
 #'     \code{ranges}.
+#' @importFrom tcltk tk_choose.dir
 #' @export
 multi.reports <- function(path.results=NULL, scenarios="all", pop.name=NULL, 
                           type="move", all=TRUE, hx=NULL, events=NULL, 
@@ -657,7 +663,7 @@ multi.reports <- function(path.results=NULL, scenarios="all", pop.name=NULL,
   
   if(is.null(pop.name)) stop("Please, provide the name of the population")
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   

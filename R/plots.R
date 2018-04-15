@@ -87,12 +87,13 @@ prep.data <- function(i, means, sds, traits, scenarios, rm.T0) {
 #' @return Save to disk ggplot objects (with extension .rda) and pdf with the 
 #'   plots (one for each group). Return a list of plots
 #' @import XLConnect
+#' @importFrom tcltk tk_choose.dir
 #' @export
 
 census.plot <- function(path.results=NULL, scenarios="all", traits, ncensus=0, 
                         ngroups=1, rm.T0=TRUE) {
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") {
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
   })
@@ -118,9 +119,10 @@ census.plot <- function(path.results=NULL, scenarios="all", traits, ncensus=0,
 #' @import XLConnect
 #' @import data.table
 #' @import ggplot2
+#' @importFrom tcltk tk_choose.dir
 #' @export
 invasion.plot <- function(fname=NULL) {
-  if(is.null(fname)) fname <- choose.files()
+  if(is.null(fname)) fname <- tk_choose.files()
   mean_data <- data.table(readWorksheetFromFile(fname, sheet="overall"))
   mean_data[, min := Mean - Std]
   mean_data[, max := Mean + Std]
@@ -153,6 +155,7 @@ invasion.plot <- function(fname=NULL) {
 #' @import XLConnect
 #' @import data.table
 #' @import ggplot2
+#' @importFrom tcltk tk_choose.dir
 #' @export
 gen.plot <- function(path.results=NULL, scenarios="all", pop.name=NULL, 
                      time.step=1, traits, r=2, c=1 ) {
@@ -170,7 +173,7 @@ gen.plot <- function(path.results=NULL, scenarios="all", pop.name=NULL,
   }
   
   #----------------------------------------------------------------------------#
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   

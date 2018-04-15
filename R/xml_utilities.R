@@ -93,6 +93,7 @@
 #' @param csv.in The name of the .csv file in the "Scenarios" folder
 #' @inheritParams collate.census
 #' @import xml2
+#' @importFrom tcltk tk_choose.dir
 #' @export
 scenarios.batch.modifier <- function(
   path.scenarios=NULL,
@@ -102,7 +103,7 @@ scenarios.batch.modifier <- function(
   
   #### Setting arguments ####
   txt <- "Please, select the 'Scenarios' folder within the workspace"
-  if(is.null(path.scenarios)) path.scenarios <- choose.dir(caption=txt)
+  if(is.null(path.scenarios)) path.scenarios <- tk_choose.dir(caption=txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.files(path=path.scenarios, pattern=".xml$", 
                             full.names=FALSE, recursive=FALSE))
@@ -235,13 +236,14 @@ scenarios.batch.modifier <- function(
 #' @inheritParams collate.census
 #' @inheritParams scenarios.batch.modifier
 #' @import xml2
+#' @importFrom tcltk tk_choose.dir
 #' @export
 workspace.path.modifier <- function(
   path.scenarios=NULL,
   scenarios="all", 
   new.grid.path) {
   txt <- "Please, select the 'Scenarios' folder within the workspace"
-  if(is.null(path.scenarios)) path.scenarios <- choose.dir(caption=txt)
+  if(is.null(path.scenarios)) path.scenarios <- tk_choose.dir(caption=txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.files(path=path.scenarios, pattern=".xml$", 
                             full.names=FALSE, recursive=FALSE))

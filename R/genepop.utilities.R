@@ -55,6 +55,7 @@
 #' @return Save to disk a genepop file with a suffix 'cleaned' and an extensin
 #'      ".gen" for each iteration within eachscenario
 #' @seealso clean.genepop
+#' @importFrom tcltk tk_choose.dir
 #' @export
 multi.clean.genepop <- function(path.results=NULL, scenarios="all", 
                                 pop.name=NULL) {
@@ -87,7 +88,7 @@ multi.clean.genepop <- function(path.results=NULL, scenarios="all",
   
   if(is.null(pop.name)) stop("Please, provide the name of the population")
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   
@@ -111,6 +112,7 @@ multi.clean.genepop <- function(path.results=NULL, scenarios="all",
 #' @inheritParams collate.census 
 #' @inheritParams multi.reports 
 #' @return A .xml file named batchFile_genepop_Reports.xml
+#' @importFrom tcltk tk_choose.dir
 #' @export
 w.genepop.batch <- function(path.results=NULL, scenarios="all", time.steps=1, 
                               pop.name, traits) {
@@ -149,7 +151,7 @@ w.genepop.batch <- function(path.results=NULL, scenarios="all", time.steps=1,
   
   #----------------------------------------------------------------------------#
   
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
@@ -216,6 +218,7 @@ gen.dist <- function(fname, mean.type="harmonic") {
 #' @inheritParams gen.dist
 #' @return See \code{gen.dist} for each scenario
 #' @seealso gen.dist
+#' @importFrom tcltk tk_choose.dir
 #' @export
 multi.gen.dist <- function(path.results=NULL, scenarios="all", pop.name=NULL,
                            mean.type="harmonic") {
@@ -247,7 +250,7 @@ multi.gen.dist <- function(path.results=NULL, scenarios="all", pop.name=NULL,
   
   if(is.null(pop.name)) stop("Please, provide the name of the population")
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   
@@ -271,6 +274,7 @@ multi.gen.dist <- function(path.results=NULL, scenarios="all", pop.name=NULL,
 #'   deviation for each time step and overall. \code{m.gen.dist} also saves to 
 #'   disk a .xlsx with the same name of the input file with the suffix "_means". 
 #' @import XLConnect
+#' @importFrom tcltk tk_choose.dir
 #' @export
 m.gen.dist <- function(path.results=NULL, scenarios="all", pop.name, 
                           traits) {
@@ -321,7 +325,7 @@ m.gen.dist <- function(path.results=NULL, scenarios="all", pop.name,
   }
   #----------------------------------------------------------------------------#
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   traits <- trait.assembler(traits)

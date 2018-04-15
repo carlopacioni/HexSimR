@@ -26,6 +26,7 @@
 #'   deviation for each time step and overall. 
 #' @import data.table
 #' @import XLConnect
+#' @importFrom tcltk tk_choose.dir
 #' @export
 invasion.front <- function(path.results=NULL, ncensus, value=1, patch.width, 
                            scenarios="all") {
@@ -87,7 +88,7 @@ invasion.front <- function(path.results=NULL, ncensus, value=1, patch.width,
   
   #----------------------------------------------------------------------------#
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   
