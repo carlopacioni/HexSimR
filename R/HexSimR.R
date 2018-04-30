@@ -97,6 +97,8 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
     # A list with one scenario with each census type for element
     scen.i <- lapply(ncensus, bycensus, iters, l.iter.folders, file.list, nscen, 
                      start=start, end=end)
+    census.names <- sub(pattern = ".csv", "", x = file.list)
+    names(scen.i) <- census.names
     return(scen.i)
   }
   
@@ -106,7 +108,9 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
   }
   
   census.mean <- function(scen) {
+    census.names <- names(scen)
     census.means <- lapply(scen, mean.iter)
+    names(census.means) <- census.names
     return(census.means)
   }
   
@@ -116,13 +120,16 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
   }
   
   census.sd <- function(scen) {
+    census.names <- names(scen)
     census.sds <- lapply(scen, sd.iter)
+    names(census.sds) <- census.names
     return(census.sds)
   }
   
-  save.xlsx <- function(census, dir.path, nscen, scen.means, scen.sds, scenarios) {
+  save.xlsx <- function(census, dir.path, nscen, scen.means, scen.sds, scenarios, 
+                        census.names) {
     wb <- loadWorkbook(paste(dir.path, scenarios[[nscen]], 
-                             paste0(scenarios[[nscen]], ".", census - 1, ".", "all", 
+                             paste0(census.names[census], ".", "all", 
                                     ".", "xlsx"), sep="/"), create=TRUE)
     createSheet(wb, name="means")
     writeWorksheet(wb, scen.means[[nscen]][[census]], sheet="means")
@@ -132,7 +139,9 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
   
   save2disk <- function(nscen, dir.path, scen.means, scen.sds, scenarios) {
     ncensus <- seq_along(scen.means[[nscen]])
-    lapply(ncensus, save.xlsx, dir.path, nscen, scen.means, scen.sds, scenarios)
+    census.names <- names(scen.means[[nscen]])
+    lapply(ncensus, save.xlsx, dir.path, nscen, scen.means, scen.sds, scenarios, 
+           census.names)
   }
   
   #--------------------------------------------------------------------------#
