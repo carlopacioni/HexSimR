@@ -63,7 +63,7 @@ invasion.front <- function(path.results=NULL, ncensus, value=1, patch.width,
     census.file <- paste0(scenarios[[nscen]], ".", ncensus, ".", "csv")
     iters <- seq_along(l.iter.folders[[nscen]])    
     l.scen.i <- lapply(iters, byiter, l.iter.folders, census.file,  nscen)
-    scen.i <- data.table(suppressWarnings(as.data.frame.list(l.scen.i)))
+    scen.i <- data.table(suppressWarnings(listVectors2data.frame(l.scen.i)))
     setnames(scen.i, paste0("TS", 1:length(names(scen.i))))
     return(scen.i)
   }

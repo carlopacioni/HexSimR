@@ -29,21 +29,21 @@
 #' @export
 #' @examples
 #'     test1 <- list( c(a='a',b='b',c='c'), c(a='d',b='e',c='f'))
-#'     HexSimR:::as.data.frame.list(test1)
+#'     HexSimR::listVectors2data.frame(test1)
 #'     
 #'     test2 <- list( c('a','b','c'), c(a='d',b='e',c='f'))
-#'     HexSimR:::as.data.frame.list(test2)
+#'     HexSimR::listVectors2data.frame(test2)
 #'     
 #'     test3 <- list('Row1'=c(a='a',b='b',c='c'), 'Row2'=c(var1='d',var2='e',var3='f'))
-#'     HexSimR:::as.data.frame.list(test3)
+#'     HexSimR::listVectors2data.frame(test3)
 #'     
 #'     test4 <- list('Row1'=letters[1:5], 'Row2'=letters[1:7], 'Row3'=letters[8:14])
-#'     HexSimR:::as.data.frame.list(test4)
+#'     HexSimR::listVectors2data.frame(test4)
 #'     
 #'     test5 <- list(letters[1:10], letters[11:20])
-#'     HexSimR:::as.data.frame.list(test5)
+#'     HexSimR::listVectors2data.frame(test5)
 #'     
-as.data.frame.list <- function(x, row.names=NULL, optional=FALSE, ...) {
+listVectors2data.frame <- function(x, row.names=NULL, optional=FALSE, ...) {
   if(!all(unlist(lapply(x, class)) %in% 
             c('raw','character','complex','numeric','integer','logical'))) {
     warning('All elements of the list must be a vector.')
