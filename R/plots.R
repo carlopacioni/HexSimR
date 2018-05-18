@@ -20,8 +20,8 @@
 #' @import ggplot2
 #' @import data.table
 #' @export
-make.plot <- function(ngroup, nscens_group, means, sds, traits, scenarios, 
-                      ncensus, rm.T0) {
+make.plot <- function(ngroup, path.results, nscens_group, means, sds, traits, 
+                      scenarios, ncensus, rm.T0) {
   seq_scens <- 1:nscens_group + nscens_group * (ngroup - 1)
   l.d <- lapply(seq_scens[seq_scens <= length(scenarios)], 
                 prep.data, means, sds, traits, scenarios, rm.T0)
@@ -102,8 +102,8 @@ census.plot <- function(path.results=NULL, scenarios="all", traits, ncensus=0,
   means <-lapply(scenarios, read.means, path.results, ncensus)
   sds <-lapply(scenarios, read.sds, path.results, ncensus)
   
-  l.plots <- lapply(1:ngroups, make.plot, nscens_group, means, sds, traits, 
-                    scenarios, ncensus, rm.T0) 
+  l.plots <- lapply(1:ngroups, make.plot, path.results, nscens_group, means, sds, 
+                    traits, scenarios, ncensus, rm.T0) 
   return(l.plots)
 }
 

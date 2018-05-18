@@ -4,10 +4,13 @@
 \alias{make.plot}
 \title{Make a plot from a list of data frames}
 \usage{
-make.plot(ngroup, nscens_group, means, sds, traits, scenarios, ncensus, rm.T0)
+make.plot(ngroup, path.results, nscens_group, means, sds, traits, scenarios,
+  ncensus, rm.T0)
 }
 \arguments{
 \item{ngroup}{The group number being processed}
+
+\item{path.results}{The path to the 'Results' folder}
 
 \item{nscens_group}{The number of scenarios within one group}
 
