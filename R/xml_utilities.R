@@ -6,8 +6,8 @@
 #' If several scenarios have been developed in HexSim and later the user 
 #' realises that there are some modifications that need to be applied to several
 #' or all of them, this function can help automate this task. It involves 
-#' generating an scenario with the correct/new events and parameters. This 
-#' scenario is used then as template and the nodes that needs to be added, 
+#' generating a scenario with the correct/new events and parameters. This 
+#' scenario is used then as template and the nodes that need to be added, 
 #' replaced or deleted are identified using a .csv. Some setting up is required 
 #' and it may not be worthwhile for only one or two scenarios. To use this 
 #' function some understanding of the xml file structure in HexSim is necessary.

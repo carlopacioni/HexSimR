@@ -4,7 +4,7 @@ None
 
 ## Bugs
   *  Fixed issue with ggplot due to new class as.data.frame.list (now removed). 
-This caused problem only with R >= 3.5.0
+This caused problems only with R >= 3.5.0
   *  Fixed labelling bug when there were > 10 census
   *  Removed choose.dir() to ensure compatibility with platforms other than Windows.
 
