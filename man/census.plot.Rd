@@ -4,8 +4,8 @@
 \alias{census.plot}
 \title{Plots census means across simulated time steps}
 \usage{
-census.plot(path.results = NULL, scenarios = "all", traits, ncensus = 0,
-  ngroups = 1, rm.T0 = TRUE)
+census.plot(path.results = NULL, scenarios = "all", traits,
+  ncensus = 0, ngroups = 1, rm.T0 = TRUE)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

@@ -26,8 +26,8 @@ events) in scenario .xml files.
 If several scenarios have been developed in HexSim and later the user 
 realises that there are some modifications that need to be applied to several
 or all of them, this function can help automate this task. It involves 
-generating an scenario with the correct/new events and parameters. This 
-scenario is used then as template and the nodes that needs to be added, 
+generating a scenario with the correct/new events and parameters. This 
+scenario is used then as template and the nodes that need to be added, 
 replaced or deleted are identified using a .csv. Some setting up is required 
 and it may not be worthwhile for only one or two scenarios. To use this 
 function some understanding of the xml file structure in HexSim is necessary.
@@ -85,7 +85,7 @@ attribute) of the identifier needs to be in this column (e.g.
 \bold{attribute} indicates whether the identifier is an attribute (TRUE) or 
 not (FALSE).
 
-\bold{mode} indicates the type of action that need to be performed. Possible 
+\bold{mode} indicates the type of action that needs to be performed. Possible 
 options are "add", "before", "after", "replace" or "delete". If "add" the 
 node is added as last child of the parent node. If the node needs to be added
 in a specific position (events generally do), "before" and "after" should be 

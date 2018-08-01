@@ -7,8 +7,8 @@
 copy.results(path.results, out = getwd(), copy.invasion = TRUE,
   inv.name = "Invasion.front.xlsx", Pext = TRUE, comp.census = TRUE,
   comp.move = TRUE, move.name = "SSMD_move.xlsx", comp.ranges = TRUE,
-  ranges.name = "SSMD_ranges.xlsx", plots = TRUE, scen.results = TRUE,
-  scenarios = "all")
+  ranges.name = "SSMD_ranges.xlsx", plots = TRUE,
+  scen.results = TRUE, scenarios = "all")
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

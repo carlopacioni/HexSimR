@@ -65,7 +65,7 @@
 #' \bold{attribute} indicates whether the identifier is an attribute (TRUE) or 
 #' not (FALSE).
 #' 
-#' \bold{mode} indicates the type of action that need to be performed. Possible 
+#' \bold{mode} indicates the type of action that needs to be performed. Possible 
 #' options are "add", "before", "after", "replace" or "delete". If "add" the 
 #' node is added as last child of the parent node. If the node needs to be added
 #' in a specific position (events generally do), "before" and "after" should be 

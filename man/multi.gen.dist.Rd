@@ -4,8 +4,8 @@
 \alias{multi.gen.dist}
 \title{Genetic distance for multiple scenarios}
 \usage{
-multi.gen.dist(path.results = NULL, scenarios = "all", pop.name = NULL,
-  mean.type = "harmonic")
+multi.gen.dist(path.results = NULL, scenarios = "all",
+  pop.name = NULL, mean.type = "harmonic")
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
