@@ -1,5 +1,7 @@
 #' Copy \code{HexSimR} results
 #' 
+#' \strong{This function is deprecated. Please see '?compress.log' to reduce project's size}
+#' 
 #' This function is used to copy/back up  \code{HexSimR} results maintaining the
 #'  same directory structure.
 #'   
@@ -48,6 +50,8 @@ copy.results  <-  function(path.results, out=getwd(),
                          comp.move=TRUE, move.name="SSMD_move.xlsx", 
                          comp.ranges=TRUE, ranges.name="SSMD_ranges.xlsx",
                          plots=TRUE, scen.results=TRUE, scenarios="all") {
+  
+  message("This function is deprecated. Please see '?compress.log' to reduce project's size")
   
   #----------------------------------------------------------------------------#
   # Helper functions

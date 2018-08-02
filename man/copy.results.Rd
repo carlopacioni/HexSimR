@@ -39,6 +39,9 @@ copy.results(path.results, out = getwd(), copy.invasion = TRUE,
 "all"}
 }
 \description{
+\strong{This function is deprecated. Please see '?compress.log' to reduce project's size}
+}
+\details{
 This function is used to copy/back up  \code{HexSimR} results maintaining the
  same directory structure.
   
@@ -48,8 +51,7 @@ This function is used to copy/back up  \code{HexSimR} results maintaining the
   All .xlsx files present in scenarios' folders will be copied (even 
   those with manually modified names) assuming that these are results to keep. 
   These include genetic mean distances.
-}
-\details{
+
 It assummes that file names of plots start with "plot" as for   \code{HexSimR} 
   default. If exists, the file "gen.plot.data.csv" (if the name was not 
   modified) will be copied as part of this option because considered part of 
