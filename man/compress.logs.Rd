@@ -2,7 +2,7 @@
 % Please edit documentation in R/compress.logs.R
 \name{compress.logs}
 \alias{compress.logs}
-\title{Compress log file and optinally remove them}
+\title{Compress log files and optinally remove them}
 \usage{
 compress.logs(path.results = NULL, scenarios = "all",
   delete.log = TRUE, overwrite.gz = TRUE, compression = 7)
@@ -22,7 +22,8 @@ overwritten?}
 \code{\link[base]{gzfile}}}
 }
 \value{
-print to screen log files' full names and respective .gz
+a list where the first element is the list of log files found and the
+  second is the gz files created
 }
 \description{
 Compress log file and optinally remove them to save space and make
