@@ -5,7 +5,8 @@
 \title{Compress log files and optinally remove them}
 \usage{
 compress.logs(path.results = NULL, scenarios = "all",
-  delete.log = TRUE, overwrite.gz = TRUE, compression = 7)
+  delete.log = TRUE, overwrite.gz = TRUE, compression = 7,
+  parallel = FALSE, ncores = NULL)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
@@ -20,6 +21,10 @@ overwritten?}
 
 \item{compression}{compression rate, integer between 0 and 9. See
 \code{\link[base]{gzfile}}}
+
+\item{parallel}{whether execute the function in parallel}
+
+\item{ncores}{the number of cores if executed in parallel}
 }
 \value{
 a list where the first element is the list of log files found and the
@@ -31,8 +36,11 @@ simulations results more portable
 }
 \details{
 From (very limited) testing, a compression of 1 gives substantial compression
-(about 23% of original size) and it is very fast. \code{compression=7} gives
-almost the max compression (~18.5% of the original size) taking ~ 4 times
+(about 23\% of original size) and it is very fast. \code{compression=7} gives
+almost the max compression (~18.5\% of the original size) taking ~ 4 times
 longer than \code{compression=1}. Anything beyon 7 takes much longer but with
-a gain of only a 0.1% or less.
+a gain of only a 0.1\% or less.
+
+Note that it makes sense to execute this function in parallel only if a solid
+state disk (SSD) is available
 }

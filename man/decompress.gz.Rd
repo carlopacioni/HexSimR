@@ -6,7 +6,8 @@
 remove the .gz files}
 \usage{
 decompress.gz(path.results = NULL, scenarios = "all",
-  delete.gz = TRUE, overwrite.log = TRUE)
+  delete.gz = TRUE, overwrite.log = TRUE, parallel = FALSE,
+  ncores = NULL)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
@@ -18,6 +19,10 @@ decompress.gz(path.results = NULL, scenarios = "all",
 
 \item{overwrite.log}{if a .log file with the same name is present, should it be
 overwritten?}
+
+\item{parallel}{whether execute the function in parallel}
+
+\item{ncores}{the number of cores if executed in parallel}
 }
 \value{
 a list where the first element is the list of gz files found and the
@@ -26,4 +31,8 @@ a list where the first element is the list of gz files found and the
 \description{
 Decompress files with ".gz" extension, append ".log" extension and optinally
 remove the .gz files, which may be necessay if reports need to be created
+}
+\details{
+Note that it makes sense to execute this function in parallel only if a solid
+state disk (SSD) is available
 }
