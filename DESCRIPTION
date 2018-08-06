@@ -21,6 +21,7 @@ Imports:
     data.table,
     ggplot2,
     mmod,
+    R.utils,
     XLConnect,
     xml2
 Suggests:
