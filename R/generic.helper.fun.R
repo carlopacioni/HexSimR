@@ -2,8 +2,8 @@
 #' Detect iteration folders
 #' 
 #' This function is used by a number of HexSimR functions to create a list of 
-#'   path where results for each iterations are saved.
-#' @param dir.path See the path where the 'Results' folder is located 
+#'   path where results for each iteration are saved.
+#' @param dir.path The path where the 'Results' folder is located 
 #' @param scenario Scenario to be processed. This is normally passed with lapply()
 #' @return A list where each element is the path to the replicates of a scenario
 iter.folders <- function(dir.path, scenario) {
