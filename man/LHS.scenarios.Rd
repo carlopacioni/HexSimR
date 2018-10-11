@@ -4,8 +4,8 @@
 \alias{LHS.scenarios}
 \title{Generate LHS scenarios}
 \usage{
-LHS.scenarios(path.scenarios = NULL, xml.template = NULL, samples, csv.in,
-  generate = TRUE)
+LHS.scenarios(path.scenarios = NULL, xml.template = NULL, samples,
+  csv.in, generate = TRUE)
 }
 \arguments{
 \item{path.scenarios}{The path to the 'Scenarios' folder}

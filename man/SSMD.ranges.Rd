@@ -10,7 +10,8 @@ SSMD.ranges(path.results = NULL, scenarios = "all", base = NULL,
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or 
+"all"}
 
 \item{base}{A character vector with the name of the scenario to be used as 
 term of comparison}

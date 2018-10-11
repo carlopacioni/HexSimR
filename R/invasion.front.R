@@ -26,6 +26,7 @@
 #'   deviation for each time step and overall. 
 #' @import data.table
 #' @import XLConnect
+#' @importFrom tcltk tk_choose.dir
 #' @export
 invasion.front <- function(path.results=NULL, ncensus, value=1, patch.width, 
                            scenarios="all") {
@@ -62,7 +63,7 @@ invasion.front <- function(path.results=NULL, ncensus, value=1, patch.width,
     census.file <- paste0(scenarios[[nscen]], ".", ncensus, ".", "csv")
     iters <- seq_along(l.iter.folders[[nscen]])    
     l.scen.i <- lapply(iters, byiter, l.iter.folders, census.file,  nscen)
-    scen.i <- data.table(suppressWarnings(as.data.frame.list(l.scen.i)))
+    scen.i <- data.table(suppressWarnings(listVectors2data.frame(l.scen.i)))
     setnames(scen.i, paste0("TS", 1:length(names(scen.i))))
     return(scen.i)
   }
@@ -87,7 +88,7 @@ invasion.front <- function(path.results=NULL, ncensus, value=1, patch.width,
   
   #----------------------------------------------------------------------------#
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   

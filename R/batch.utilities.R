@@ -19,6 +19,7 @@
 #'   directory is used 
 #' @inheritParams collate.census 
 #' @return A .bat file named comb_log_files.bat
+#' @importFrom tcltk tk_choose.dir
 #' @export
 w.combine.log.batch <- function(path.results=NULL, scenarios="all", dir.out=NULL) {
   #----------------------------------------------------------------------------#
@@ -33,7 +34,7 @@ w.combine.log.batch <- function(path.results=NULL, scenarios="all", dir.out=NULL
   
   #----------------------------------------------------------------------------#
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   if(is.null(dir.out)) dir.out <- getwd()
@@ -58,6 +59,7 @@ w.combine.log.batch <- function(path.results=NULL, scenarios="all", dir.out=NULL
 #' @param move Whether a batch file to generate 'movement' reports should be created
 #' @inheritParams collate.census 
 #' @return A .xml file named batchFile_Reports.xml
+#' @importFrom tcltk tk_choose.dir
 #' @export
 report.batch <- function(path.results=NULL, scenarios="all", ranges=TRUE, 
                          move=TRUE) {
@@ -94,7 +96,7 @@ report.batch <- function(path.results=NULL, scenarios="all", ranges=TRUE,
   
   #----------------------------------------------------------------------------#
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   

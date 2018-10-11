@@ -4,14 +4,15 @@
 \alias{multi.reports}
 \title{Generate summary statistics for multiple reports}
 \usage{
-multi.reports(path.results = NULL, scenarios = "all", pop.name = NULL,
-  type = "move", all = TRUE, hx = NULL, events = NULL, start = "min",
-  end = "max")
+multi.reports(path.results = NULL, scenarios = "all",
+  pop.name = NULL, type = "move", all = TRUE, hx = NULL,
+  events = NULL, start = "min", end = "max")
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or 
+"all"}
 
 \item{pop.name}{The name of the population}
 
@@ -28,7 +29,7 @@ mean and standard deviation across years needs to be calculated. If NULL
 
 \item{start}{The first time step to be included}
 
-\item{end}{The last time step to be include}
+\item{end}{The last time step to be included}
 }
 \value{
 A list where each element is the output from either \code{move} or

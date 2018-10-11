@@ -1,61 +1,104 @@
 
 #' Combine together HexSim census outputs across iterations.
-#'
-#' Combine together HexSim census outputs across iterations. If the scenarios have 
-#' multiple census events, all census files are processed (separately). Mean values 
-#' are reported in the final file which is located in Results/scenario_name
-#' folder and returned as a list. 
-#'
-#' If there are several scenarios and \code{scenarios="all"} (default), all
-#' scenarios are processed, otherwise it is possible to select a subset of scenarios
-#' using a character vector, e.g. scenarios=c("scen1", "scen2").
-#'
+#' 
+#' Combine together HexSim census outputs across iterations. If the scenarios 
+#' have multiple census events, all census files are processed (separately). 
+#' Mean values are reported in the final file which is located in 
+#' Results/scenario_name folder and returned as a list.
+#' 
+#' If there are several scenarios and \code{scenarios="all"} (default), all 
+#' scenarios are processed, otherwise it is possible to select a subset of 
+#' scenarios using a character vector, e.g. scenarios=c("scen1", "scen2").
+#' 
 #' If \code{path.results=NULL} an interactive dialog box is used to select the 
-#'   path where the results are located
-#'
-#' Note, when there is a large number of files, this function may be memory hungry 
-#'
-#' @param path.results The path to the 'Results' folder 
-#' @param scenarios A character vector with the scenarios to be processed or "all"
-#' @return A list with three elements: the combined data, the mean and standard
+#' path where the results are located
+#' 
+#' \code{start} controls the first time step that should be considered in each 
+#' iteration. This is intended to be used when the user wants to discard the
+#' first part of the simulations, for example because the model needs to reach a
+#' steady-state.
+#'  
+#' \code{end} controls the last time step that should be considered in each 
+#' iteration. This is intended to be used when populations can go extinct in 
+#' some iterations. Calculation of the mean can consider only the extant 
+#' populations (that is, only the ones that don't go extinct) or fill in the 
+#' data with "0" when populations went extinct, so that the mean calculations 
+#' will take that into account. With the default setting (i.e. 
+#' \code{end="max"}), the mean values are calculated only using the extant 
+#' populations. When \code{end} is a integer value (typically the number of time
+#' steps the simulation has been run for) that is larger than the maximum time 
+#' step of the iteration being considered, then data for the subsequent time 
+#' steps are filled in with "0".
+#' 
+#' Note, when there is a large number of files, this function may
+#' be memory hungry
+#' 
+#' @param path.results The path to the 'Results' folder
+#' @param scenarios A character vector with the scenarios to be processed or 
+#'   "all"
+#' @inheritParams ranges
+#' @return A list with three elements: the combined data, the mean and standard 
 #'   deviation. An xls file is also saved with the descriptive statistics and a 
-#'   .rda file is saved with the combined data 
+#'   .rda file is saved with the combined data
 #' @import data.table
 #' @import XLConnect
+#' @importFrom tcltk tk_choose.dir 
 #' @export
 
-collate.census <- function(path.results=NULL, scenarios="all") {
+collate.census <- function(path.results=NULL, scenarios="all", start="min", end="max") {
   
   #----------------------------------------------------------------------------#
   # Helper functions
   #----------------------------------------------------------------------------#
   
-  byiter <- function(iter, l.iter.folders, census.list, census, nscen) {
+  byiter <- function(iter, l.iter.folders, census.list, census, nscen, start, end) {
     f <- paste(l.iter.folders[[nscen]][iter], census.list[census], sep="/")
     census.data <- fread(f)
-    setnames(census.data, make.names(names(census.data)))
+    headers <- make.names(names(census.data))
+    setnames(census.data, headers)
+    if(is.numeric(start)) {
+      census.data <- census.data[match(start, Time.Step):dim(census.data)[1],]
+    }
+    if(is.numeric(end)) {
+      if(census.data[, max(Time.Step)] < end) {
+        TS <- (census.data[, max(Time.Step)] + 1):end
+        m <- matrix(rep(0, length(TS) * (length(census.data) - 1)), 
+                    ncol=length(census.data) - 1)
+        mdt <- data.table(m)
+        setnames(mdt, headers[-match("Time.Step", headers)])
+        mdt[, Time.Step := TS]
+        census.data <- rbindlist(list(census.data, mdt), use.names = TRUE)
+      } else {
+        if(census.data[, max(Time.Step)] > end) 
+          census.data <- census.data[1:match(end, Time.Step),]
+      }
+    }
     return(census.data)
   }
   
   # Return a data.table with all iterations for one census type and one scenario
-  bycensus <- function(census, iters, l.iter.folders, file.list, nscen) {
+  bycensus <- function(census, iters, l.iter.folders, file.list, nscen, start, end) {
     # a list with data from one census type and one scenario for each iterations
     l.census.data <- lapply(iters, byiter, census=census, census.list=file.list, 
-                            l.iter.folders=l.iter.folders, nscen)
+                            l.iter.folders=l.iter.folders, nscen=nscen, 
+                            start=start, end=end)
     census.data.comb <- rbindlist(l.census.data, use.names=TRUE)
     return(census.data.comb)
   }
   
   
   # Return a list with one scenario with each census type for element
-  byscen <- function (nscen, scenarios, l.iter.folders) {
+  byscen <- function (nscen, scenarios, l.iter.folders, start, end) {
     file.list <- list.files(l.iter.folders[[nscen]][1], 
                             pattern=paste0(scenarios[[nscen]], "\\.", "[0-9]+", 
                                            "\\.", "csv$"))
     iters <- seq_along(l.iter.folders[[nscen]])
     ncensus <- seq_along(file.list)
     # A list with one scenario with each census type for element
-    scen.i <- lapply(ncensus, bycensus, iters, l.iter.folders, file.list, nscen)
+    scen.i <- lapply(ncensus, bycensus, iters, l.iter.folders, file.list, nscen, 
+                     start=start, end=end)
+    census.names <- sub(pattern = ".csv", "", x = file.list)
+    names(scen.i) <- census.names
     return(scen.i)
   }
   
@@ -65,7 +108,9 @@ collate.census <- function(path.results=NULL, scenarios="all") {
   }
   
   census.mean <- function(scen) {
+    census.names <- names(scen)
     census.means <- lapply(scen, mean.iter)
+    names(census.means) <- census.names
     return(census.means)
   }
   
@@ -75,13 +120,16 @@ collate.census <- function(path.results=NULL, scenarios="all") {
   }
   
   census.sd <- function(scen) {
+    census.names <- names(scen)
     census.sds <- lapply(scen, sd.iter)
+    names(census.sds) <- census.names
     return(census.sds)
   }
   
-  save.xlsx <- function(census, dir.path, nscen, scen.means, scen.sds, scenarios) {
+  save.xlsx <- function(census, dir.path, nscen, scen.means, scen.sds, scenarios, 
+                        census.names) {
     wb <- loadWorkbook(paste(dir.path, scenarios[[nscen]], 
-                             paste0(scenarios[[nscen]], ".", census - 1, ".", "all", 
+                             paste0(census.names[census], ".", "all", 
                                     ".", "xlsx"), sep="/"), create=TRUE)
     createSheet(wb, name="means")
     writeWorksheet(wb, scen.means[[nscen]][[census]], sheet="means")
@@ -91,12 +139,14 @@ collate.census <- function(path.results=NULL, scenarios="all") {
   
   save2disk <- function(nscen, dir.path, scen.means, scen.sds, scenarios) {
     ncensus <- seq_along(scen.means[[nscen]])
-    lapply(ncensus, save.xlsx, dir.path, nscen, scen.means, scen.sds, scenarios)
+    census.names <- names(scen.means[[nscen]])
+    lapply(ncensus, save.xlsx, dir.path, nscen, scen.means, scen.sds, scenarios, 
+           census.names)
   }
   
   #--------------------------------------------------------------------------#
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   
@@ -105,7 +155,7 @@ collate.census <- function(path.results=NULL, scenarios="all") {
   # A list of lists, each being a scenario. Each scenario has census types for 
   # elements
   data.comb <- lapply(nscens, byscen, scenarios=scenarios, 
-                      l.iter.folders=l.iter.folders)
+                      l.iter.folders=l.iter.folders, start=start, end=end)
   names(data.comb) <- scenarios
   
   scen.means <- lapply(data.comb, census.mean)
@@ -164,6 +214,7 @@ collate.census <- function(path.results=NULL, scenarios="all") {
 #' @inheritParams invasion.front 
 #' @return Save census file to disk and return a list with the new census files
 #' @import data.table
+#' @importFrom tcltk tk_choose.dir 
 #' @export
 census.calc <- function(path.results=NULL, ncensus, headers, var.name=NULL, 
                         bin.f="+", scenarios="all") {
@@ -194,7 +245,7 @@ census.calc <- function(path.results=NULL, ncensus, headers, var.name=NULL,
   if(is.function(bin.f) & is.null(var.name)) 
     stop("Please, pass a character vector to var.name")
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   headers <- make.names(headers)
@@ -229,6 +280,7 @@ census.calc <- function(path.results=NULL, ncensus, headers, var.name=NULL,
 #' in RNA interference high-throughput screening assays. Genomics 89:552-561.
 #'
 #' @import XLConnect
+#' @importFrom tcltk tk_choose.dir
 #' @export
 
 SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0) {
@@ -251,7 +303,7 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
   #----------------------------------------------------------------------------#
   if(is.null(base)) stop("Please, provide the name of the base scenario")
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") {
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
   })
@@ -297,7 +349,8 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
 #' in RNA interference high-throughput screening assays. Genomics 89:552-561.
 #'
 #' @importFrom stats pnorm sd
-#' @importFrom utils choose.dir choose.files count.fields read.csv write.csv
+#' @importFrom utils  count.fields read.csv write.csv
+#' @importFrom tcltk tk_choose.dir
 #' @import XLConnect
 #' @export
 SSMD.move <- function(path.results=NULL, scenarios="all", base=NULL, 
@@ -327,7 +380,7 @@ SSMD.move <- function(path.results=NULL, scenarios="all", base=NULL,
   
   if(is.null(base)) stop("Please, provide the name of the base scenario")
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") {
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
   })
@@ -400,7 +453,7 @@ move <- function(rep.move=NULL) {
 #'   mean and standard deviation across years needs to be calculated. If NULL 
 #'   (default), all events are considered
 #' @param start The first time step to be included
-#' @param end The last time step to be include
+#' @param end The last time step to be included
 #' @return A list with three elements:
 #'   \itemize{ 
 #'       \item $descriptive: A \code{data.frame} (\code{data.table}) with the 
@@ -516,6 +569,7 @@ ranges <- function(rep.ranges=NULL, hx=NULL, events=NULL, start="min", end="max"
 #' in RNA interference high-throughput screening assays. Genomics 89:552-561.
 #'
 #' @import XLConnect
+#' @importFrom tcltk tk_choose.dir
 #' @export
 
 SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL, 
@@ -550,7 +604,7 @@ SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL,
   #----------------------------------------------------------------------------#
   if(is.null(base)) stop("Please, provide the name of the base scenario")
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") {
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
   })
@@ -600,6 +654,7 @@ SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL,
 #' @seealso \code{\link{move}}, \code{\link{ranges}}
 #' @return A list where each element is the output from either \code{move} or
 #'     \code{ranges}.
+#' @importFrom tcltk tk_choose.dir
 #' @export
 multi.reports <- function(path.results=NULL, scenarios="all", pop.name=NULL, 
                           type="move", all=TRUE, hx=NULL, events=NULL, 
@@ -617,7 +672,7 @@ multi.reports <- function(path.results=NULL, scenarios="all", pop.name=NULL,
   
   if(is.null(pop.name)) stop("Please, provide the name of the population")
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- choose.dir(caption = txt)
+  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
   

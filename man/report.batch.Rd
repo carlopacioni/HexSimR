@@ -11,7 +11,8 @@ report.batch(path.results = NULL, scenarios = "all", ranges = TRUE,
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or 
+"all"}
 
 \item{ranges}{Whether a batch file to generate 'ranges' reports should be created}
 

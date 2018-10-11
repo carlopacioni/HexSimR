@@ -4,16 +4,17 @@
 \alias{make.table}
 \title{Make a table from HexSimR results}
 \usage{
-make.table(path.results = NULL, scenarios = "all", fnames, SSMD = FALSE,
-  colh = list(c("GroupSize", "Resources", "nGroups", "ha", "sqkm")),
-  vround = 1, sdround = 1, time.steps = NULL,
+make.table(path.results = NULL, scenarios = "all", fnames,
+  SSMD = FALSE, colh = list(c("GroupSize", "Resources", "nGroups",
+  "ha", "sqkm")), vround = 1, sdround = 1, time.steps = NULL,
   table.name = "Tables.xlsx", tab.name = NULL, save2disk = TRUE,
   dir.out = NULL)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or 
+"all"}
 
 \item{fnames}{The name(s) of the output file(s) to be processed. If more the 
 one scenario is passed, the output file names have to be all equal}

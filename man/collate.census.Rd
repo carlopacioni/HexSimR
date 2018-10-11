@@ -4,31 +4,55 @@
 \alias{collate.census}
 \title{Combine together HexSim census outputs across iterations.}
 \usage{
-collate.census(path.results = NULL, scenarios = "all")
+collate.census(path.results = NULL, scenarios = "all", start = "min",
+  end = "max")
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or 
+"all"}
+
+\item{start}{The first time step to be included}
+
+\item{end}{The last time step to be included}
 }
 \value{
-A list with three elements: the combined data, the mean and standard
+A list with three elements: the combined data, the mean and standard 
   deviation. An xls file is also saved with the descriptive statistics and a 
   .rda file is saved with the combined data
 }
 \description{
-Combine together HexSim census outputs across iterations. If the scenarios have 
-multiple census events, all census files are processed (separately). Mean values 
-are reported in the final file which is located in Results/scenario_name
-folder and returned as a list.
+Combine together HexSim census outputs across iterations. If the scenarios 
+have multiple census events, all census files are processed (separately). 
+Mean values are reported in the final file which is located in 
+Results/scenario_name folder and returned as a list.
 }
 \details{
-If there are several scenarios and \code{scenarios="all"} (default), all
-scenarios are processed, otherwise it is possible to select a subset of scenarios
-using a character vector, e.g. scenarios=c("scen1", "scen2").
+If there are several scenarios and \code{scenarios="all"} (default), all 
+scenarios are processed, otherwise it is possible to select a subset of 
+scenarios using a character vector, e.g. scenarios=c("scen1", "scen2").
 
 If \code{path.results=NULL} an interactive dialog box is used to select the 
-  path where the results are located
+path where the results are located
 
-Note, when there is a large number of files, this function may be memory hungry
+\code{start} controls the first time step that should be considered in each 
+iteration. This is intended to be used when the user wants to discard the
+first part of the simulations, for example because the model needs to reach a
+steady-state.
+ 
+\code{end} controls the last time step that should be considered in each 
+iteration. This is intended to be used when populations can go extinct in 
+some iterations. Calculation of the mean can consider only the extant 
+populations (that is, only the ones that don't go extinct) or fill in the 
+data with "0" when populations went extinct, so that the mean calculations 
+will take that into account. With the default setting (i.e. 
+\code{end="max"}), the mean values are calculated only using the extant 
+populations. When \code{end} is a integer value (typically the number of time
+steps the simulation has been run for) that is larger than the maximum time 
+step of the iteration being considered, then data for the subsequent time 
+steps are filled in with "0".
+
+Note, when there is a large number of files, this function may
+be memory hungry
 }

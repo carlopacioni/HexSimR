@@ -4,13 +4,14 @@
 \alias{multi.gen.dist}
 \title{Genetic distance for multiple scenarios}
 \usage{
-multi.gen.dist(path.results = NULL, scenarios = "all", pop.name = NULL,
-  mean.type = "harmonic")
+multi.gen.dist(path.results = NULL, scenarios = "all",
+  pop.name = NULL, mean.type = "harmonic")
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or 
+"all"}
 
 \item{pop.name}{The name of the population}
 

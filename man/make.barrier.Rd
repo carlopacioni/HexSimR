@@ -4,8 +4,8 @@
 \alias{make.barrier}
 \title{Modify a hbf with HexSim barrier data}
 \usage{
-make.barrier(template, mortality, deflection, npairs, file.name, sufs = NULL,
-  dir.out = NULL)
+make.barrier(template, mortality, deflection, npairs, file.name,
+  sufs = NULL, dir.out = NULL)
 }
 \arguments{
 \item{template}{The full name of the hbf barrier file to use as template}

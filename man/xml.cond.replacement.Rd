@@ -10,7 +10,8 @@ xml.cond.replacement(path.scenarios = NULL, scenarios = "all", csv.in,
 \arguments{
 \item{path.scenarios}{The path to the 'Scenarios' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or 
+"all"}
 
 \item{csv.in}{The name of the .csv file in the "Scenarios" folder with the
 information on the nodes that need to be modified (or checked in case of

@@ -16,13 +16,14 @@ Pext(data = NULL, path.results, rda.in = "collated.census.rda",
 \item{rda.in}{The fully qualified (i.e. including the path) name of the .rda 
 file where the output from \code{collate.census} is saved}
 
-\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or 
+"all"}
 
 \item{ncensus}{The number of the census to be considered}
 
 \item{start}{The first time step to be included}
 
-\item{end}{The last time step to be include}
+\item{end}{The last time step to be included}
 
 \item{headers}{A character vector matching exactly the headers of the census 
 file columns that are to be used by \code{bin.f}}

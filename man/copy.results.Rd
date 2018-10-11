@@ -7,8 +7,8 @@
 copy.results(path.results, out = getwd(), copy.invasion = TRUE,
   inv.name = "Invasion.front.xlsx", Pext = TRUE, comp.census = TRUE,
   comp.move = TRUE, move.name = "SSMD_move.xlsx", comp.ranges = TRUE,
-  ranges.name = "SSMD_ranges.xlsx", plots = TRUE, scen.results = TRUE,
-  scenarios = "all")
+  ranges.name = "SSMD_ranges.xlsx", plots = TRUE,
+  scen.results = TRUE, scenarios = "all")
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
@@ -35,9 +35,13 @@ copy.results(path.results, out = getwd(), copy.invasion = TRUE,
 
 \item{scen.results}{Whether to copy results saved in scenarios' folders}
 
-\item{scenarios}{A character vector with the scenarios to be processed or "all"}
+\item{scenarios}{A character vector with the scenarios to be processed or 
+"all"}
 }
 \description{
+\strong{This function is deprecated. Please see '?compress.log' to reduce project's size}
+}
+\details{
 This function is used to copy/back up  \code{HexSimR} results maintaining the
  same directory structure.
   
@@ -47,8 +51,7 @@ This function is used to copy/back up  \code{HexSimR} results maintaining the
   All .xlsx files present in scenarios' folders will be copied (even 
   those with manually modified names) assuming that these are results to keep. 
   These include genetic mean distances.
-}
-\details{
+
 It assummes that file names of plots start with "plot" as for   \code{HexSimR} 
   default. If exists, the file "gen.plot.data.csv" (if the name was not 
   modified) will be copied as part of this option because considered part of 
