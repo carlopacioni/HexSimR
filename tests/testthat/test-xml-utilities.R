@@ -6,7 +6,7 @@ test_that("scenarios.batch.modifier", {
   new <- system.file("extdata", "MRVC_4BaitYr_ThreeCells.xml", package="HexSimR")
   old <- system.file("extdata", "MRVC_4BaitYr_ThreeCells_old.xml", package="HexSimR")
   csv.in <- system.file("extdata", "test_csv.csv", package="HexSimR")
-  testFolder <- tempdir()
+  testFolder <- tempdir(check = TRUE)
   file.copy(c(new, old, csv.in), testFolder)
   
   XMLTest <- scenarios.batch.modifier(
@@ -91,7 +91,7 @@ test_that("LHS.scenarios", {
   csv.LHS.condChanges_lookup01in <- 
     system.file("extdata", "Test_LHS_condChangesLookup_01.csv", package="HexSimR")
   
-  testFolder <- tempdir()
+  testFolder <- tempdir(check = TRUE)
   file.copy(c(template, csv.LHS.in, 
               csv.LHS.condChangesin, csv.LHS.condChanges_lookup01in), testFolder)
   csv_file <- read.csv(file=file.path(testFolder, "test_csv_LHS.csv"), 
