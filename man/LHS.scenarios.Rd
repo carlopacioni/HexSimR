@@ -52,8 +52,8 @@ param_name, type, value, distribution. See documentation for
 \code{scenarios.batch.modifier} on the meaning of nodes, identifier, 
 attribute. When \code{generate=FALSE} only the last four are mandatory.
 
-There might be situation where the parameter values to be changed is in an 
-internal node respect to the node identifier. In order to identified uniquely
+There might be situation where the parameter values to be changed are in an 
+internal node respect to the node identifier. In order to identify uniquely
 this parameter, the identifier of the parameter node needs to be indicated. 
 This is best explained with an example. An accumulateTrait is identified by 
 the name attribute (i.e. <accumulateTrait name="XXX">), however the parameter
@@ -87,4 +87,25 @@ When \code{generate=TRUE}, the second element of the list returned contains
 the nodes found in the template. It is probably a good idea to scan through 
 these to check whether these were the expected ones and most importantly that
 none are empty!
+}
+\examples{
+# Locate the template file
+template <- system.file("extdata", "MRVC_4BaitYr_ThreeCells.xml", package="HexSimR")
+
+# Locate the .csv file
+csv.LHS.in <- system.file("extdata", "test_csv_LHS.csv", package="HexSimR")
+
+# Create a temp dir
+testFolder <- tempdir(check = TRUE)
+
+# copy example files
+file.copy(c(template, csv.LHS.in), testFolder)
+
+# Exexute the function
+LHS <- LHS.scenarios(
+path.scenarios=testFolder,
+xml.template="MRVC_4BaitYr_ThreeCells.xml",
+samples=9, 
+csv.in ="test_csv_LHS.csv",
+generate=TRUE)
 }
