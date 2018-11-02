@@ -10,7 +10,7 @@ LHS.scenarios(path.scenarios = NULL, xml.template = NULL, samples,
 \arguments{
 \item{path.scenarios}{The path to the 'Scenarios' folder}
 
-\item{xml.template}{The name of the xml file to use as template for the new 
+\item{xml.template}{The name of the xml file to use as template for the new
 nodes}
 
 \item{samples}{The number of LHS samples (i.e. parameter combinations)}
