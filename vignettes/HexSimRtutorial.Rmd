@@ -52,7 +52,7 @@ knitr::include_graphics("Map.tif")
 
     
 
-To find out where the (zipped) example data are, we run the following code, which loads the package and store the location of the example data file in `example_file`, assuming you have already install HexSimR.
+To find out where the (zipped) example data are, we run the following code, which loads the package and store the location of the example data file in `example_file`, assuming you have already installed HexSimR.
 
 ```{r}
 library(HexSimR, quietly = TRUE)
