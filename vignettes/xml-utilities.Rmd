@@ -1,0 +1,366 @@
+---
+title: "Latin Hypercube Sampling and (batch) modification of scenarios and maps"
+author: "Carlo Pacioni"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+           fig_caption: yes
+vignette: >
+  %\VignetteIndexEntry{Latin Hypercube Sampling and (batch) modification of scenarios and maps}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Introduction
+This second tutorial introduces a few new functionalities that have been implemented in HexSimR >= 0.3.3. Most of these functionalities aim to facilitate scenario creation and manipulations. If you only have to make a few one-off changes in the scenario(s) that you have created, it is probably easier to just manually do those, but if you are planning to generate a large number of scenarios from a template scenario where you modify some parameters, or you realised that you set up things wrong and want to apply the same change to a (relatively) large number of scenarios, then you may find useful to use HexSimR to speed up and automate this process. HexSim stores the scenario settings in a xml file, so, __with the exception of `make.map`__, the functions presented here actually modify these files and some basic understanding of the xml formatting is required. The good thing about xml language is that it is quite straight forward and intuitive, so you'll see that it won't require much effort. 
+
+
+## Xml file structure
+There are fantastic and free tutorials available in internet nowdays that describe in details xml language. In this short section I only aim to point out the critical elements that are needed to correctly execute HemSimR xml utilities functions.
+
+The easiest way to understand how HexSim code the simulation settings is to open an scenario file and have a look at its structure. Using a source code editor like [Notepad++](https://notepad-plus-plus.org/) (that colour-code different element of the 
+ text based on the language used) can help to better visualise the structure. 
+ 
+ The core element in a xml file is a node. A node is opened by wrapping its name with the simbols **<** and **>**. For example: **<MyNode>**. A node is then closed with a forward slash in front of its name: **</MyNode>**. Sometimes, it can be opened and closed in one go, like this: **<MyNode   />**. We call *attribute* elements of the node that define its parameters' value and are defined by some text followed by the "**=**" symbols. For example:
+ 
+    <MyNode myAttribute="some values here"/> 
+    
+Node can have a hierarchical sructure, meaning that some are nested in others. These are sometimes called child nodes.
+
+    <MyNode>
+      <myChildNode/>
+    </MyNode> 
+    
+Lastly, node can have *element values*, which can be text or numbers and are contained between the node's opening and closing, like this:
+
+    <MyNode> "This is a text element" </MyNode>
+    
+
+Scenarios settings and parameters in HexSim are set by a node in 
+ the xml file. Some nodes have a unique identifier, which can be an attribute 
+ (generally **name="attribute_value"**), or a text element value (e.g. 
+ **<name> node_name </name>**). To this end, in this tutorial, identifiers are considered 
+ elements that make the node unique. For example, accumulate events have all 
+ the same structure, but they can be identified by the value given to the node
+ **<name>**. On the contrary, there are nodes that are unique and can be simply 
+ identified by the node's name. One example of such nodes is 
+ **<initializationSpatialData>**, which is unique, so a search in the xml file for
+ the path: *"/scenario/population/initializationSpatialData"* will return one 
+ node only. From a practical point of view, the easier way to identify what nodes are modified when some changes are applied to a scenario is to create a reference scenario, then modify some of its events/parameters and save it with a different name. If you then compare 
+ the two xml files using, for example, the plug in "compare" in Notepad++, or the program [Winmerge](http://winmerge.org/) (on Windows), the lines that are different between the two files will be highlighted and it should be straightforward to identify the relevant nodes.
+
+```{r, echo=FALSE, fig.cap="__Figure 1.__ An example of a comparison between two xml files in Notepd++ where the modified lines (the text element in this case) is highlight."}
+knitr::include_graphics("CompareXml2.tif")
+```
+
+
+We will now step through a few examples of these new functions. HexSimR >= 0.3.3 comes with a few example files. Let's first create a temporary directory called `testFolder`:
+
+
+```{r}
+testFolder <- tempdir(check = TRUE)
+```
+We will be using this directory to run the examples. If you are replicating this tutorial on your machine, it may be a good idea to browse to this temporary directory to see what changes while we go through the examples. Just type `testFolder` to see the path where the temp directory is.
+    
+
+# Batch modification of scenarios
+ 
+ If several scenarios have been developed in HexSim and later the user 
+ realises that there are some modifications that need to be applied to several
+ or all of them, this function can help automate this task. It involves 
+ generating a scenario with the correct/new events and parameters. This 
+ scenario is used then as template and the nodes that need to be added, 
+ replaced or deleted are identified using a .csv file. Some setting up is required 
+ and it may not be worthwhile to use this function for a handful of scenarios. 
+ 
+ The easiest is to follow an example. With the following code, we load the package, locate the example files, and store them in `testFolder`. All this assumes that you have already installed HexSimR.
+
+```{r}
+library(HexSimR, quietly = TRUE)
+new <- system.file("extdata", "MRVC_4BaitYr_ThreeCells.xml", package="HexSimR")
+old <- system.file("extdata", "MRVC_4BaitYr_ThreeCells_old.xml", package="HexSimR")
+csv.in <- system.file("extdata", "test_csv.csv", package="HexSimR")
+file.copy(c(new, old, csv.in), testFolder)
+```
+
+The .csv file essentially provides the information on how to locate the nodes
+ that need to be modified, and what type of actions need to be carried out.The
+ .csv must be located in the scenario folder (i.e. where your scenario files are), and the name should be passed with `csv.in` as a character vector. The file must have the following 
+ headings: **nodes**, **identifier**, **attribute**, **mode**, **ref**, **ref_identifier**,	and 
+ **ref_attribute**. The function `scenarios.batch.modifier` can then be ued to carry out the intended modifications. `scenarios.batch.modifier` will parse the file and use 
+ the `csv.in`'s columns as arguments. You can explore the "*test_csv.csv*" that you just copied to see an example (see table below).
+
+```{r, echo=FALSE}
+csv <- read.csv(csv.in)
+knitr::kable(csv)
+```
+ 
+ 
+ The column with heading **nodes** is the path to the node to be searched 
+ in `xml.template`, which is the template file (that is, the file that contains the new nodes/parameter values), except when the **mode** is `"delete"`, in 
+ which case the nodes are searched in the scenario file to be modified and then deleted. The 
+ path starts at the root of the xml file(s) (`scenarios`) and progresses until the
+ node's name or identifier is found. The path must start with a "/", and must not have a "/" 
+ at the end. For example, for an accumulator, the path in the column "nodes" 
+ would be: "/scenario/population/accumulators/accumulator/name".
+ 
+ **identifier** is used to indicate whether the node has an identifier. If 
+ it does (e.g. **name="attribute_value"**), the name (or the value if an 
+ attribute) of the identifier needs to be in this column (e.g. 
+ *attribute_value*), otherwise `FALSE` must be used.
+ 
+ **attribute** indicates whether the identifier is an attribute (`TRUE`) or 
+ not (`FALSE`).
+ 
+ **mode** indicates the type of action that needs to be performed. Possible 
+ options are "**add**", "**before**", "**after**", "**replace**" or "**delete**". If `"add"` the 
+ node is added as last child of the parent node. If the node needs to be added
+ in a specific position (events generally do), `"before"` or `"after"` should be 
+ used to indicate the position respect to the **ref** node (i.e. whether 
+ the new node goes *before* or *after* the node **ref**. Note that the 
+ **ref** node is searched in the `scenarios`" file(s), not the 
+ `xml.template` (pay attention here: `xml.template` is the file that contains the new nodes/parameter values that it is used as template for the correct simulation settings. The `scenarios` file(s) are the ones that are modified). If the option `"delete"` is used, the node is searched and
+ deleted from the `scenarios` file. When `"replace"` is used, the **ref** node 
+ must be provided, even when the node is the same. This is because there might
+ be situations where what is being changed is the name of the node. In 
+ these cases, `scenarios.batch.modifier` would not find the original node
+ in the `scenarios` file.
+ 
+**ref** needs to be passed when the options `"before"`, `"after"` or `"replace"`
+ are used in **mode**}. When not relevant, `NA` is used. When 
+ **ref** is used, then a search is performed in the `scenarios` xml file and 
+ the fields **ref_identifier** and	**ref_attribute** must also be passed
+ when relevant. **ref_identifier** and	**ref_attribute** have the same 
+ meaning as **identifier** and **attribute**, but they refer to the 
+ **ref** node. Use `FALSE` when these are not relevant.
+ 
+ An example of how to appply this funstion is:
+ 
+```{r} 
+XMLTest <- scenarios.batch.modifier(
+    path.scenarios=testFolder,
+    scenarios="MRVC_4BaitYr_ThreeCells_old.xml", 
+    xml.template="MRVC_4BaitYr_ThreeCells.xml",
+    csv.in="test_csv.csv")
+```
+
+ When you excecute `scenarios.batch.modifier`, a back up of the folder `path.scenarios` is copied in the folder "*Scenarios_bkup*", one level up from `path.scenarios`. You can use the backed up file to verify that the changes have been applied and identify the difference. You will see that a banch of accumulators and events and their relative spatial data have been added. 
+ 
+           
+ If `scenarios="all"` si used (default), all scenarios in `path.scenarios` are processed 9wihth the exclusion of `xml.template`), otherwise it is possible to select a subset of scenarios using a character vector, e.g.
+ `scenarios=c("scen1", "scen2")`. 
+ 
+ Additional details on this function can be found using `?scenarios.batch.modifier`. 
+
+ Once you are done exploring the output files, you can delete them and the folder with:
+
+```{r}
+  files <- list.files(testFolder, full.names=TRUE)
+  file.remove(files)
+  unlink(file.path(dirname(testFolder), '/Scenarios_bkup'), 
+           recursive=TRUE)
+```
+
+
+# Latin Hypercube Sampling
+
+
+ The function `LHS.scenarios` is used to generate scenarios whose parameter combinations 
+ follow a Latin Hypercupe Sampling design. In a nushell, what we want to achieve is to consider a range of values for a number of parameters (e.g. survival rates) and randomnly sample those parameters within the established range to evaluate whether the results change. A Latin Hypercupe Sampling (LHS) design is a sort of stratified random design that ensure that all the parameter combinations are considered. If enough samples are taken in a (generic) random sampling, there is probably no need to use a LHS, but it can help when fewer samples are taken. In my opinion, because using LHS can only improve inference compared to (generic) random sampling, or make no difference, I don't see a reason why it shouldn't be used.
+ 
+Setting manually scenarios with different paramter values, becomes quickly annoying for example, in the simple case where you want to test two parameters, each with 5 categorical values, you'll have to set up 25 scenarios... using `LHS.scenarios`, you can automate this process.
+
+Parameter values can be drawn from normal, lognormal, binomial, beta or uniform distributions or have a set of fixed values. You have to have a template scenario that constitutes the backbone of your simulation framework (identified withthe argument `xml.template`).
+ 
+ 
+ A .csv file needs to be created, must be located in the scenario folder and 
+ the name should be passed with `csv.in` as a character vector (see 
+ `system.file("extdata", "test_csv_LHS.csv", package="HexSimR")` for an 
+ example). The .csv must have the following headings: **nodes**, **identifier**, **attribute**, 
+ **param_node**, **param_node_identifier**, **param_node_attribute**, **param_identifier**, 
+ **param_name**, **type**, **value**, **distribution**. The meaning of nodes, identifier, 
+ attribute is the same as in `scenarios.batch.modifier` (see above or `?scenarios.batch.modifier`). When `generate=FALSE` (see below) only the last four arguments are mandatory.
+ 
+ An example of such a file could be:
+ 
+```{r, echo=FALSE}
+csv.LHS.in <- system.file("extdata", "test_csv_LHS.csv", package="HexSimR")
+csv <- read.csv(csv.LHS.in)
+knitr::kable(csv)
+```
+ 
+ 
+On thing you may have noticed is that we are changing the values of a *spatialDataSeries*. In other words, we are changing the spatial data (e.g. a map) of the simulations. It is important to undestand that we are only changing the text string in the scenario file that indicates to HexSim where to find the spatial data. If the new value used doesn't exist (in our examples, if there is no HexMap "Shooting_5" and "Shooting_5_10") in the "project/Spatial Data/Hexagons"  directory of the HexSim's project, HexSim won't be able to locate the spatial data and will stop thorwing an error. The other thing that it is important to consider is that there might be events that refer to that spatial data, and HexSim can use in events the spatial data loaded for that scenario with the *spatialDataSeries*, so these have to mach. We get back to this later on (see "Conditional replacement of xml elements"") to find out how we can quickly cater for this situation. Last hint before moving one: if your xml modification also require the creations of lots of maps, the function `make.map` can help to automate this step too (if some conditions are met).
+ 
+ There might be situation where the parameter values to be changed are in an 
+ internal node respect to the node identifier. In order to identify uniquely
+ this parameter, the identifier of the parameter's node needs to be indicated. 
+ This is best explained with an example. An *accumulateTrait* is identified by 
+ the name attribute (i.e. **<accumulateTrait name="XXX">**), however the parameter
+ values are contained in the **<value>** node within the *accumulateTrait*. The node
+ **<value>** is itself identified by a name attribute, but the parameters are 
+ stored under a **threshold** attribute. 
+ 
+    <accumulatedTrait name="BaitRates" accumulator="BaitRate">
+        <value name="NoBaits" threshold="-INF"/>
+        <value name="Bait3km" threshold="33"/>
+        <value name="Bait10km" threshold="66"/>
+        <description/>
+      </accumulatedTrait>
+  
+
+A search for the node *accumulateTrait* with the attribute *name="BaitRates"* would return three child nodes. To avoid multiple hit, **nodes**, **identifier** and **attribute** are used to identify uniquely the 
+ parent node where the parameter is contained (i.e. the node *accumulateTrait* with the attribute *name="BaitRates"*). **param_node**,	**param_node_identifier**, and 
+ **param_node_attribute** (in this case, for example: */value/name* and *"Bait3km"*, respectively) are used to identify the node where the parameter values are contained (if necessary, use `NA` for **param_node** and `FALSE` for the others columns if not relevant), and **param_identifier** (here: *threshold*) is used 
+ to identify the actual parameter values that need to be changed, when this is
+ stored as an attribute. Use `FALSE` when the latter is not relevant (e.g. if 
+ the node identifier is the parameter that needs to be changed).
+ 
+ **type** refers to the type of parameter. It can take exactly one of the 
+ following: `"integer"`, `"numeric"` or `"character"`. **value** refers to the 
+ parameters of the distribution from which values are drawn (separated by a 
+ comma) if one is used: mean and sd for normal, meanlog and sdlog for 
+ lognormal, shape1 and shape2 for beta, prob for binomial and min and max for 
+ uniform, otherwise a collection of values if **distribution** --> **fixed**. 
+ When **distribution** --> **fixed** or **type** --> **character** the elements in 
+ **value** have equal probability.
+ 
+ **param_name** is the name of the parameter that is being changed. These 
+ are used as labels (headers) in the hypercube matrix that it is saved to disk
+ and returned as an object from the function.
+ 
+ An example of how ot use this function follows:
+ 
+```{r}
+# Locate the template file
+template <- system.file("extdata", "MRVC_4BaitYr_ThreeCells.xml", package="HexSimR")
+
+# Locate the .csv file
+csv.LHS.in <- system.file("extdata", "test_csv_LHS.csv", package="HexSimR")
+# Create a temp dir
+testFolder <- tempdir(check = TRUE)
+# copy example files
+file.copy(c(template, csv.LHS.in), testFolder)
+
+# Exexute the function
+  LHS <- LHS.scenarios(
+    path.scenarios=testFolder,
+    xml.template="MRVC_4BaitYr_ThreeCells.xml",
+    samples=9, 
+    csv.in ="test_csv_LHS.csv",
+    generate=TRUE)
+```
+
+
+The function return a list and saves a few files depending on the user's choice.
+ If `generate` is `FALSE`, then the function quits after generating the 
+ hypercube matrix (that is, a matrix where the parameter values combinations are saved).
+
+ When `generate=TRUE`, the second element of the list returned contains 
+ the nodes found in the template. It is probably a good idea to scan through 
+ these to check whether these were the expected ones and most importantly that
+ none is empty! If the latter, something went wrong in ID the nodes!
+
+
+# Conditional replacement of xml elements
+ 
+ There might be situtations where we want to apply a change to a scenario in relation to the calues used in that scenario in other parameters. As mentioned above, an example is when some nodes refer to spatial data that may have changed due to our modification of the xml files (with either `LHS.scenarios` or `scenarios.batch.modifier`). `xml.cond.replacement` exists for this purpose.
+ This function replaces values in specific element nodes of xml scenario files
+ if a condition is satisfied. 
+ 
+ Similarly as for `LHS.scenarios` a .csv file identifies element nodes whose value needs to be 
+ satisfied. That is, a search is performed to identify a node and its values, which is then 
+ compared to the value reported in the column **value** in the .csv file. If found, then the scenario changes are carried out. 
+ 
+```{r, echo=FALSE}
+csv.LHS.condChangesin <- 
+    system.file("extdata", "LHS_condChanges.csv", package="HexSimR")
+csv <- read.csv(csv.LHS.condChangesin)
+knitr::kable(csv)
+```
+ 
+ 
+ For each row in the .csv file, a second .csv file needs to be present, which is passed with the argument  `lookup`. The is basically a list of nodes that need to be modified and their new values. An example of such a file is:
+ 
+```{r, echo=FALSE}
+csv.LHS.condChanges_lookup01in <- 
+    system.file("extdata", "Test_LHS_condChangesLookup_01.csv", package="HexSimR")csv <- read.csv(csv.LHS.condChanges_lookup01in)
+knitr::kable(csv)
+```
+
+In this case, HexSimR searches for the spatialDataSeries node named "Shooting_5", checks whether the parameter value is "Shooting_5" and in these scenario files where these conditions are met, it will replace the (fake) values "ThisIsATest", in all the nodes reported in the `lookup` file.
+
+Let's assume we want to modify the scenarios created with `LHS.scenarios` function run before. We could do this with the (made up) example files in HexSimR:
+
+```{r}
+# locate the .csv file
+csv.LHS.condChangesin <- 
+    system.file("extdata", "LHS_condChanges.csv", package="HexSimR")
+
+# Locate the second .csv for the 'lookup' argument
+csv.LHS.condChanges_lookup01in <- 
+    system.file("extdata", "Test_LHS_condChangesLookup_01.csv", package="HexSimR")
+
+# Copy them in the temp folder
+file.copy(c(csv.LHS.condChangesin, csv.LHS.condChanges_lookup01in), testFolder)
+  
+# execute the changes  
+xml.cond.replacement(path.scenarios = testFolder, 
+                       scenarios = basename(xml_files), 
+                       csv.in = "LHS_condChanges.csv", 
+                       lookup = "Test_LHS_condChangesLookup_01.csv")
+```
+
+
+
+unlink(testFolder, recursive=TRUE)
+
+E:/HexSimR/VignetteXmlUti
+
+## make.map
+ This function searches for a value and replaces it with \code{new.values}. When
+ \code{length(new.values) > 1}, \code{sufs} needs to be passed to append a 
+ suffix to the file name, otherwise the file is overwritten.
+ 
+#
+ x is the value that is searched and replaced in the csv file
+# ks is the vectori of values (carrying capacities in this case) that are replaced
+# template is the name of the csv map file to use as template
+
+# now in HexSImR
+## Figures
+
+The figure sizes have been customised so that you can easily put two images side-by-side. 
+
+```{r, fig.show='hold'}
+plot(1:10)
+plot(10:1)
+```
+
+You can enable figure captions by `fig_caption: yes` in YAML:
+
+    output:
+      rmarkdown::html_vignette:
+        fig_caption: yes
+
+Then you can use the chunk option `fig.cap = "Your figure caption."` in **knitr**.
+
+## More Examples
+
+You can write math expressions, e.g. $Y = X\beta + \epsilon$, footnotes^[A footnote here.], and tables, e.g. using `knitr::kable()`.
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(head(mtcars, 10))
+```
+
+Also a quote using `>`:
+
+> "He who gives up [code] safety for [code] speed deserves neither."
+([via](https://twitter.com/hadleywickham/status/504368538874703872))
