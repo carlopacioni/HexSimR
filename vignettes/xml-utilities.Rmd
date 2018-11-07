@@ -311,6 +311,9 @@ csv.LHS.condChanges_lookup01in <-
 
 # Copy them in the temp folder
 file.copy(c(csv.LHS.condChangesin, csv.LHS.condChanges_lookup01in), testFolder)
+
+# Locate the LHS scenario files
+xml_files <-list.files(testFolder, pattern="LHS[0-9].xml$", full.names=TRUE)
   
 # execute the changes  
 xml.cond.replacement(path.scenarios = testFolder, 
