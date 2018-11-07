@@ -291,7 +291,8 @@ knitr::kable(csv)
  
 ```{r, echo=FALSE}
 csv.LHS.condChanges_lookup01in <- 
-    system.file("extdata", "Test_LHS_condChangesLookup_01.csv", package="HexSimR")csv <- read.csv(csv.LHS.condChanges_lookup01in)
+    system.file("extdata", "Test_LHS_condChangesLookup_01.csv", package="HexSimR")
+csv <- read.csv(csv.LHS.condChanges_lookup01in)
 knitr::kable(csv)
 ```
 
