@@ -132,7 +132,7 @@ make.map <- function(template, new.values, old.value, file.name, sufs=NULL,
   for(new.value in new.values) {
     i <- i + 1
     fmod <- f
-    fmod[sel, 2] <- new.values
+    fmod[sel, 2] <- new.value
     write.csv(fmod, file = 
                 file.path(dir.out, paste0(file.name, sufs[i], ".csv")), 
               row.names = FALSE)
@@ -149,7 +149,7 @@ make.map <- function(template, new.values, old.value, file.name, sufs=NULL,
 #' have one barrier pair you have to provide six values.
 #' 
 #' Several files can be generated using mapply() to pass one \code{template} and
-#' one \code{file.name} at the time.
+#' one \code{file.name} at the time (see vignette for details).
 #' 
 #' @param template The full name of the hbf barrier file to use as template
 #' @param mortality is the vector of new mortality values that are replaced

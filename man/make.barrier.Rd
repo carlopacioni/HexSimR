@@ -31,5 +31,5 @@ have one barrier pair you have to provide six values.
 }
 \details{
 Several files can be generated using mapply() to pass one \code{template} and
-one \code{file.name} at the time.
+one \code{file.name} at the time (see vignette for details).
 }
