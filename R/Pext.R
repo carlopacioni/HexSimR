@@ -110,9 +110,20 @@ Pext <- function(data=NULL, path.results, rda.in="collated.census.rda",
           s_start <- census[, min(Time.Step)]
           }
     } else {
+      if(start < census[, min(Time.Step)]) 
+        stop(paste("The value of 'start' is lower than the first Time Step in the scenario",
+                   scenario))
       s_start <- start
   }
-    if(end == "max") s_end <- census[, max(Time.Step)] else s_end <- end
+    if(end == "max") {
+      s_end <- census[, max(Time.Step)] 
+      } else {
+        if(end > census[, max(Time.Step)]) 
+          stop(paste("The value of 'end' is higher than the last Time Step in the scenario",
+                     scenario))
+        s_end <- end
+      }
+        
     extTable[[scenario]] <- cbind(census[, .(Run, Time.Step)], 
                       census[, headers, with=FALSE] == 0)
     
