@@ -5,54 +5,73 @@
 \title{Combine together HexSim census outputs across iterations.}
 \usage{
 collate.census(path.results = NULL, scenarios = "all", start = "min",
-  end = "max")
+  end = "max", keep.zeros = TRUE)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or 
+\item{scenarios}{A character vector with the scenarios to be processed or
 "all"}
 
 \item{start}{The first time step to be included}
 
 \item{end}{The last time step to be included}
+
+\item{keep.zeros}{Whether zeros are retained in the mean calculations (TRUE,
+default), or are excluded (FALSE)}
 }
 \value{
-A list with three elements: the combined data, the mean and standard 
-  deviation. An xls file is also saved with the descriptive statistics and a 
-  .rda file is saved with the combined data
+A list with three elements: the combined data, the mean and standard
+ deviation. Each of these elements is in itself a list with  each scenario as
+ a element. Nested within the scenarios is a list with each census file. An
+ xls file is also saved with the descriptive statistics and a .rda file is
+ saved with the combined data
 }
 \description{
-Combine together HexSim census outputs across iterations. If the scenarios 
-have multiple census events, all census files are processed (separately). 
-Mean values are reported in the final file which is located in 
+Combine together HexSim census outputs across iterations. If the scenarios
+have multiple census events, all census files are processed (separately). Mean
+values are reported in the final file which is located in
 Results/scenario_name folder and returned as a list.
 }
 \details{
-If there are several scenarios and \code{scenarios="all"} (default), all 
-scenarios are processed, otherwise it is possible to select a subset of 
+If there are several scenarios and \code{scenarios="all"} (default), all
+scenarios are processed, otherwise it is possible to select a subset of
 scenarios using a character vector, e.g. scenarios=c("scen1", "scen2").
 
-If \code{path.results=NULL} an interactive dialog box is used to select the 
+If \code{path.results=NULL} an interactive dialog box is used to select the
 path where the results are located
 
-\code{start} controls the first time step that should be considered in each 
+\code{start} controls the first time step that should be considered in each
 iteration. This is intended to be used when the user wants to discard the
 first part of the simulations, for example because the model needs to reach a
 steady-state.
- 
-\code{end} controls the last time step that should be considered in each 
-iteration. This is intended to be used when populations can go extinct in 
-some iterations. Calculation of the mean can consider only the extant 
-populations (that is, only the ones that don't go extinct) or fill in the 
-data with "0" when populations went extinct, so that the mean calculations 
-will take that into account. With the default setting (i.e. 
-\code{end="max"}), the mean values are calculated only using the extant 
-populations. When \code{end} is a integer value (typically the number of time
-steps the simulation has been run for) that is larger than the maximum time 
-step of the iteration being considered, then data for the subsequent time 
-steps are filled in with "0".
 
-Note, when there is a large number of files, this function may
-be memory hungry
+\code{end} controls the last time step that should be considered in each
+iteration. This is typically the last time step the simulations were set for,
+or it can be used to discard the time steps after a certain point.
+\strong{Note} that if the population goes extinct, HexSim may stop recording
+data after the time step in which the population went extinct, hence the last
+time step may be different across iteration. Explicitly setting \code{end} is
+particularly important in this situation to ensure correct mean and sd
+calculations. \code{collate.census} will fill in the data with "0" if the
+population goes extinct before \code{end} when the latter is a number.
+
+The default setting (i.e. \code{end="max"}) is for convenience and to ensure
+back-compatibility, but its use is not recommended. When  \code{end="max"}
+\code{collate.census} will use the last time step of each replicate as end
+point, nut, if the iterations have different number of time steps, the mean
+and sd calculations will be a mixture between the extant and all populations
+(across all iterations, see below).
+
+\code{keep.zeros} is a logical (\code{TRUE}, default, or \code{FALSE}) and
+indicates whether the zero-values should be used in the mean and sd
+calculations. If not, the zeros are stripped out before calculations. This
+could make sense, for example, when the trait (or other variables) being
+considered indicates the population size and the user wants to consider only
+extent populations (i.e. ignore extinct populations). When
+\code{keep.zeros=TRUE} an "all" suffix is appended to the file name,
+otherwise, "extant" is used.
+
+Note, when there is a large number of files, this function may be memory
+hungry
 }

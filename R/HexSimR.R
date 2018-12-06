@@ -1,51 +1,70 @@
 
-#' Combine together HexSim census outputs across iterations.
-#' 
-#' Combine together HexSim census outputs across iterations. If the scenarios 
-#' have multiple census events, all census files are processed (separately). 
-#' Mean values are reported in the final file which is located in 
-#' Results/scenario_name folder and returned as a list.
-#' 
-#' If there are several scenarios and \code{scenarios="all"} (default), all 
-#' scenarios are processed, otherwise it is possible to select a subset of 
-#' scenarios using a character vector, e.g. scenarios=c("scen1", "scen2").
-#' 
-#' If \code{path.results=NULL} an interactive dialog box is used to select the 
-#' path where the results are located
-#' 
-#' \code{start} controls the first time step that should be considered in each 
-#' iteration. This is intended to be used when the user wants to discard the
-#' first part of the simulations, for example because the model needs to reach a
-#' steady-state.
-#'  
-#' \code{end} controls the last time step that should be considered in each 
-#' iteration. This is intended to be used when populations can go extinct in 
-#' some iterations. Calculation of the mean can consider only the extant 
-#' populations (that is, only the ones that don't go extinct) or fill in the 
-#' data with "0" when populations went extinct, so that the mean calculations 
-#' will take that into account. With the default setting (i.e. 
-#' \code{end="max"}), the mean values are calculated only using the extant 
-#' populations. When \code{end} is a integer value (typically the number of time
-#' steps the simulation has been run for) that is larger than the maximum time 
-#' step of the iteration being considered, then data for the subsequent time 
-#' steps are filled in with "0".
-#' 
-#' Note, when there is a large number of files, this function may
-#' be memory hungry
-#' 
-#' @param path.results The path to the 'Results' folder
-#' @param scenarios A character vector with the scenarios to be processed or 
-#'   "all"
-#' @inheritParams ranges
-#' @return A list with three elements: the combined data, the mean and standard 
-#'   deviation. An xls file is also saved with the descriptive statistics and a 
-#'   .rda file is saved with the combined data
-#' @import data.table
-#' @import XLConnect
-#' @importFrom tcltk tk_choose.dir 
-#' @export
+#'Combine together HexSim census outputs across iterations.
+#'
+#'Combine together HexSim census outputs across iterations. If the scenarios
+#'have multiple census events, all census files are processed (separately). Mean
+#'values are reported in the final file which is located in
+#'Results/scenario_name folder and returned as a list.
+#'
+#'If there are several scenarios and \code{scenarios="all"} (default), all
+#'scenarios are processed, otherwise it is possible to select a subset of
+#'scenarios using a character vector, e.g. scenarios=c("scen1", "scen2").
+#'
+#'If \code{path.results=NULL} an interactive dialog box is used to select the
+#'path where the results are located
+#'
+#'\code{start} controls the first time step that should be considered in each
+#'iteration. This is intended to be used when the user wants to discard the
+#'first part of the simulations, for example because the model needs to reach a
+#'steady-state.
+#'
+#'\code{end} controls the last time step that should be considered in each
+#'iteration. This is typically the last time step the simulations were set for,
+#'or it can be used to discard the time steps after a certain point.
+#'\strong{Note} that if the population goes extinct, HexSim may stop recording
+#'data after the time step in which the population went extinct, hence the last
+#'time step may be different across iteration. Explicitly setting \code{end} is
+#'particularly important in this situation to ensure correct mean and sd
+#'calculations. \code{collate.census} will fill in the data with "0" if the
+#'population goes extinct before \code{end} when the latter is a number.
+#'
+#'The default setting (i.e. \code{end="max"}) is for convenience and to ensure
+#'back-compatibility, but its use is not recommended. When  \code{end="max"}
+#'\code{collate.census} will use the last time step of each replicate as end
+#'point, nut, if the iterations have different number of time steps, the mean
+#'and sd calculations will be a mixture between the extant and all populations
+#'(across all iterations, see below).
+#'
+#'\code{keep.zeros} is a logical (\code{TRUE}, default, or \code{FALSE}) and
+#'indicates whether the zero-values should be used in the mean and sd
+#'calculations. If not, the zeros are stripped out before calculations. This
+#'could make sense, for example, when the trait (or other variables) being
+#'considered indicates the population size and the user wants to consider only
+#'extent populations (i.e. ignore extinct populations). When
+#'\code{keep.zeros=TRUE} an "all" suffix is appended to the file name,
+#'otherwise, "extant" is used.
+#'
+#'Note, when there is a large number of files, this function may be memory
+#'hungry
+#'
+#'@param path.results The path to the 'Results' folder
+#'@param scenarios A character vector with the scenarios to be processed or
+#'  "all"
+#'@param keep.zeros Whether zeros are retained in the mean calculations (TRUE,
+#'  default), or are excluded (FALSE)
+#'@inheritParams ranges
+#'@return A list with three elements: the combined data, the mean and standard
+#'  deviation. Each of these elements is in itself a list with  each scenario as
+#'  a element. Nested within the scenarios is a list with each census file. An
+#'  xls file is also saved with the descriptive statistics and a .rda file is
+#'  saved with the combined data
+#'@import data.table
+#'@import XLConnect
+#'@importFrom tcltk tk_choose.dir
+#'@export
 
-collate.census <- function(path.results=NULL, scenarios="all", start="min", end="max") {
+collate.census <- function(path.results=NULL, scenarios="all", start="min", end="max",
+                           keep.zeros=TRUE) {
   
   #----------------------------------------------------------------------------#
   # Helper functions
@@ -62,11 +81,12 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
     if(is.numeric(end)) {
       if(census.data[, max(Time.Step)] < end) {
         TS <- (census.data[, max(Time.Step)] + 1):end
-        m <- matrix(rep(0, length(TS) * (length(census.data) - 1)), 
-                    ncol=length(census.data) - 1)
+        m <- matrix(rep(0, length(TS) * (length(census.data) - 2)), 
+                    ncol=length(census.data) - 2)
         mdt <- data.table(m)
-        setnames(mdt, headers[-match("Time.Step", headers)])
+        setnames(mdt, headers[-match(c("Run", "Time.Step"), headers)])
         mdt[, Time.Step := TS]
+        mdt[, Run := census.data[, unique(Run)]]
         census.data <- rbindlist(list(census.data, mdt), use.names = TRUE)
       } else {
         if(census.data[, max(Time.Step)] > end) 
@@ -102,49 +122,57 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
     return(scen.i)
   }
   
-  mean.iter <- function(census) {
-    each.census <- census[, lapply(.SD, mean), by="Time.Step" ]
+  rep.zeros <- function(x) replace(x, which(x==0), NA)
+  
+  mean.iter <- function(census, keep.zeros) {
+    if(isFALSE(keep.zeros)) census <- census[, lapply(.SD, rep.zeros)]
+    each.census <- census[, lapply(.SD, mean, na.rm=TRUE), by="Time.Step" ]
     return(each.census)
   }
   
-  census.mean <- function(scen) {
+  census.mean <- function(scen, keep.zeros) {
     census.names <- names(scen)
-    census.means <- lapply(scen, mean.iter)
+    census.means <- lapply(scen, mean.iter, keep.zeros=keep.zeros)
     names(census.means) <- census.names
     return(census.means)
   }
   
-  sd.iter <- function(census) {
-    each.census <- census[, lapply(.SD, sd), by="Time.Step" ]
+  sd.iter <- function(census, keep.zeros) {
+    if(isFALSE(keep.zeros)) census <- census[, lapply(.SD, rep.zeros)]
+    each.census <- census[, lapply(.SD, sd, na.rm=TRUE), by="Time.Step" ]
     return(each.census)
   }
   
-  census.sd <- function(scen) {
+  census.sd <- function(scen, keep.zeros) {
     census.names <- names(scen)
-    census.sds <- lapply(scen, sd.iter)
+    census.sds <- lapply(scen, sd.iter, keep.zeros=keep.zeros)
     names(census.sds) <- census.names
     return(census.sds)
   }
   
   save.xlsx <- function(census, dir.path, nscen, scen.means, scen.sds, scenarios, 
-                        census.names) {
-    wb <- loadWorkbook(paste(dir.path, scenarios[[nscen]], 
-                             paste0(census.names[census], ".", "all", 
-                                    ".", "xlsx"), sep="/"), create=TRUE)
+                        census.names, keep.zeros) {
+    wb <- loadWorkbook(file.path(dir.path, scenarios[[nscen]], 
+                             paste(census.names[census], 
+                                   if(isFALSE(keep.zeros)) "extant" else "all", "comb", 
+                                    "xlsx", sep=".")), create=TRUE)
     createSheet(wb, name="means")
     writeWorksheet(wb, scen.means[[nscen]][[census]], sheet="means")
     createSheet(wb, name="sd")
     writeWorksheet(wb, scen.sds[[nscen]][[census]], sheet="sd")
     saveWorkbook(wb)}
   
-  save2disk <- function(nscen, dir.path, scen.means, scen.sds, scenarios) {
+  save2disk <- function(nscen, dir.path, scen.means, scen.sds, scenarios, keep.zeros) {
     ncensus <- seq_along(scen.means[[nscen]])
     census.names <- names(scen.means[[nscen]])
     lapply(ncensus, save.xlsx, dir.path, nscen, scen.means, scen.sds, scenarios, 
-           census.names)
+           census.names, keep.zeros)
   }
   
   #--------------------------------------------------------------------------#
+  if(end == "max") {
+    warning("The value 'max' for the argument 'end' is a convinience option, \nbut can lead to spurious results if used improperly. \nPlease, see 'Details.")
+    }
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") 
@@ -158,12 +186,15 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
                       l.iter.folders=l.iter.folders, start=start, end=end)
   names(data.comb) <- scenarios
   
-  scen.means <- lapply(data.comb, census.mean)
-  scen.sds <- lapply(data.comb, census.sd)
+  scen.means <- lapply(data.comb, census.mean, keep.zeros=keep.zeros)
+  scen.sds <- lapply(data.comb, census.sd, keep.zeros=keep.zeros)
   
-  lapply(nscens, save2disk, dir.path=path.results, scen.means, scen.sds, scenarios)
+  lapply(nscens, save2disk, dir.path=path.results, scen.means, scen.sds, 
+         scenarios, keep.zeros=keep.zeros)
   coll.census <- list(data=data.comb, means=scen.means, sds=scen.sds)
-  save(coll.census, file=paste(path.results, "collated.census.rda", sep="/"), 
+  save(coll.census, file=file.path(path.results, 
+                                   paste(if(isFALSE(keep.zeros)) "extant" else "all", 
+                                         "collated.census.rda", sep=".")), 
        compress="xz")
   
   return(coll.census)
