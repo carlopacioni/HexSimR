@@ -2,7 +2,7 @@
 % Please edit documentation in R/compress.logs.R
 \name{compress.logs}
 \alias{compress.logs}
-\title{Compress log files and optinally remove them}
+\title{Compress log files and optionally remove them}
 \usage{
 compress.logs(path.results = NULL, scenarios = "all",
   delete.log = TRUE, overwrite.gz = TRUE, compression = 7,
@@ -11,7 +11,7 @@ compress.logs(path.results = NULL, scenarios = "all",
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or 
+\item{scenarios}{A character vector with the scenarios to be processed or
 "all"}
 
 \item{delete.log}{whether the log file should be deleted}
@@ -31,8 +31,8 @@ a list where the first element is the list of log files found and the
   second is the gz files created
 }
 \description{
-Compress log file and optinally remove them to save space and make
-simulations results more portable
+Compress log files and optionally remove them to save space and make
+simulation results more portable
 }
 \details{
 From (very limited) testing, a compression of 1 gives substantial compression
@@ -42,5 +42,17 @@ longer than \code{compression=1}. Anything beyon 7 takes much longer but with
 a gain of only a 0.1\% or less.
 
 Note that it makes sense to execute this function in parallel only if a solid
-state disk (SSD) is available
+state disk (SSD) is available. If \code{ncores} is left to its default
+(\code{NULL}) and \code{parallel=TRUE} all available processors will be used.
+}
+\examples{
+# Create a temp directory
+tmp <- tempdir()
+dir.create(file.path(tmp, "test"))
+# Create a fake log file
+cat(file=file.path(tmp, "test", "foo.log"), "Hello world!")
+# Compress the log file
+compress.logs(path.results=tmp, scenarios="test", delete.log=TRUE, overwrite.gz=TRUE)
+# clean up
+unlink(tmp, recursive=TRUE)
 }

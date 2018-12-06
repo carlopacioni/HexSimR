@@ -9,7 +9,7 @@ m.gen.dist(path.results = NULL, scenarios = "all", pop.name, traits)
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or 
+\item{scenarios}{A character vector with the scenarios to be processed or
 "all"}
 
 \item{pop.name}{The name of the population}

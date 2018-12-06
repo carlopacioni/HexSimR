@@ -1,7 +1,7 @@
-#' Compress log files and optinally remove them
+#' Compress log files and optionally remove them
 #'
-#' Compress log file and optinally remove them to save space and make
-#' simulations results more portable
+#' Compress log files and optionally remove them to save space and make
+#' simulation results more portable
 #'
 #' From (very limited) testing, a compression of 1 gives substantial compression
 #' (about 23\% of original size) and it is very fast. \code{compression=7} gives
@@ -10,7 +10,8 @@
 #' a gain of only a 0.1\% or less.
 #'
 #' Note that it makes sense to execute this function in parallel only if a solid
-#' state disk (SSD) is available
+#' state disk (SSD) is available. If \code{ncores} is left to its default
+#' (\code{NULL}) and \code{parallel=TRUE} all available processors will be used.
 #'
 #' @param delete.log whether the log file should be deleted
 #' @param overwrite.gz if a .gz file with the same name is present, should it be
@@ -24,6 +25,16 @@
 #'   second is the gz files created
 #' @importFrom R.utils gzip
 #' @export
+#' @examples
+#' # Create a temp directory
+#' tmp <- tempdir()
+#' dir.create(file.path(tmp, "test"))
+#' # Create a fake log file
+#' cat(file=file.path(tmp, "test", "foo.log"), "Hello world!")
+#' # Compress the log file
+#' compress.logs(path.results=tmp, scenarios="test", delete.log=TRUE, overwrite.gz=TRUE)
+#' # clean up
+#' unlink(tmp, recursive=TRUE)
 
 compress.logs <- function(path.results=NULL, scenarios="all", delete.log=TRUE, 
                           overwrite.gz=TRUE, compression=7, parallel=FALSE, ncores=NULL) {

@@ -35,7 +35,7 @@ copy.results(path.results, out = getwd(), copy.invasion = TRUE,
 
 \item{scen.results}{Whether to copy results saved in scenarios' folders}
 
-\item{scenarios}{A character vector with the scenarios to be processed or 
+\item{scenarios}{A character vector with the scenarios to be processed or
 "all"}
 }
 \description{

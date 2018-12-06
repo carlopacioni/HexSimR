@@ -16,7 +16,7 @@ invasion.front(path.results = NULL, ncensus, value = 1, patch.width,
 
 \item{patch.width}{The width of the patch}
 
-\item{scenarios}{A character vector with the scenarios to be processed or 
+\item{scenarios}{A character vector with the scenarios to be processed or
 "all"}
 }
 \value{

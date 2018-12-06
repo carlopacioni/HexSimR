@@ -10,7 +10,7 @@ scenarios.batch.modifier(path.scenarios = NULL, scenarios = "all",
 \arguments{
 \item{path.scenarios}{The path to the 'Scenarios' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or 
+\item{scenarios}{A character vector with the scenarios to be processed or
 "all"}
 
 \item{xml.template}{The name of the xml file to use as template for the new

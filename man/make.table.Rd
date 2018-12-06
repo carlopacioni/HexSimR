@@ -13,7 +13,7 @@ make.table(path.results = NULL, scenarios = "all", fnames,
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or 
+\item{scenarios}{A character vector with the scenarios to be processed or
 "all"}
 
 \item{fnames}{The name(s) of the output file(s) to be processed. If more the 

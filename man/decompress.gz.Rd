@@ -12,7 +12,7 @@ decompress.gz(path.results = NULL, scenarios = "all",
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
 
-\item{scenarios}{A character vector with the scenarios to be processed or 
+\item{scenarios}{A character vector with the scenarios to be processed or
 "all"}
 
 \item{delete.gz}{whether the .gz file should be deleted after decompression}

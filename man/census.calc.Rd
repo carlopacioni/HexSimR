@@ -21,7 +21,7 @@ file columns that are to be used by \code{bin.f}}
 \item{bin.f}{A character vector to pass the binary function to be applied to 
 the columns identified by \code{headers} (Default: \code{"+"})}
 
-\item{scenarios}{A character vector with the scenarios to be processed or 
+\item{scenarios}{A character vector with the scenarios to be processed or
 "all"}
 }
 \value{
