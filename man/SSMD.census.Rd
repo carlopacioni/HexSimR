@@ -5,7 +5,7 @@
 \title{Compare census values against a baseline scenario.}
 \usage{
 SSMD.census(path.results = NULL, scenarios = "all", base = NULL,
-  ncensus = 0)
+  ncensus = 0, keep.zeros = "TRUE")
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
@@ -13,25 +13,32 @@ SSMD.census(path.results = NULL, scenarios = "all", base = NULL,
 \item{scenarios}{A character vector with the scenarios to be processed or
 "all"}
 
-\item{base}{A character vector with the name of the scenario to be used as 
+\item{base}{A character vector with the name of the scenario to be used as
 term of comparison}
 
 \item{ncensus}{The number of the census to be considered}
+
+\item{keep.zeros}{Whether zeros were kept or not when census files were
+collated}
 }
 \value{
-A list with SSMD in the first element and p-values in the second. 
-  These results are also saved to disk as two tabs in an excel file named 
-  "SSMD_census[ncensus].xlsx", where [ncensus] is the number of the census file.
+A list with SSMD in the first element and p-values in the second.
+  These results are also saved to disk as two tabs in an excel file named
+  "SSMD_census[ncensus].xlsx", where [ncensus] is the number of the census
+  file.
 }
 \description{
-\code{SSMD.census} carries out pairwise comparisons of the census values 
-  against a baseline scenario using Strictly Standardised Mean Difference 
-  (SSMD, Zhang 2007).  
-  
+\code{SSMD.census} carries out pairwise comparisons of the census values
+against a baseline scenario using Strictly Standardised Mean Difference
+(SSMD, Zhang 2007).
+}
+\details{
 It takes as data input the output from \code{collate.census} (it reads data
-  directly from xls files).
+directly from xls files). The argument \code{keep.zeros} needs to be set
+exactly as it was in \code{collate.census} call.
 }
 \references{
-Zhang, X. D. 2007. A pair of new statistical parameters for quality control
-in RNA interference high-throughput screening assays. Genomics 89:552-561.
+Zhang, X. D. 2007. A pair of new statistical parameters for
+quality control in RNA interference high-throughput screening assays.
+Genomics 89:552-561.
 }

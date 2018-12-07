@@ -70,28 +70,31 @@ prep.data <- function(i, means, sds, traits, scenarios, rm.T0) {
 
 
 #' Plots census means across simulated time steps
-#' 
-#' It takes as data input the output from \code{collate.census} (it reads data 
+#'
+#' It takes as data input the output from \code{collate.census} (it reads data
 #' directly from xls files).
-#' 
+#'
 #' \code{rm.T0} is generally used to remove the the first row of data. This
-#' makes sense when all time steps were logged, but there is little meaning in 
+#' makes sense when all time steps were logged, but there is little meaning in
 #' keeping in time zero as this is the initialization step.
-#' 
+#'
+#' \code{keep.zeros} is used to indicate the value used for this argument when
+#' \code{collate.census} was run.
+#'
 #' @param ngroups The number of groups in which the scenarios are to be divided
-#' @param rm.T0 Whether to remove the first row of data. Relevant when it is 
+#' @param rm.T0 Whether to remove the first row of data. Relevant when it is
 #'   Time Step '0' (default=TRUE)
-#' @inheritParams collate.census
 #' @inheritParams SSMD.census
+#' @inheritParams collate.census
 #' @inheritParams w.genepop.batch
-#' @return Save to disk ggplot objects (with extension .rda) and pdf with the 
+#' @return Save to disk ggplot objects (with extension .rda) and pdf with the
 #'   plots (one for each group). Return a list of plots
 #' @import XLConnect
 #' @importFrom tcltk tk_choose.dir
 #' @export
 
 census.plot <- function(path.results=NULL, scenarios="all", traits, ncensus=0, 
-                        ngroups=1, rm.T0=TRUE) {
+                        ngroups=1, rm.T0=TRUE, keep.zeros="TRUE") {
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   suppressWarnings(if(scenarios == "all") {
@@ -99,8 +102,8 @@ census.plot <- function(path.results=NULL, scenarios="all", traits, ncensus=0,
   })
   traits <- make.names(traits)
   nscens_group <- ceiling(length(scenarios) / ngroups)
-  means <-lapply(scenarios, read.means, path.results, ncensus)
-  sds <-lapply(scenarios, read.sds, path.results, ncensus)
+  means <-lapply(scenarios, read.means, path.results, ncensus, keep.zeros=keep.zeros)
+  sds <-lapply(scenarios, read.sds, path.results, ncensus, keep.zeros=keep.zeros)
   
   l.plots <- lapply(1:ngroups, make.plot, path.results, nscens_group, means, sds, 
                     traits, scenarios, ncensus, rm.T0) 

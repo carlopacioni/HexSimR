@@ -4,7 +4,7 @@
 \alias{read.means}
 \title{Read means values from output of collate.census}
 \usage{
-read.means(scenario, path.results, ncensus)
+read.means(scenario, path.results, ncensus, keep.zeros)
 }
 \arguments{
 \item{scenario}{A character vector with the name of the scenario}
@@ -12,6 +12,9 @@ read.means(scenario, path.results, ncensus)
 \item{path.results}{The path to the 'Results' folder}
 
 \item{ncensus}{The number of the census to be considered}
+
+\item{keep.zeros}{Whether zeros were kept or not when census files were
+collated}
 }
 \description{
 #' This function is internally used by other \code{HexSimR} functions

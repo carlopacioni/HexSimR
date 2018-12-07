@@ -24,7 +24,7 @@ make.plot(ngroup, path.results, nscens_group, means, sds, traits,
 
 \item{ncensus}{The number of the census to be considered}
 
-\item{rm.T0}{Whether to remove the first row of data. Relevant when it is 
+\item{rm.T0}{Whether to remove the first row of data. Relevant when it is
 Time Step '0' (default=TRUE)}
 }
 \description{

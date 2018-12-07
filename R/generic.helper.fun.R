@@ -81,13 +81,14 @@ pval <- function(x) pnorm(abs(as.matrix(x)), lower.tail=FALSE)
 #' 
 #' #' This function is internally used by other \code{HexSimR} functions
 #' @param scenario A character vector with the name of the scenario  
-#' @inheritParams collate.census
 #' @inheritParams SSMD.census
+#' @inheritParams collate.census
 #' @export
-read.means <- function(scenario, path.results, ncensus) {
+read.means <- function(scenario, path.results, ncensus, keep.zeros) {
   mean_data <- readWorksheetFromFile(
-    paste0(path.results, "/", scenario, "/", scenario, ".", 
-           ncensus, ".", "all", ".", "xlsx"), 
+    file.path(path.results, scenario, paste(scenario, ncensus, 
+                           if(isFALSE(keep.zeros)) "extant" else "all", "comb", 
+                           "xlsx", sep=".")), 
     sheet="means")
   return(mean_data)
 }
@@ -97,13 +98,14 @@ read.means <- function(scenario, path.results, ncensus) {
 #' This function is internally used by other \code{HexSimR} functions
 #' 
 #' @param scenario A character vector with the name of the scenario  
-#' @inheritParams collate.census
 #' @inheritParams SSMD.census
+#' @inheritParams collate.census
 #' @export
-read.sds <- function(scenario, path.results, ncensus) {
+read.sds <- function(scenario, path.results, ncensus, keep.zeros) {
   std_data <- readWorksheetFromFile(
-    paste0(path.results, "/", scenario, "/", scenario, ".", 
-           ncensus, ".", "all", ".", "xlsx"), 
+    file.path(path.results, scenario, paste(scenario, ncensus, 
+                           if(isFALSE(keep.zeros)) "extant" else "all", "comb", 
+                           "xlsx", sep=".")), 
     sheet="sd")
   return(std_data)
 }

@@ -5,7 +5,7 @@
 \title{Plots census means across simulated time steps}
 \usage{
 census.plot(path.results = NULL, scenarios = "all", traits,
-  ncensus = 0, ngroups = 1, rm.T0 = TRUE)
+  ncensus = 0, ngroups = 1, rm.T0 = TRUE, keep.zeros = "TRUE")
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
@@ -19,19 +19,25 @@ census.plot(path.results = NULL, scenarios = "all", traits,
 
 \item{ngroups}{The number of groups in which the scenarios are to be divided}
 
-\item{rm.T0}{Whether to remove the first row of data. Relevant when it is 
+\item{rm.T0}{Whether to remove the first row of data. Relevant when it is
 Time Step '0' (default=TRUE)}
+
+\item{keep.zeros}{Whether zeros were kept or not when census files were
+collated}
 }
 \value{
-Save to disk ggplot objects (with extension .rda) and pdf with the 
+Save to disk ggplot objects (with extension .rda) and pdf with the
   plots (one for each group). Return a list of plots
 }
 \description{
-It takes as data input the output from \code{collate.census} (it reads data 
+It takes as data input the output from \code{collate.census} (it reads data
 directly from xls files).
 }
 \details{
 \code{rm.T0} is generally used to remove the the first row of data. This
-makes sense when all time steps were logged, but there is little meaning in 
+makes sense when all time steps were logged, but there is little meaning in
 keeping in time zero as this is the initialization step.
+
+\code{keep.zeros} is used to indicate the value used for this argument when
+\code{collate.census} was run.
 }

@@ -171,7 +171,7 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
   
   #--------------------------------------------------------------------------#
   if(end == "max") {
-    warning("The value 'max' for the argument 'end' is a convinience option, \nbut can lead to spurious results if used improperly. \nPlease, see 'Details.")
+    warning("The value 'max' for the argument 'end' is a convinience option, \nbut can lead to spurious results if used improperly. \nPlease, see 'Details'.")
     }
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
@@ -291,30 +291,35 @@ census.calc <- function(path.results=NULL, ncensus, headers, var.name=NULL,
 
 
 #' Compare census values against a baseline scenario.
-#' 
-#' \code{SSMD.census} carries out pairwise comparisons of the census values 
-#'   against a baseline scenario using Strictly Standardised Mean Difference 
-#'   (SSMD, Zhang 2007).  
-#'   
+#'
+#' \code{SSMD.census} carries out pairwise comparisons of the census values
+#' against a baseline scenario using Strictly Standardised Mean Difference
+#' (SSMD, Zhang 2007).
+#'
 #' It takes as data input the output from \code{collate.census} (it reads data
-#'   directly from xls files). 
-#'   
-#' @param base A character vector with the name of the scenario to be used as 
+#' directly from xls files). The argument \code{keep.zeros} needs to be set
+#' exactly as it was in \code{collate.census} call.
+#'
+#' @param base A character vector with the name of the scenario to be used as
 #'   term of comparison
 #' @param ncensus The number of the census to be considered
+#' @param keep.zeros Whether zeros were kept or not when census files were
+#'   collated
 #' @inheritParams collate.census
-#' @return A list with SSMD in the first element and p-values in the second. 
-#'   These results are also saved to disk as two tabs in an excel file named 
-#'   "SSMD_census[ncensus].xlsx", where [ncensus] is the number of the census file.
-#' @references
-#' Zhang, X. D. 2007. A pair of new statistical parameters for quality control
-#' in RNA interference high-throughput screening assays. Genomics 89:552-561.
+#' @return A list with SSMD in the first element and p-values in the second.
+#'   These results are also saved to disk as two tabs in an excel file named
+#'   "SSMD_census[ncensus].xlsx", where [ncensus] is the number of the census
+#'   file.
+#' @references Zhang, X. D. 2007. A pair of new statistical parameters for
+#' quality control in RNA interference high-throughput screening assays.
+#' Genomics 89:552-561.
 #'
 #' @import XLConnect
 #' @importFrom tcltk tk_choose.dir
 #' @export
 
-SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0) {
+SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0, 
+                        keep.zeros="TRUE") {
  
   #----------------------------------------------------------------------------#
   # Helper functions
@@ -339,13 +344,15 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
     scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
   })
   scenarios <- scenarios[scenarios != base]
-  wb_base <- loadWorkbook(paste0(path.results, "/", base, "/", base, ".", ncensus, 
-                                 ".", "all", ".", "xlsx"))
+  wb_base <- loadWorkbook(file.path(path.results, base, paste(base, ncensus, 
+                            if(isFALSE(keep.zeros)) "extant" else "all", "comb", 
+                            "xlsx", sep=".")))
+  
   mean_base <- readWorksheet(wb_base, sheet="means")
   sd_base <- readWorksheet(wb_base, sheet="sd")
   
-  means <-lapply(scenarios, read.means, path.results, ncensus)
-  sds <-lapply(scenarios, read.sds, path.results, ncensus)
+  means <-lapply(scenarios, read.means, path.results, ncensus, keep.zeros=keep.zeros)
+  sds <-lapply(scenarios, read.sds, path.results, ncensus, keep.zeros=keep.zeros)
   
   ssmds <- lapply(seq_along(scenarios), ssmd_census, means, sds, 
                   mean_base, sd_base, scenarios)

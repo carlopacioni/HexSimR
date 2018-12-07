@@ -13,7 +13,7 @@ SSMD.move(path.results = NULL, scenarios = "all", base = NULL,
 \item{scenarios}{A character vector with the scenarios to be processed or
 "all"}
 
-\item{base}{A character vector with the name of the scenario to be used as 
+\item{base}{A character vector with the name of the scenario to be used as
 term of comparison}
 
 \item{sum.move}{The name of the file where the data are (including the extension).}

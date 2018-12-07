@@ -81,7 +81,7 @@
 #' @return A data.frame (data.table) with the compiled table. If save2disk=TRUE 
 #'   an xls file is also saved to disk.
 #' @export
-make.table <- function(path.results=NULL, scenarios="all", fnames, SSMD=FALSE, 
+  make.table <- function(path.results=NULL, scenarios="all", fnames, SSMD=FALSE, 
                 colh=list(c("GroupSize", "Resources",	"nGroups", "ha", "sqkm")), 
                 vround=1, sdround=1, time.steps=NULL, table.name="Tables.xlsx", 
                 tab.name=NULL, save2disk=TRUE, 
@@ -111,7 +111,7 @@ make.table <- function(path.results=NULL, scenarios="all", fnames, SSMD=FALSE,
       sds <- make.names(sds)
       setnames(data, c(colh, sds))
     } else {
-      if(substr(fname, nC_fname - 7, nC_fname) == "all.xlsx") {
+      if(substr(fname, nC_fname - 8, nC_fname) == "comb.xlsx") {
         fname <- paste(scenario, fname, sep=".") 
       } 
       wb <- loadWorkbook(paste(path.results, 
