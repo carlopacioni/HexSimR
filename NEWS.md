@@ -1,14 +1,24 @@
+# HexSimR 0.9.0.900
+## New functionality
+collate.census gains keep.zeros
+
+TO-DO ##################################################################
+
+## Bugs
+  *  fixed issues when using start or end arguments in collate.census()
+  TO-DO
+  
 # HexSimR 0.4.4.900
 ## New functionality
 LHS.scenario
 compress.logs
-copy.results is now deprecated
 rename.replicates
-TO-DO ###################################################################
+copy.results is now deprecated
 
 ## Bugs
-  *  TO-DO
-
+  *  fixed bug that prevented start and end arguments in Pext() to be used when numeric
+  *  Pext() now throws an error when paramenters are improper
+  
 # HexSimR 0.3.4.900
 ## New functionality
 None
