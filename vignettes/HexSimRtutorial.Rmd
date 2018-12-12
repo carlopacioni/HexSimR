@@ -5,8 +5,6 @@ date: "`r Sys.Date()`"
 output: 
    rmarkdown::html_vignette: 
          fig_caption: yes
-   rmarkdown::pdf_document:
-         fig_caption: yes
 vignette: > 
   %\VignetteIndexEntry{Vignette Title} 
   %\VignetteEngine{knitr::rmarkdown} 
@@ -62,7 +60,7 @@ example_file <- system.file("extdata", "Results.zip", package="HexSimR")
 
 Then, we create a temporary directory where we can unzip the files (and sub-directories) so that, at the end of this tutorial, you can delete all the files we have been playing with, leaving alone your HexSimR installation:
 ```{r}
-duplicate <- tempdir()
+duplicate <- tempdir(check = TRUE)
 unzip(example_file, exdir = duplicate)
 
 ```
@@ -76,7 +74,9 @@ If you decide to use HexSimR, remember that for each function there is a help fi
 ## Calculations and plots with census and report files
 Imagine this: you have developed your baseline scenario, have finalised your additional ~40 alternative scenarios in order to test several combination of management options (as we did in our paper), and, finally, you have proudly run 200 replicates for each of them. Each scenario generates, say, three census files that contain data you want look at (in our example there are actually four census files). Now, you find yourself with 3 census files X 200 replicates X ~40 scenarios = ~24,000 post-simulation files to process (and that is just dealing with the census files, leaving alone all the rest). If you want to manually open and paste them together, or import one by one into a statistical package to analyse them, be my guest... Alternatively, you can get HexSimR to do this for you. In our model, I created a map that divided the study area in two populations: inside and outside the fence. By doing this I could ask HexSim to generate a census file where each individual would obtain a value for a specific trait ("PopID") based on its location. 'Trait Index  2' and 'Trait Index  3' are the number of loners and pack members inside the fence, and 'Trait Index  4' and 'Trait Index 5' are the number of loners and pack members outside the fence. All I have to do now, for each census file, for each scenario, is to sum the value of these two variables to obtain the total population size inside and outside the fence, and then average these across the 200 replicates to know what the average trend is for each scenario. This is what the three lines of codes below do. You have to only provide the path to the "Results" folder (if you have run HexSim, you may have noticed that it stores all the results in a folder called "Results"), indicate which census event you are interested in (in this case it is the number '2'), the name of the traits you want to consider with the argument `headers`, what you want to call your outcome variables ('surprisingly', I'm calling them 'Inside' and 'Outside'), and finally what sort of operation you want to perform on these variables ("+" should be self-explanatory... but just to be explicit, the first line of code translates into: "Trait Index  2" + "Trait Index  3"). Note that the outcome variables are effectively added as new columns in the census files. With `scenario='all'`, I indicate that I want to do this for all scenarios that HexSimR finds in the 'Results' folder (but I could have provided a character vector with the names of a subset of scenarios).  
 
-The second block of code below calculates the sex ratios inside and outside the fence. I have included a census event stratified by age and sex in the model. I won't explain what each trait is (I'm sure you trust me on this), but the basic idea is that I first sum together all males inside and outside, respectively. Then, I sum all females inside and outside the fence, and lastly I calcualte the ratios between these sums.  Once all these calculations are done, with the function `collate.census`, HexSimR calculates the mean and SD across all 200 iterations. Note, that `collate.census` does this for all census files that it finds, so I don't have to specify the census files I want to include. I'll obtain the average for each of them in one go regardless of whether I have performed any calculation on them.
+The second block of code below calculates the sex ratios inside and outside the fence. I have included a census event stratified by age and sex in the model. I won't explain what each trait is (I'm sure you trust me on this), but the basic idea is that I first sum together all males inside and outside, respectively. Then, I sum all females inside and outside the fence, and lastly I calcualte the ratios between these sums.  Once all these calculations are done, with the function `collate.census`, HexSimR calculates the mean and SD across all 200 iterations. Note, that `collate.census` does this for all census files that it finds, so I don't have to specify the census files I want to include. I'll obtain the average for each of them in one go regardless of whether I have performed any calculation on them. From HexSimR version 0.3.4 `collate.census` gained two additional arguments: `start` and ` end`. These are used to set the intervals of time steps to be considered. `end` is particularly importart because, if the population goes extinct, ther results may be spurious if not set properly because, if the population goes extinct, HexSim may stop recording
+data after the time step in which the population went extinct, hence the last
+time step may be different across iteration. Different time steps between replicates will affect the calculation of the mean as some time steps may be missing (while they should be zeros) if the population went extinct earlier. `end` is typically the last time step simulated (30 in this case), but it can be less if the user wants to discard the final tail of time steps in the simulations. `end` will also accept `max` as an option, but its used is discouraged (it only exists for programmatic reasons as explained in the function documentation). An additional argument gained by this function since v 1.0 is `keep.zeros`. If `TRUE`, `collate.census` will include the zeros in the mean and sd calculations. On the contrary, zeros will be stripped out before the calculations if `FALSE`. This is equivalent to consider only 'extant' populations (or traits) that are still existing (i.e. >0), or all (i.e. include zeros in the calcualtion of the means).
 
 ```{r}
 # HexSimR is expecting to be pointed to the Results folder
@@ -125,15 +125,16 @@ temp<-census.calc(path.results, ncensus=1,
             var.name = "SexRatio_Out", bin.f = "/", scenarios = "all")
 
 # Calculate the means and SDs
-coll.census <- collate.census(path.results, scenarios="all")
+coll.census <- collate.census(path.results, scenarios="all", end=30)
 
 ```
 
-Finally, one thing you may want to do is to plot these means with SD bars to inspect the results. The following will create a list with only one element, the plot.
+Finally, one thing you may want to do is to plot these means with SD bars to inspect the results. The following will create a list with only one element, the plot. Remember to use the argument `keep.zeros` to mirror what you used in `collate.census`.
 
 ```{r, fig.width=7.23}
 # Plot census
-census.p <- census.plot(path.results, scenarios="all", traits=c("Inside", "Outside"), ncensus=2, ngroups=1)
+census.p <- census.plot(path.results, scenarios="all", traits=c("Inside", "Outside"), 
+                        ncensus=2, ngroups=1, keep.zeros = TRUE)
 census.p[[1]]
 ```
 
@@ -216,7 +217,7 @@ $$SSMD_{i}=\frac{V_i-V_B}{\sqrt{s^{2}_i+s^{2}_B}}$$
 
 where $V_{i}$ is the mean value of the variable of interest in the $i$ scenario being compared, $V_{B}$ is the mean value in the baseline scenario, and $s_i$ and $s_B$ are their respective standard deviations. 
 
-In the example below, I run a comparison for two census files and the descriptive statistics of the report. The names of the functions should be self explanatory to indicate which one is which, if you get lost just call the help file with the name of the function. I only use a very simple loop here, but if you have something more complex and want to loop `SSMD.census` to carry out multiple comparisons across several scenarios, have a look at the function `apply.ssmd` in the supplementary material of the paper for an example on how to do that. 
+In the example below, I run a comparison for two census files and the descriptive statistics of the report (remember to change the value of the argument \code{keep.zeros} if you changed it from the default when you ran \code{collate.census}). The names of the functions should be self explanatory to indicate which one is which, if you get lost just call the help file with the name of the function. I only use a very simple loop here, but if you have something more complex and want to loop `SSMD.census` to carry out multiple comparisons across several scenarios, have a look at the function `apply.ssmd` in the supplementary material of the paper for an example on how to do that. 
 
 ```{r}
 for (i in 1:2) {
@@ -238,7 +239,7 @@ ssmd.ran
 ## Probability of extinction
 HexSimR also offers the possibility to calculate the probability of extinction. This estimate doesn't make much sense in my example because no population goes extinct, but I'll demonstrate here how ```Pext``` can be used anyway. ```Pext``` calculates the probability of extinction for each time step and a cumulative probability between a specified interval. It will also conduct a statistical comparison (only of the cumulative probability) if the number of the requested scenarios is > 1 and ```base``` is not NULL.
 
-```Pext``` calculates the probability of extinction starting from the census files and you can select any trait that is included in the census event you indicated with the argument ```headers```. This makes this function quite powerful as it can be used to calculate the probability of any trait(s) you included in a census file are equal to zero (or non-zero by calculating 1 - Pext).  
+```Pext``` calculates the probability of extinction starting from the census files and you can select any trait that is included in the census event you indicated with the argument ```headers```. This makes this function quite powerful as it can be used to calculate the probability that any trait(s) you included in a census file is (are) equal to zero (or non-zero by calculating 1 - Pext).  
 
 Please, read the function help file for more details on this function. One important note that it is worthwhile to point out is that in this function the formula to calculate SSMD becomes:
 
@@ -329,7 +330,7 @@ gp
    
 # Minor utilities
 
-HexSimR also has a few little functions to speed up the process that really do not do much other than avoiding repeateded clicking. These are listed below.
+HexSimR also has a few little functions to speed up the process that really do not do much other than avoiding repeated clicking. These are listed below.
 
 ### Prepare batch files
 If you ran several replicates of one scenario, you may want to combine their log files. HexSim provides utility to do this, but if you use the graphical user interface (GUI) you have to click the relative option  for each scenario and wait for it to be done before you can move to the next. Of course, HexSim also gives you the option to generate a batch file and then run it with the command line. To set up the batch file you have to click on each scenario and add it to the batch file, but I think I already mentioned that I'm an extremely lazy person and this is already too much clicking for me. A similar situation applies for the range or movement reports (if you are just starting with HexSim and don't know what these are, suffice to say that these are files where the data you are interested in are dumped for you to use). HexSimR can do all this in one line for each type of option (e.g. log files, movement report, ranges, etc).  If you want to generate a report, or combine the log file for all the scenarios you ran (quite likely I'd assume), you can just use 'all' in the argument `scenarios`, or you can pass a character vector with the names of a subset of scenarios.  
@@ -353,17 +354,14 @@ w.genepop.batch (path.results, scenarios="all", time.steps=30,
 
 Once OutputTransformer.exe is done generating the reports, the genepop input files need to be cleaned up with `multi.clean.genepop()` to make sure that the files respect the formatting required by `mmod` (Winter, 2012), which is used internally by HexSimR when you use `gen.dist()` before you can use it as I demonstrate in the example in the 'genetic analysis' section.  
 
-
-## Backing up results
-There might be several reason why you need to back up your analysis results without copying all simulation data. For example, unless I know that I am going to use these data again, I normally keep only a (compressed) back up of the simulations, but I definitely keep multiple back ups of my data analysis. Also, the size of the data analysis results is generally quite small and I can share these with co-authors. Because I don't want to copy everything by hand (did I mention I'm a lazy person?), and I want to keep the sub-folder structure so that I can still call HexSimR's functions if I decide to carry out further analyses,  HexSimR also has a function to  help copy across the results to a new location. At the time of writing, I didn't give this function a lot of testing, so please check that everything you want is effectively copied, but it should mirror the folder sub-structure and copy all the data you have  processed with HexSimR leaving behind the log and raw files. In this example, I create a 'Backup' folder within the same temp folder we have been working in, but the destination folder can be anything that R can establish a connection to: a folder on the same machine you are working from, an external hard disk, a hard disk or a server on your network etc.
-
-```{r}
-# Create a back up folder
-bkup <- paste(duplicate, "Backup", sep="/")
-dir.create(bkup, showWarnings=FALSE, recursive=TRUE)
-copy.results(path.results, out = bkup)
+## Resume simulations
+If you have many replicates of the same scenario, sometimes happens that HexSim doesn't complete these simulations (e.g. a power shut down) and you find with a job half done. HexSim will replace the results if you just restart the job, but sometime it is a pain to start all over again because simulations may take a long time to complete and you may not want to ditch the ones that were successfully comlpeted. If you just move the output to a different location (or rename the folder not to be overwritten by HexSim), you will have the problem that you will have multiple files with the same name when you try to merge the results together. If these files are in the order of hundreds, manually renaming them is out of question. I found myself in this situation several times and I have created a simple function that automatically rename the output files so that it is only necessary to re-run the missing simulations and not the whole job. It is up to the user, thought, to confirm that the simulations  that were retained were actually completed. If you have a census event in your model, normally it is quite straight forward to confirm that by ensuring that all the simulated years were logged (unless the population went extinct before completion). Thee code chunck below is an example of how this function can be used (although it is not actually executed in this tutorial to allow the examples below to work).
+```{r, eval=FALSE}
+rename.replicates(path.results, scenario = "DingoBaseSBF_SelDist", suffix = 10:10)
 ```
 
+## Backing up results
+Since HexSimR 0.4 the function `copy.results()` is **deprecated**. It just was too difficult to ensure that that function was keeping track of all the little changes and additional outputs from the updated code. To save space, now HexSimR have a new function: `compress.logs()`. This function compress the log files (which are mostly responsable for the huge size of HexSim results) and optionally remove the original files after compression. If you need to access the uncompressed log files, these can be obtained back with the function `decompress.gz()`. By selecting `delete.log=TRUE` all log files are removed. If you have a solid state disk, the speed is improved if you select `parallel=TRUE`, in which case the number of processors to be used can be selected with `ncores`. For additional control options on the compression ratio and parallel performances, see `?compress.logs` and `?decompress.gz`.
 
 
 ## Summarise everything in a table
