@@ -28,34 +28,46 @@ file where the output from \code{collate.census} is saved}
 \item{headers}{A character vector matching exactly the headers of the census 
 file columns that are to be used by \code{bin.f}}
 
-\item{base}{A character vector with the name of the scenario to be used as 
+\item{base}{A character vector with the name of the scenario to be used as
 term of comparison}
 }
 \value{
-A list with four elements: \itemize{ \item $extTable.means: A
+A list with four elements: \itemize{ \item $means.Pext.time.step: A
   \code{data.frame} (\code{data.table}) with the mean probability of
-  extinction for each year, for each scenario \item $extTable.sds: A
-  \code{data.frame} (\code{data.table}) with the standard deviation of the
-  probability of extinction for each Time Step, for each scenario \item
-  $cumul.ext.means: A \code{data.frame} (\code{data.table}) with the mean
+  extinction for each time step, for each scenario \item $sds.Pext.time.step:
+  A \code{data.frame} (\code{data.table}) with the standard deviation of the
+  probability of extinction for each time step, for each scenario \item
+  $cumul.Pext.means: A \code{data.frame} (\code{data.table}) with the mean
   cumulative probability of extinction from the Time Step \code{start} to
-  \code{end}, for each scenario \item $cumul.ext.sds: A \code{data.frame}
+  \code{end}, for each scenario \item $cumul.Pext.sds: A \code{data.frame}
   (\code{data.table}) with standard deviation of the cumulative probability
   of extinction from the Time Step \code{start} to \code{end}, for each
-  scenario } These results are also saved to disk in two xls files: \itemize{
-  \item $Pext_census:  The mean and standard deviation for each Time Step (in
-  two separate tabs) \item $Cumulative_Pext_census:  the mean and standard
-  deviation across the selected time steps (in two separate tabs) } The
-  results for the SSMD comparisons are saved in the file starting with
-  "SSMD_Cumul_Pext_census". The census number is appended to the name of all
+  scenario  \item $means.time.step.Pext: A \code{data.frame}
+  (\code{data.table}) with the mean probability of extinction across all time
+  steps, for each scenario \item $sds.time.step.Pext: A \code{data.frame}
+  (\code{data.table}) with the standard deviation of the probability of
+  extinction across all time steps, for each scenario}
+
+  These results are also saved to disk in two xls files: \itemize{ \item
+  $Pext/time.step_census:  The mean and standard deviation for each Time Step
+  (in two separate tabs) \item $Cumulative_Pext_census:  the mean and
+  standard deviation of the cumulative probability of extinction for the
+  selected time step interval (in two separate tabs) \item
+  $Pext.time.step_census: The mean and standard deviation of the time step
+  probability of extinction across all time steps within the selected
+  interval (in two separate tabs) } The results for the SSMD comparisons are
+  saved in the file starting with "SSMD_Cumul_Pext_census" or
+  SSMD_means.time.step.Pext. The census number is appended to the name of all
   xls file.
 }
 \description{
-Calculates the probability of extinction for each time step and a cumulative
-probability between a specified interval. If the number of the requested
-scenarios is > 1, it is possible to indicate a baseline scenario and
-\code{Pext} will also calculate the Strictly Standardised Mean Difference
-(SSMD, Zhang 2007).
+Calculates the probability of extinction for each time step, the mean
+probability of extinction across all time steps, and the cumulative
+probability of extinction (that is, the probability that a populaition goes
+extinct in at least one time step). Specific time step intervals can be
+specified. If the number of the requested scenarios is > 1, it is possible to
+indicate a baseline scenario and \code{Pext} will also calculate the Strictly
+Standardised Mean Difference (SSMD, Zhang 2007).
 }
 \details{
 By default, \code{Pext} calculates the probability of extinction using the
@@ -72,9 +84,10 @@ passed as R object with \code{data}. If  \code{data=NULL}, then a fully
 qualified file name of the .rda file saved by \code{collate.census} needs to
 be passed with the argument \code{rda.in}.
 
-When \code{start="min"} (default), it is automatically set to 1 when the
-first time step is zero, otherwise it will be set to the minimum Time Step >
-0. When \code{end="max"} it is set to the maximum Time Step value.
+When \code{start="min"} (default), the first time step considered is
+automatically set to 1 if the first time step is zero, otherwise it will be
+set to the minimum Time Step > 0. When \code{end="max"}, the last time step
+considered is set to the maximum Time Step value.
 
 \strong{NOTE} that in this function SSMD is calculated as the difference
 between the parameter of the base scenario minus the parameter of the
@@ -91,8 +104,8 @@ then SSMD=0 and p-value=0.5.
 }
 \references{
 Zhang, X. D. 2007. A pair of new statistical parameters for
-quality control in RNA interference high-throughput screening assays.
-Genomics 89:552-561.
+  quality control in RNA interference high-throughput screening assays.
+  Genomics 89:552-561.
 }
 \seealso{
 \code{\link{collate.census}}

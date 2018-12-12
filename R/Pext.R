@@ -1,10 +1,12 @@
 #' Probability of extinction
 #'
-#' Calculates the probability of extinction for each time step and a cumulative
-#' probability between a specified interval. If the number of the requested
-#' scenarios is > 1, it is possible to indicate a baseline scenario and
-#' \code{Pext} will also calculate the Strictly Standardised Mean Difference
-#' (SSMD, Zhang 2007).
+#' Calculates the probability of extinction for each time step, the mean
+#' probability of extinction across all time steps, and the cumulative
+#' probability of extinction (that is, the probability that a populaition goes
+#' extinct in at least one time step). Specific time step intervals can be
+#' specified. If the number of the requested scenarios is > 1, it is possible to
+#' indicate a baseline scenario and \code{Pext} will also calculate the Strictly
+#' Standardised Mean Difference (SSMD, Zhang 2007).
 #'
 #' By default, \code{Pext} calculates the probability of extinction using the
 #' column "Population Size", however any column(s) in the census file can be
@@ -20,9 +22,10 @@
 #' qualified file name of the .rda file saved by \code{collate.census} needs to
 #' be passed with the argument \code{rda.in}.
 #'
-#' When \code{start="min"} (default), it is automatically set to 1 when the
-#' first time step is zero, otherwise it will be set to the minimum Time Step >
-#' 0. When \code{end="max"} it is set to the maximum Time Step value.
+#' When \code{start="min"} (default), the first time step considered is
+#' automatically set to 1 if the first time step is zero, otherwise it will be
+#' set to the minimum Time Step > 0. When \code{end="max"}, the last time step
+#' considered is set to the maximum Time Step value.
 #'
 #' \strong{NOTE} that in this function SSMD is calculated as the difference
 #' between the parameter of the base scenario minus the parameter of the
@@ -44,27 +47,37 @@
 #' @inheritParams SSMD.census
 #' @inheritParams census.calc
 #' @seealso \code{\link{collate.census}}
-#' @return A list with four elements: \itemize{ \item $extTable.means: A
+#' @return A list with four elements: \itemize{ \item $means.Pext.time.step: A
 #'   \code{data.frame} (\code{data.table}) with the mean probability of
-#'   extinction for each year, for each scenario \item $extTable.sds: A
-#'   \code{data.frame} (\code{data.table}) with the standard deviation of the
-#'   probability of extinction for each Time Step, for each scenario \item
-#'   $cumul.ext.means: A \code{data.frame} (\code{data.table}) with the mean
+#'   extinction for each time step, for each scenario \item $sds.Pext.time.step:
+#'   A \code{data.frame} (\code{data.table}) with the standard deviation of the
+#'   probability of extinction for each time step, for each scenario \item
+#'   $cumul.Pext.means: A \code{data.frame} (\code{data.table}) with the mean
 #'   cumulative probability of extinction from the Time Step \code{start} to
-#'   \code{end}, for each scenario \item $cumul.ext.sds: A \code{data.frame}
+#'   \code{end}, for each scenario \item $cumul.Pext.sds: A \code{data.frame}
 #'   (\code{data.table}) with standard deviation of the cumulative probability
 #'   of extinction from the Time Step \code{start} to \code{end}, for each
-#'   scenario } These results are also saved to disk in two xls files: \itemize{
-#'   \item $Pext_census:  The mean and standard deviation for each Time Step (in
-#'   two separate tabs) \item $Cumulative_Pext_census:  the mean and standard
-#'   deviation across the selected time steps (in two separate tabs) } The
-#'   results for the SSMD comparisons are saved in the file starting with
-#'   "SSMD_Cumul_Pext_census". The census number is appended to the name of all
+#'   scenario  \item $means.time.step.Pext: A \code{data.frame}
+#'   (\code{data.table}) with the mean probability of extinction across all time
+#'   steps, for each scenario \item $sds.time.step.Pext: A \code{data.frame}
+#'   (\code{data.table}) with the standard deviation of the probability of
+#'   extinction across all time steps, for each scenario}
+#'
+#'   These results are also saved to disk in two xls files: \itemize{ \item
+#'   $Pext/time.step_census:  The mean and standard deviation for each Time Step
+#'   (in two separate tabs) \item $Cumulative_Pext_census:  the mean and
+#'   standard deviation of the cumulative probability of extinction for the
+#'   selected time step interval (in two separate tabs) \item
+#'   $Pext.time.step_census: The mean and standard deviation of the time step
+#'   probability of extinction across all time steps within the selected
+#'   interval (in two separate tabs) } The results for the SSMD comparisons are
+#'   saved in the file starting with "SSMD_Cumul_Pext_census" or
+#'   SSMD_means.time.step.Pext. The census number is appended to the name of all
 #'   xls file.
 #'
 #' @references Zhang, X. D. 2007. A pair of new statistical parameters for
-#' quality control in RNA interference high-throughput screening assays.
-#' Genomics 89:552-561.
+#'   quality control in RNA interference high-throughput screening assays.
+#'   Genomics 89:552-561.
 
 #' @import data.table
 #' @import XLConnect
@@ -83,7 +96,33 @@ Pext <- function(data=NULL, path.results, rda.in="collated.census.rda",
     writeWorksheet(wb, var2, sheet=tabvar2)
     saveWorkbook(wb)
   }
-  #----------------------------------------------------------------------------#
+  
+  apply.ssmd <- function(means, sds, base, headers) {
+    setkey(means, Scenario)
+    mbase <- means[base, (headers), with=FALSE]
+    setkey(sds, Scenario)
+    sdbase <- sds[base, (headers), with=FALSE]
+    
+    mdata <- means[!base, (headers), with=FALSE]
+    sddata <- sds[!base, (headers), with=FALSE]
+    
+    ssmd <- (mbase - mdata) / sqrt(sddata^2 + sdbase^2)
+    
+    pv <-  data.table(HexSimR::pval(ssmd))
+    pv[, Scenario := means[!base, Scenario]]
+    setcolorder(pv, c("Scenario", headers))
+    
+    ssmd[, Scenario := means[!base, Scenario]]
+    setcolorder(ssmd, c("Scenario", headers))
+    
+    wb <- loadWorkbook(
+      file.path(path.results, paste0("SSMD_", deparse(substitute(means)), 
+                    "_census", ncensus, ".xlsx")), 
+                       create=TRUE)
+    save.xlsx(path.results, wb, var1=ssmd, var2=pv, tabvar1="SSMD", tabvar2="pvalues")
+    
+  }
+    #----------------------------------------------------------------------------#
   if(is.null(data)) {
     temp.space <- new.env()
     data <- load(paste(path.results, rda.in, sep="/"), temp.space)
@@ -95,12 +134,15 @@ Pext <- function(data=NULL, path.results, rda.in="collated.census.rda",
   if(scenarios == "all") scenarios <- names(data)
   headers <- make.names(headers)
   
-  extTable <- list()
-  extTable.means <- list()
-  extTable.sds <- list()
-  cumul.ext <- list()
-  cumul.ext.means <- list()
-  cumul.ext.sds <- list()
+  time.step.Pext <- list()
+  mean.Pext.time.step <- list()
+  sd.Pext.time.step <- list()
+  cumul.Pext <- list()
+  cumul.Pext.means <- list()
+  cumul.Pext.sds <- list()
+  mean.time.step.Pext <- list()
+  sd.time.step.Pext <- list()
+  
   for (scenario in scenarios) {
     census <- data[[scenario]][[ncensus + 1]]
     if(start == "min") {
@@ -124,78 +166,86 @@ Pext <- function(data=NULL, path.results, rda.in="collated.census.rda",
         s_end <- end
       }
         
-    extTable[[scenario]] <- cbind(census[, .(Run, Time.Step)], 
+    
+    mTS <- census[, max(Time.Step), by=Run]
+    if(length(mTS[, unique(V1)]) > 1)
+      stop(paste("Different number of time steps between replicates in", scenario),
+           "\nPlease, ensure you ran 'collate.census' with the appropriate value for the argument 'max'")
+    
+    
+    time.step.Pext[[scenario]] <- cbind(census[, .(Run, Time.Step)], 
                       census[, headers, with=FALSE] == 0)
     
-    extTable.means[[scenario]] <- extTable[[scenario]][, 
+    mean.Pext.time.step[[scenario]] <- time.step.Pext[[scenario]][, 
                                                lapply(.SD, mean, na.rm=TRUE), 
                                                by="Time.Step", .SDcols=headers]
-    extTable.means[[scenario]][, Scenario := scenario]
-    setcolorder(extTable.means[[scenario]], c("Scenario", "Time.Step", headers))
+    mean.Pext.time.step[[scenario]][, Scenario := scenario]
+    setcolorder(mean.Pext.time.step[[scenario]], c("Scenario", "Time.Step", headers))
     
-    extTable.sds[[scenario]] <- extTable[[scenario]][, 
+    sd.Pext.time.step[[scenario]] <- time.step.Pext[[scenario]][, 
                                                lapply(.SD, sd, na.rm=TRUE), 
                                                by="Time.Step", .SDcols=headers]
-    extTable.sds[[scenario]][, Scenario := scenario]
-    setcolorder(extTable.sds[[scenario]], c("Scenario", "Time.Step", headers))
+    sd.Pext.time.step[[scenario]][, Scenario := scenario]
+    setcolorder(sd.Pext.time.step[[scenario]], c("Scenario", "Time.Step", headers))
     
-    setkey(extTable[[scenario]], Time.Step)
-    cumul.ext[[scenario]] <- extTable[[scenario]][J(s_start:s_end), 
+    setkey(time.step.Pext[[scenario]], Time.Step)
+   cumul.Pext[[scenario]] <- time.step.Pext[[scenario]][J(s_start:s_end), 
                                                lapply(.SD, sum, na.rm=TRUE), 
                                                by="Run", .SDcols=headers]
-    cumul.ext[[scenario]][, Scenario := scenario]
-    cumul.ext[[scenario]] <-  cbind(cumul.ext[[scenario]][, .(Scenario)],
-                        cumul.ext[[scenario]][, headers, with=FALSE] > 0)
-    cumul.ext.means[[scenario]] <- cumul.ext[[scenario]][, 
+   cumul.Pext[[scenario]][, Scenario := scenario]
+   cumul.Pext[[scenario]] <-  cbind(cumul.Pext[[scenario]][, .(Scenario)],
+                       cumul.Pext[[scenario]][, headers, with=FALSE] > 0)
+   cumul.Pext.means[[scenario]] <-cumul.Pext[[scenario]][, 
                                               lapply(.SD, mean, na.rm=TRUE), 
                                               by="Scenario"]
-    cumul.ext.sds[[scenario]] <- cumul.ext[[scenario]][, 
+   cumul.Pext.sds[[scenario]] <-cumul.Pext[[scenario]][, 
                                               lapply(.SD, sd, na.rm=TRUE), 
                                               by="Scenario"]
+    
+   mean.time.step.Pext[[scenario]] <- time.step.Pext[[scenario]][J(s_start:s_end), 
+                                                    lapply(.SD, mean, na.rm=TRUE),
+                                                    .SDcols=headers]
+   mean.time.step.Pext[[scenario]][, Scenario := scenario]
+    setcolorder(mean.time.step.Pext[[scenario]], c("Scenario", headers))
+    
+    sd.time.step.Pext[[scenario]] <- time.step.Pext[[scenario]][J(s_start:s_end), 
+                                                    lapply(.SD, sd, na.rm=TRUE), 
+                                                    .SDcols=headers]
+    sd.time.step.Pext[[scenario]][, Scenario := scenario]
+    setcolorder(sd.time.step.Pext[[scenario]], c("Scenario", headers))
   }
   
-  extTable.means <- rbindlist(extTable.means, use.names=TRUE)
-  extTable.sds <- rbindlist(extTable.sds, use.names=TRUE)
+  means.Pext.time.step <- rbindlist(mean.Pext.time.step, use.names=TRUE)
+  sds.Pext.time.step <- rbindlist(sd.Pext.time.step, use.names=TRUE)
   
-  cumul.ext.means <- rbindlist(cumul.ext.means, use.names=TRUE)
-  cumul.ext.sds <- rbindlist(cumul.ext.sds, use.names=TRUE)
+ cumul.Pext.means <- rbindlist(cumul.Pext.means, use.names=TRUE)
+ cumul.Pext.sds <- rbindlist(cumul.Pext.sds, use.names=TRUE)
+  
+ means.time.step.Pext <- rbindlist(mean.time.step.Pext, use.names=TRUE)
+ sds.time.step.Pext <- rbindlist(sd.time.step.Pext, use.names=TRUE)
   
   # SSMD
   if(length(scenarios) > 1 & !is.null(base)) {
-    setkey(cumul.ext.means, Scenario)
-    mbase <- cumul.ext.means[base, (headers), with=FALSE]
-    setkey(cumul.ext.sds, Scenario)
-    sdbase <- cumul.ext.sds[base, (headers), with=FALSE]
-    
-    mdata <- cumul.ext.means[!base, (headers), with=FALSE]
-    sddata <- cumul.ext.sds[!base, (headers), with=FALSE]
-    
-    ssmd <- (mbase - mdata) / sqrt(sddata^2 + sdbase^2)
-    
-    pv <-  data.table(HexSimR:::pval(ssmd))
-    pv[, Scenario := cumul.ext.means[!base, Scenario]]
-    setcolorder(pv, c("Scenario", headers))
-    
-    ssmd[, Scenario := cumul.ext.means[!base, Scenario]]
-    setcolorder(ssmd, c("Scenario", headers))
-    
-    wb <- loadWorkbook(paste(path.results, sep="/",
-                             paste0("SSMD_Cumul_Pext_census", ncensus, ".xlsx")), 
-                       create=TRUE)
-    save.xlsx(path.results, wb, var1=ssmd, var2=pv, tabvar1="SSMD", tabvar2="pvalues")
+    apply.ssmd(means=cumul.Pext.means, sds=cumul.Pext.sds, base, headers)
+    apply.ssmd(means=means.time.step.Pext, sds=sds.time.step.Pext, base, headers)
   }
   
-  
-  wb <- loadWorkbook(paste(path.results, sep="/",
-                           paste0("Pext_census", ncensus, ".xlsx")), 
+  wb <- loadWorkbook(file.path(path.results, 
+                          paste0("Pext.time.step_census", ncensus, ".xlsx")), 
                      create=TRUE)
-  save.xlsx(path.results, wb, var1=extTable.means, var2=extTable.sds)
+  save.xlsx(path.results, wb, var1=means.Pext.time.step, var2=sds.Pext.time.step)
   
-  wb <- loadWorkbook(paste(path.results, sep="/",
-                           paste0("Cumulative_Pext_census", ncensus, ".xlsx")), 
+  wb <- loadWorkbook(file.path(path.results, 
+                               paste0("Cumulative_Pext_census", ncensus, ".xlsx")), 
                      create=TRUE)
-  save.xlsx(path.results, wb, var1=cumul.ext.means, var2=cumul.ext.sds)
+  save.xlsx(path.results, wb, var1=cumul.Pext.means, var2=cumul.Pext.sds)
+
+  wb <- loadWorkbook(file.path(path.results, 
+                               paste0("Time_step_Pext_census", ncensus, ".xlsx")), 
+                     create=TRUE)
+  save.xlsx(path.results, wb, var1=means.time.step.Pext, var2=sds.time.step.Pext)
   
-  return(list(extTable.means=extTable.means, extTable.sds=extTable.sds, 
-              cumul.ext.means=cumul.ext.means, cumul.ext.sds=cumul.ext.sds))
+  return(list(means.Pext.time.step=means.Pext.time.step, sds.Pext.time.step=sds.Pext.time.step, 
+              cumul.Pext.means=cumul.Pext.means, cumul.Pext.sds=cumul.Pext.sds,
+             means.time.step.Pext=means.time.step.Pext, sds.time.step.Pext=sds.time.step.Pext))
 }
