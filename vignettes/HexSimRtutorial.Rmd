@@ -74,9 +74,9 @@ If you decide to use HexSimR, remember that for each function there is a help fi
 ## Calculations and plots with census and report files
 Imagine this: you have developed your baseline scenario, have finalised your additional ~40 alternative scenarios in order to test several combination of management options (as we did in our paper), and, finally, you have proudly run 200 replicates for each of them. Each scenario generates, say, three census files that contain data you want look at (in our example there are actually four census files). Now, you find yourself with 3 census files X 200 replicates X ~40 scenarios = ~24,000 post-simulation files to process (and that is just dealing with the census files, leaving alone all the rest). If you want to manually open and paste them together, or import one by one into a statistical package to analyse them, be my guest... Alternatively, you can get HexSimR to do this for you. In our model, I created a map that divided the study area in two populations: inside and outside the fence. By doing this I could ask HexSim to generate a census file where each individual would obtain a value for a specific trait ("PopID") based on its location. 'Trait Index  2' and 'Trait Index  3' are the number of loners and pack members inside the fence, and 'Trait Index  4' and 'Trait Index 5' are the number of loners and pack members outside the fence. All I have to do now, for each census file, for each scenario, is to sum the value of these two variables to obtain the total population size inside and outside the fence, and then average these across the 200 replicates to know what the average trend is for each scenario. This is what the three lines of codes below do. You have to only provide the path to the "Results" folder (if you have run HexSim, you may have noticed that it stores all the results in a folder called "Results"), indicate which census event you are interested in (in this case it is the number '2'), the name of the traits you want to consider with the argument `headers`, what you want to call your outcome variables ('surprisingly', I'm calling them 'Inside' and 'Outside'), and finally what sort of operation you want to perform on these variables ("+" should be self-explanatory... but just to be explicit, the first line of code translates into: "Trait Index  2" + "Trait Index  3"). Note that the outcome variables are effectively added as new columns in the census files. With `scenario='all'`, I indicate that I want to do this for all scenarios that HexSimR finds in the 'Results' folder (but I could have provided a character vector with the names of a subset of scenarios).  
 
-The second block of code below calculates the sex ratios inside and outside the fence. I have included a census event stratified by age and sex in the model. I won't explain what each trait is (I'm sure you trust me on this), but the basic idea is that I first sum together all males inside and outside, respectively. Then, I sum all females inside and outside the fence, and lastly I calcualte the ratios between these sums.  Once all these calculations are done, with the function `collate.census`, HexSimR calculates the mean and SD across all 200 iterations. Note, that `collate.census` does this for all census files that it finds, so I don't have to specify the census files I want to include. I'll obtain the average for each of them in one go regardless of whether I have performed any calculation on them. From HexSimR version 0.3.4 `collate.census` gained two additional arguments: `start` and ` end`. These are used to set the intervals of time steps to be considered. `end` is particularly importart because, if the population goes extinct, ther results may be spurious if not set properly because, if the population goes extinct, HexSim may stop recording
+The second block of code below calculates the sex ratios inside and outside the fence. I have included a census event stratified by age and sex in the model. I won't explain what each trait is (I'm sure you trust me on this), but the basic idea is that I first sum together all males inside and outside, respectively. Then, I sum all females inside and outside the fence, and lastly I calcualte the ratios between these sums.  Once all these calculations are done, with the function `collate.census`, HexSimR calculates the mean and SD across all 200 iterations. Note, that `collate.census` does this for all census files that it finds, so I don't have to specify the census files I want to include. I'll obtain the average for each of them in one go regardless of whether I have performed any calculation on them. From HexSimR version 0.3.4 `collate.census` gained two additional arguments: `start` and `end`. These are used to set the intervals of time steps to be considered. `end` is particularly importart because, if the population goes extinct, the results may be spurious if not set properly. This is because, if the population goes extinct, HexSim may stop recording
 data after the time step in which the population went extinct, hence the last
-time step may be different across iteration. Different time steps between replicates will affect the calculation of the mean as some time steps may be missing (while they should be zeros) if the population went extinct earlier. `end` is typically the last time step simulated (30 in this case), but it can be less if the user wants to discard the final tail of time steps in the simulations. `end` will also accept `max` as an option, but its used is discouraged (it only exists for programmatic reasons as explained in the function documentation). An additional argument gained by this function since v 1.0 is `keep.zeros`. If `TRUE`, `collate.census` will include the zeros in the mean and sd calculations. On the contrary, zeros will be stripped out before the calculations if `FALSE`. This is equivalent to consider only 'extant' populations (or traits) that are still existing (i.e. >0), or all (i.e. include zeros in the calcualtion of the means).
+time step may be different across iterations. Different time steps between replicates will affect the calculation of the mean as some time steps may be missing (while they should be zeros) if the population went extinct earlier. `end` is typically the last time step simulated (30 in this case), but it can be less if the user wants to discard the final tail of time steps in the simulations. `end` will also accept `max` as an option, but its use is discouraged (it only exists for programmatic reasons as explained in the function documentation). An additional argument gained by this function since v 1.0 is `keep.zeros`. If `TRUE`, `collate.census` will include the zeros in the mean and sd calculations. On the contrary, zeros will be stripped out before the calculations if `FALSE`. This is equivalent to consider only 'extant' populations (or traits) that are still existing (i.e. >0), or all (i.e. include zeros in the calcualtion of the means).
 
 ```{r}
 # HexSimR is expecting to be pointed to the Results folder
@@ -237,7 +237,7 @@ ssmd.ran
 ```
 
 ## Probability of extinction
-HexSimR also offers the possibility to calculate the probability of extinction. This estimate doesn't make much sense in my example because no population goes extinct, but I'll demonstrate here how ```Pext``` can be used anyway. ```Pext``` calculates the probability of extinction for each time step and a cumulative probability between a specified interval. It will also conduct a statistical comparison (only of the cumulative probability) if the number of the requested scenarios is > 1 and ```base``` is not NULL.
+HexSimR also offers the possibility to calculate the probability of extinction. This estimate doesn't make much sense in my example because no population goes extinct, so I'll demonstrate here how ```Pext``` can be used with some made up data. ```Pext``` calculates the probability of extinction for each time step, the cumulative probability (which basically answer the question: what is the probability that a populaiton goes extinct in at least one time step) and (since HexSimR v 1.0) the mean probability of extinction across all time steps. Any of these statistics can be requested within a specific interval. It will also conduct a statistical comparison (only of the cumulative probability) if the number of the requested scenarios is > 1 and ```base``` is not NULL for the cumulative probability of extinction and the mean probability of extinction across all time steps.
 
 ```Pext``` calculates the probability of extinction starting from the census files and you can select any trait that is included in the census event you indicated with the argument ```headers```. This makes this function quite powerful as it can be used to calculate the probability that any trait(s) you included in a census file is (are) equal to zero (or non-zero by calculating 1 - Pext).  
 
@@ -247,15 +247,59 @@ $$SSMD_{i}=\frac{V_B-V_i}{\sqrt{s^{2}_{i}+s^{2}_{B}}}$$
 
 Note that, the direction of the changes is inverted. This is done to provide a more intuitive result, under the assumption that, more often than not, if the probability of extinction increases compared to the baseline scenario, it is a negative result.
 
-You may have already noted that SSMD can't be computed if both $s$ are zero. This is likely to happen when the populations always go extinct, or never go extinct as it is in this example. In this case, the cells in the returned xls file are blank. On the other extreme, I'm sure you have alredy noted that if the mean parameters are the same, then SSMD=0 and p-value=0.5.  
+You may have already noted that SSMD can't be computed if both $s$ are zero. This is likely to happen when the populations always or never go extinct as it is in this example. In this case, the cells in the returned xls file are blank. On the other extreme, I'm sure you have alredy noted that if the mean parameters are the same, then SSMD=0 and p-value=0.5.  
 
-In the example below, I calculate the probability of extinction for the population inside and outside the fence, across all simulated years (to this end, because some traits may take no value at Time Step=0, if you use the default for ```start```, then Time Step will be set to 1). I then print out the mean cumulative probabilities of extinction for each scenario (which I have alredy told you is zero...):
+In the example below, I calculate the probability of extinction for the overall population (that is, inside and outside the fence, which correspoinds to the column named "Population.Size"), and inside the fence, across all simulated years (to this end, because some traits may take no value at Time Step=0, if you use the default for ```start```, then Time Step will be set to 1). I first have to copy and decrompress the fake results that are shipped with HexSimR and collate these with `collate.census`, then I calculate the probability of extinction and lastly print out the results for the cumulative probability of extinction:
 
 ```{r}
-pextinct2 <- Pext(data=coll.census, path.results, scenarios="all", ncensus=2, start="min", 
-                 end="max", headers=c("Inside", "Outside"), 
-                 base="DingoBaseSBF_SelDist")
-pextinct2$cumul.ext.means
+# Extract made up results
+test.file <- system.file("extdata", "PextTest.zip", package="HexSimR")
+  testFolder <- tempdir(check=TRUE)
+  file.copy(test.file, testFolder)
+  unzip(test.file, exdir=testFolder)
+  path.results <- file.path(testFolder, "PextTest", "PextTest")
+  collall<-collate.census(path.results, end=30)
+  
+  # Calculate the probability of extinction
+  peall <- Pext(collall, path.results=path.results, ncensus=0, 
+                headers=c("Population.Size", "Inside"), base="Sqkm5_LHS9")
+  
+  peall$cumul.Pext.means
+```
+  
+  You can see that in these fake simulations the population inside the fence goes extinct 100% of the time inside the fence (for at least one time step), but the overall population never does. I found thought that this statistics doesn't tell us much because it is clearly different if the population goes extinct for only one time step but then new dogs colonise the inside of the fence as opposed to the possibility of the population going extinct multiple time steps. In this sense, the mean probability of extinction across time steps is possibly more informative because its value will reflect whether the population is more likely to go extinct over multiple years, in multiple replicates. **NOTE** that this statistic is computed as the mean probability across all time steps and replicates, so, if only a few  replicates were run, the accuracy of the calculation may be very low.
+  
+```{r}
+  peall$means.time.step.Pext
+```
+  
+  In the example above, it is quite straight forward to see that there is much difference in the probability of extinction inside the fence, but the probability of extinction of the overall population is almost half in the scenario 'Sqkm5'.
+  
+  Given the many time steps in which the population has size zero, this fake dataset is also suited to demonstrate the difference in using the option `keep.zeros=FALSE` as opposed to the default `keep.zeros=TRUE`, when collating the results. Below I collate the census files with `keep.zeros=FALSE` and print out the mean values of the overall population for the last five time steps and compare those with the ones calculated previously.
+  
+```{r}  
+  collext<-collate.census(path.results, end=30, keep.zeros=FALSE)
+
+  tail(collext$means$Sqkm5_LHS9$Sqkm5_LHS9.0$Population.Size)
+  tail(collall$means$Sqkm5_LHS9$Sqkm5_LHS9.0$Population.Size)    
+```
+ 
+ Note how the values are higher for 'collext', this is because using `keep.zeros=FALSE` we only retained in the calculations the extant populations, while when `keep.zeros=TRUE` the average calculations will include as many zeros as extinction events. Which one to use will then depend onthe purpose of the analysis, is the user is to compute the mean number of individuals when a population exist, then the user will have to use use only the extant populations (possibly in conjuntion with `Pext` to find out how often the population doesn't extist).
+ 
+ Before abondoning this dataset, I will also use it to show how the number of rows is different when the default option `end="max"` is used, hence my remark before of not to use the default option (and why Pext will throw an error if detect different number of rows in the collated data)!
+ 
+```{r} 
+  
+  collmax<-collate.census(path.results)
+  nrow(collall$means$Sqkm5_LHS9$Sqkm5_LHS9.0)
+  nrow(collmax$means$Sqkm5_LHS9$Sqkm5_LHS9.0)
+```
+  
+  Since we are done with this dataset lets clean up your disk:
+```{r}  
+  files <- list.files(file.path(testFolder), full.names=TRUE, recursive=TRUE)
+  file.remove(files)
+  unlink(testFolder, recursive=TRUE)
 ```
 
 
