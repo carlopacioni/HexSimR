@@ -62,12 +62,12 @@ A list with four elements: \itemize{ \item $means.Pext.time.step: A
 }
 \description{
 Calculates the probability of extinction for each time step, the mean
-probability of extinction across all time steps, and the cumulative
-probability of extinction (that is, the probability that a populaition goes
-extinct in at least one time step). Specific time step intervals can be
-specified. If the number of the requested scenarios is > 1, it is possible to
-indicate a baseline scenario and \code{Pext} will also calculate the Strictly
-Standardised Mean Difference (SSMD, Zhang 2007).
+probability of extinction across all time steps (and across all replicates),
+and the cumulative probability of extinction (that is, the probability that a
+populaition goes extinct in at least one time step). Specific time step
+intervals can be specified. If the number of the requested scenarios is > 1,
+it is possible to indicate a baseline scenario and \code{Pext} will also
+calculate the Strictly Standardised Mean Difference (SSMD, Zhang 2007).
 }
 \details{
 By default, \code{Pext} calculates the probability of extinction using the
