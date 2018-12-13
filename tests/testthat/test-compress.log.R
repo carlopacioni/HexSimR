@@ -1,6 +1,6 @@
 library(HexSimR)
 context("compress log files")
-tmp <- tempdir()
+tmp <- tempdir(check=TRUE)
 dir.create(file.path(tmp, "test"))
 cat(file=file.path(tmp, "test", "foo.log"), "Hello world!")
 
