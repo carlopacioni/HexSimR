@@ -638,6 +638,7 @@ LHS.scenarios <- function(
 #'   to changed. One file for each row of csv.in
 #' @param verbose Whether report to screen nodes found and changed (default: TRUE)   
 #' @import xml2
+#' @importFrom tcltk tk_choose.dir
 #' @export
 xml.cond.replacement <- function (path.scenarios=NULL,
                                   scenarios="all",
@@ -646,7 +647,7 @@ xml.cond.replacement <- function (path.scenarios=NULL,
                                   verbose=TRUE) {
   #### Setting arguments ####
   txt <- "Please, select the 'Scenarios' folder within the workspace"
-  if(is.null(path.scenarios)) path.scenarios <- choose.dir(caption=txt)
+  if(is.null(path.scenarios)) path.scenarios <- tk_choose.dir(caption=txt)
   suppressWarnings(if(scenarios == "all") 
     scenarios <- list.files(path=path.scenarios, pattern=".xml$", 
                             full.names=FALSE, recursive=FALSE))
