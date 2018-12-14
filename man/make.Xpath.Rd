@@ -16,15 +16,18 @@ make.Xpath(node_path, identifier, attrib, param_node = NA,
 
 \item{param_node}{Whether the parameter is contained in an internal node}
 
+\item{param_identifier}{A character vector if the param has an identifier,
+FALSE otherwise}
+
 \item{is.LHS}{Whether the Xpath being built is for a LHS}
 }
 \value{
 A character vector with the Xpath
 }
 \description{
-This function builds a Xpath to search nodes in HexSim xml files. It is used 
+This function builds a Xpath to search nodes in HexSim xml files. It is used
 internally by hexSimR. When used in the LHS.scenarios function, it constructs
-the path "/.../name[text()='...']" when param_node is not NA, 
+the path "/.../name[text()='...']" when param_node is not NA,
 param_identifier is FALSE and is.LHS is TRUE. Addtional details on arguments
 are in the scenarios.batch.modifier.
 }

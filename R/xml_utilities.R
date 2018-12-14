@@ -1,15 +1,17 @@
 #' Build a Xpath
-#' 
-#' This function builds a Xpath to search nodes in HexSim xml files. It is used 
+#'
+#' This function builds a Xpath to search nodes in HexSim xml files. It is used
 #' internally by hexSimR. When used in the LHS.scenarios function, it constructs
-#' the path "/.../name[text()='...']" when param_node is not NA, 
+#' the path "/.../name[text()='...']" when param_node is not NA,
 #' param_identifier is FALSE and is.LHS is TRUE. Addtional details on arguments
 #' are in the scenarios.batch.modifier.
-#' 
+#'
 #' @param node_path The node_path
 #' @param identifier The identifier of the node
 #' @param attrib Whether the identifier is an attribute
 #' @param param_node Whether the parameter is contained in an internal node
+#' @param param_identifier  A character vector if the param has an identifier,
+#'   FALSE otherwise
 #' @param is.LHS Whether the Xpath being built is for a LHS
 #' @return A character vector with the Xpath
 #' @export
@@ -32,17 +34,19 @@ make.Xpath <- function(node_path, identifier, attrib,
 #----------------------------------------------------------------------------#
 
 #' Check conditions and pass the right arguments to make.Xpath
-#' 
+#'
 #' See scenarios.batch.modifier for addtional details on arguments
-#' 
+#'
 #' @param node_paths A character vector of node_paths
 #' @param Xpaths A empty list of length = length(node_paths)
 #' @param identifiers A character vector of node identifiers
 #' @param attribs A logical vector as to whether the identifiers are attributes
-#' @param param_nodes A character vector if the parameters are contained in 
+#' @param param_nodes A character vector if the parameters are contained in
 #'   internal nodes, NA otherwise
 #' @param param_node_identifiers A character vector if the param_nodes have
 #'   identifiers, FALSE otherwise
+#' @param param_node_attributes Whether the param_node_identifiers is an
+#'   attribute (TRUE) or not (FALSE).
 #' @param param_identifiers A character vector if the params have identifiers
 #'   (it is assumed these are attributes), FALSE otherwise
 #' @param is.LHS A logical vector whether the Xpaths being built are for a LHS

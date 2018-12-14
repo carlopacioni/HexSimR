@@ -17,11 +17,14 @@ make.Xpaths(node_paths, Xpaths, identifiers, attribs, param_nodes = NA,
 
 \item{attribs}{A logical vector as to whether the identifiers are attributes}
 
-\item{param_nodes}{A character vector if the parameters are contained in 
+\item{param_nodes}{A character vector if the parameters are contained in
 internal nodes, NA otherwise}
 
 \item{param_node_identifiers}{A character vector if the param_nodes have
 identifiers, FALSE otherwise}
+
+\item{param_node_attributes}{Whether the param_node_identifiers is an
+attribute (TRUE) or not (FALSE).}
 
 \item{param_identifiers}{A character vector if the params have identifiers
 (it is assumed these are attributes), FALSE otherwise}
