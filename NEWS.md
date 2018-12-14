@@ -1,12 +1,23 @@
 # HexSimR 0.9.0.900
 ## New functionality
 collate.census gains keep.zeros
+collate.census outputs renamed for clarity
+keep.zeros argument is added to a number of functions to make consistent the naming of the inputs/outputs
+Pext include a new statistic and outputs are renamed
+Pext throws an error if number of time steps between replicates are different
+Pval is now exported and available to users
 
-TO-DO ##################################################################
 
 ## Bugs
   *  fixed issues when using start or end arguments in collate.census()
-  TO-DO
+  *  fixed bugs in make.table when not all time steps were logged in HexSim (#5)
+  
+## Additional minor changes
+  *  ensured compatibiilty with next R release 3.6
+  *  modified code in line with data.tbale 1.11.4
+  *  updated the tutorial
+  *  second vignette to introduce new functionalities or arguments
+  *  internal tests were added for collate.census and Pext
   
 # HexSimR 0.4.4.900
 ## New functionality
