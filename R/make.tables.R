@@ -185,12 +185,12 @@
   data <- do.call(cbind, ldat)
   scen_inst <- grep("Scenario", names(data))
   if(length(scen_inst) > 1) {
-    data[, scen_inst[2:length(scen_inst)] := NULL, with=FALSE]
+    data[, scen_inst[2:length(scen_inst)] := NULL]
   }
   
   time_inst <- grep("TimeStep", names(data))
   if(length(time_inst) > 1) {
-    data[, time_inst[2:length(time_inst)] := NULL, with=FALSE]
+    data[, time_inst[2:length(time_inst)] := NULL]
   }
  
   if(save2disk == TRUE) {
