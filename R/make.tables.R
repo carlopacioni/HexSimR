@@ -169,8 +169,10 @@
   
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }
   
   if(is.null(tab.name)) {
     if(SSMD) tab.name <- "SSMD" else tab.name <- "descriptive"

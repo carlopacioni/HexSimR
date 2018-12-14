@@ -44,8 +44,10 @@ compress.logs <- function(path.results=NULL, scenarios="all", delete.log=TRUE,
 
 txt <- "Please, select the 'Results' folder within the workspace"
 if(is.null(path.results)) path.results <- tk_choose.dir(caption=txt)
-suppressWarnings(if(scenarios == "all") 
-  scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+if(length(scenarios) == 1) {
+  if(scenarios == "all") 
+    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+}
 
 l.logs <- list.files(path=file.path(path.results, scenarios), pattern=".log$", 
                      full.names=TRUE, recursive=TRUE)
@@ -116,8 +118,10 @@ decompress.gz <- function(path.results=NULL, scenarios="all", delete.gz=TRUE,
   
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption=txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }
   
   l.gz <- list.files(path=file.path(path.results, scenarios), pattern=".gz$", 
                        full.names=TRUE, recursive=TRUE)

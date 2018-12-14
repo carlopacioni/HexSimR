@@ -175,8 +175,10 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
     }
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }
   
   l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
   nscens <- seq_along(scenarios)
@@ -277,8 +279,10 @@ census.calc <- function(path.results=NULL, ncensus, headers, var.name=NULL,
     stop("Please, pass a character vector to var.name")
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }
   headers <- make.names(headers)
   if(is.null(var.name)) 
     var.name <- paste0(headers, collapse=bin.f)
@@ -340,9 +344,11 @@ SSMD.census <- function(path.results=NULL, scenarios="all", base=NULL, ncensus=0
   if(is.null(base)) stop("Please, provide the name of the base scenario")
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") {
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
-  })
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }
+  
   scenarios <- scenarios[scenarios != base]
   wb_base <- loadWorkbook(file.path(path.results, base, paste(base, ncensus, 
                             if(isFALSE(keep.zeros)) "extant" else "all", "comb", 
@@ -419,9 +425,11 @@ SSMD.move <- function(path.results=NULL, scenarios="all", base=NULL,
   if(is.null(base)) stop("Please, provide the name of the base scenario")
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") {
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
-  })
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }
+  
   scenarios <- scenarios[scenarios != base]
   base.data <- read.data(scenario=base, path.results, sum.move)
    
@@ -643,9 +651,11 @@ SSMD.ranges <- function(path.results=NULL, scenarios="all", base=NULL,
   if(is.null(base)) stop("Please, provide the name of the base scenario")
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") {
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
-  })
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }
+  
   scenarios <- scenarios[scenarios != base]
   wb_base <- loadWorkbook(paste(path.results, base, sum.ranges, sep="/"))
   mean_base <- readWorksheet(wb_base, sheet="means")
@@ -711,8 +721,10 @@ multi.reports <- function(path.results=NULL, scenarios="all", pop.name=NULL,
   if(is.null(pop.name)) stop("Please, provide the name of the population")
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }
   
   rep.names <- lapply(scenarios, file.names, path.results, pop.name)
   if(type == "move") {

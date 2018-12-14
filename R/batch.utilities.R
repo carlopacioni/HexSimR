@@ -35,8 +35,10 @@ w.combine.log.batch <- function(path.results=NULL, scenarios="all", dir.out=NULL
   #----------------------------------------------------------------------------#
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }
   if(is.null(dir.out)) dir.out <- getwd()
   l.coms <- lapply(scenarios, com.scenario, path.results)
    
@@ -97,8 +99,10 @@ report.batch <- function(path.results=NULL, scenarios="all", ranges=TRUE,
   #----------------------------------------------------------------------------#
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  } 
   
   if(ranges == TRUE) w.report.batch(path.results, scenarios, report="ranges", 
                                   suf="-[all].log")

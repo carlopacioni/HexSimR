@@ -89,9 +89,10 @@ multi.clean.genepop <- function(path.results=NULL, scenarios="all",
   if(is.null(pop.name)) stop("Please, provide the name of the population")
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
-  
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }  
   l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
   nscens <- seq_along(scenarios)
   
@@ -152,8 +153,10 @@ w.genepop.batch <- function(path.results=NULL, scenarios="all", time.steps=1,
   #----------------------------------------------------------------------------#
   
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }
   l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
   nscens <- seq_along(scenarios)
   traits <- paste0(traits, collapse="\":\"" )
@@ -250,9 +253,10 @@ multi.gen.dist <- function(path.results=NULL, scenarios="all", pop.name=NULL,
   
   if(is.null(pop.name)) stop("Please, provide the name of the population")
   txt <- "Please, select the 'Results' folder within the workspace"
-  if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }
   
   l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
   nscens <- seq_along(scenarios)
@@ -326,8 +330,10 @@ m.gen.dist <- function(path.results=NULL, scenarios="all", pop.name,
   #----------------------------------------------------------------------------#
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }
   traits <- trait.assembler(traits)
   
   l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)

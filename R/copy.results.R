@@ -63,8 +63,10 @@ copy.results  <-  function(path.results, out=getwd(),
   }
   
   copy.scen.summaries <- function(path.results, out, scenarios) {
-    suppressWarnings(if(scenarios == "all") 
-      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+    if(length(scenarios) == 1) {
+      if(scenarios == "all") 
+        scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+    }
     lapply(scenarios, copy.res, p="*.xlsx$", path.results, out)
   }
   

@@ -97,9 +97,11 @@ census.plot <- function(path.results=NULL, scenarios="all", traits, ncensus=0,
                         ngroups=1, rm.T0=TRUE, keep.zeros="TRUE") {
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") {
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
-  })
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }
+  
   traits <- make.names(traits)
   nscens_group <- ceiling(length(scenarios) / ngroups)
   means <-lapply(scenarios, read.means, path.results, ncensus, keep.zeros=keep.zeros)
@@ -177,8 +179,10 @@ gen.plot <- function(path.results=NULL, scenarios="all", pop.name=NULL,
   
   #----------------------------------------------------------------------------#
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE))
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
+  }
   
   traits <- paste0(traits, collapse="\":\"" )
   

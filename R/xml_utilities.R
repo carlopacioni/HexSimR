@@ -260,9 +260,13 @@ scenarios.batch.modifier <- function(
   #### Setting arguments ####
   txt <- "Please, select the 'Scenarios' folder within the workspace"
   if(is.null(path.scenarios)) path.scenarios <- tk_choose.dir(caption=txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.files(path=path.scenarios, pattern=".xml$", 
-                            full.names=FALSE, recursive=FALSE))
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.files(path=path.scenarios, pattern=".xml$", 
+                              full.names=FALSE, recursive=FALSE)
+  }
+  
+  
   if(!is.null(xml.template)){
     scenarios <- scenarios[!scenarios %in% xml.template]
   }
@@ -398,9 +402,12 @@ workspace.path.modifier <- function(
   new.grid.path) {
   txt <- "Please, select the 'Scenarios' folder within the workspace"
   if(is.null(path.scenarios)) path.scenarios <- tk_choose.dir(caption=txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.files(path=path.scenarios, pattern=".xml$", 
-                            full.names=FALSE, recursive=FALSE))
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.files(path=path.scenarios, pattern=".xml$", 
+                              full.names=FALSE, recursive=FALSE)
+  }
+    
   for(scenario in scenarios) {
     xml_scenario <- read_xml(file.path(path.scenarios, scenario))
     workspace <- xml_find_all(xml_scenario, "/scenario/workspace")
@@ -648,9 +655,12 @@ xml.cond.replacement <- function (path.scenarios=NULL,
   #### Setting arguments ####
   txt <- "Please, select the 'Scenarios' folder within the workspace"
   if(is.null(path.scenarios)) path.scenarios <- tk_choose.dir(caption=txt)
-  suppressWarnings(if(scenarios == "all") 
-    scenarios <- list.files(path=path.scenarios, pattern=".xml$", 
-                            full.names=FALSE, recursive=FALSE))
+  if(length(scenarios) == 1) {
+    if(scenarios == "all") 
+      scenarios <- list.files(path=path.scenarios, pattern=".xml$", 
+                              full.names=FALSE, recursive=FALSE)
+  }
+  
   csv_file <- read.csv(file=file.path(path.scenarios, csv.in), 
                        stringsAsFactors=FALSE)
   
