@@ -490,6 +490,7 @@ workspace.path.modifier <- function(
 #' @import xml2
 #' @importFrom lhs randomLHS
 #' @importFrom stats qbeta qbinom qlnorm qnorm qunif
+#' @importFrom tcltk tk_choose.dir
 #' @export
 #' @examples 
 #' # Locate the template file
@@ -536,7 +537,7 @@ LHS.scenarios <- function(
   
   #### Setting arguments ####
   txt <- "Please, select the 'Scenarios' folder within the workspace"
-  if(is.null(path.scenarios)) path.scenarios <- choose.dir(caption=txt)
+  if(is.null(path.scenarios)) path.scenarios <- tk_choose.dir(caption=txt)
   
   csv_file <- read.csv(file=file.path(path.scenarios, csv.in), 
                        stringsAsFactors=FALSE)
