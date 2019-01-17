@@ -19,40 +19,40 @@ knitr::opts_chunk$set(
 ```
 
 # Introduction
-This second tutorial introduces a few new functionalities that have been implemented in HexSimR >= 0.3.3. Most of these functionalities aim to facilitate scenario creation and manipulation. If you only have to make a few one-off changes in the scenario(s) that you have created, it is probably easier to just manually do those, but if you are planning to generate a large number of scenarios from a template scenario where you modify some parameters, or you realised that you set up things wrong and want to apply the same change to a (relatively) large number of scenarios, then you may find useful to use HexSimR to speed up and automate this process. HexSim stores the scenario settings in a xml (eXtensible Markup Language) file, so, unless specified, the functions presented here actually modify these files and some basic understanding of the xml formatting is required. The good thing about xml is that it is quite straight forward and intuitive, so you'll see that getting a good handle of it won't require much effort. 
+This second tutorial introduces a few new functionalities that have been implemented in HexSimR >= 0.3.3. Most of these functionalities aim to facilitate scenario creation and manipulation. If you only have to make a few one-off changes in the scenario(s) that you have created, it is probably easier to just manually do those, but if you are planning to generate a large number of scenarios from a template scenario where you modify some parameters, or you realised that you set things up wrong and want to apply the same change to a (relatively) large number of scenarios, then you may find it useful to use HexSimR to speed up and automate this process. HexSim stores the scenario settings in a xml (eXtensible Markup Language) file, so, unless specified, the functions presented here actually modify these files and some basic understanding of the xml formatting is required. The good thing about xml is that it is quite straight forward and intuitive, so you'll see that getting a good handle of it won't require much effort. 
 
 
 ## Xml file structure
-There are fantastic and free tutorials available in internet nowadays that describe in details xml formatting. In this short section I only aim to point out the critical elements that are needed to correctly execute HemSimR's xml utility functions.
+There are fantastic and free tutorials available on the internet nowadays that describe xml formatting in details. In this short section I aim to only point out the critical elements that are needed to correctly execute HemSimR's xml utility functions.
 
 The easiest way to understand how HexSim codes the simulation settings is to open a scenario file and have a look at its structure. Using a source code editor like [Notepad++](https://notepad-plus-plus.org/) (that colour-codes different elements of the 
  text based on the language used) can help to better visualise the structure. 
  
- The core element in a xml file is a node. A node is opened by wrapping its name with the simbols **<** and **>**. For example: **<MyNode>**. A node is then closed with a forward slash in front of its name: **</MyNode>**. Sometimes, it can be opened and closed in one go, like this: **<MyNode   />**. We call *attribute* elements of the node that define its parameters' values and are defined by some text followed by the "**=**" symbols. For example:
+ The core element in a xml file is a node. A node is opened by wrapping its name with the symbols **<** and **>**. For example: **\<MyNode>**. A node is then closed with a forward slash in front of its name: **\</MyNode>**. Sometimes, it can be opened and closed in one go, like this: **\<MyNode   />**. We call *attribute* elements of the node that define its parameters' values and are defined by some text followed by the "**=**" symbols. For example:
  
     <MyNode myAttribute="a value"/> 
     
-Node can have a hierarchical structure, meaning that some are nested into others. These are sometimes called child nodes.
+Nodes can have a hierarchical structure, meaning that some are nested into others. These are sometimes called child nodes.
 
     <MyNode>
       <myChildNode/>
     </MyNode> 
     
-Lastly, node can have *element values*, which can be text or numbers and are contained between the node's opening and closing, like this:
+Lastly, nodes can have *element values*, which can be text or numbers and are contained between the node's opening and closing, like this:
 
     <MyNode> "This is a text element" </MyNode>
     
 
-Scenarios settings and parameters in HexSim are set by a node in 
+Scenario settings and parameters in HexSim are set by a node in 
  the xml file. Some nodes have a unique identifier, which can be an attribute 
  (generally **name="attribute_value"**), or a text element value (e.g. 
- **<name> node_name </name>**). To this end, in this tutorial, identifiers are considered 
- elements that make the node unique. For example, accumulate events have all 
+ **\<name> node_name \</name>**). To this end, in this tutorial, identifiers are considered 
+ elements that make the node unique. For example, accumulate events all have 
  the same structure, but they can be identified by the value given to the node
- **<name>**. From a practical point of view, the easiest way to identify what nodes are modified when some changes are applied to a scenario is to create a reference scenario, then manually modify the events/parameters and save it with a different name. If you then compare 
+ **\<name>**. From a practical point of view, the easiest way to identify which nodes are modified when some changes are applied to a scenario is to create a reference scenario, then manually modify the events/parameters and save it with a different name. If you then compare 
  the two xml files using, for example, the plug-in "compare" in Notepad++, or the program [Winmerge](http://winmerge.org/) (on Windows), the lines that are different between the two files will be highlighted and it should be straightforward to identify the relevant nodes.
 
-```{r, echo=FALSE, fig.cap="__Figure 1.__ An example of a comparison between two xml files in Notepd++ where the modified lines (the text element in this case) is highlight."}
+```{r, echo=FALSE, fig.cap="__Figure 1.__ An example of a comparison between two xml files in Notepad++ where the modified lines (the text element in this case) is highlighted."}
 knitr::include_graphics("CompareXml2.tif")
 ```
 
@@ -63,7 +63,7 @@ We will now step through a few examples of these new functions. HexSimR >= 0.3.3
 ```{r}
 testFolder <- tempdir(check = TRUE)
 ```
-We will be using this directory to run the examples. If you are replicating this tutorial on your machine, it may be a good idea to browse to this temporary directory to see what changes while we go through the examples. Just type `testFolder` to see the path where the temp directory is.
+We will be using this directory to run the examples. If you are replicating this tutorial on your machine, it may be a good idea to browse to this temporary directory to see what changes while we go through the examples. Just type `testFolder` to see the path where the temporary directory is.
 ```{r}
 testFolder
 ```
@@ -71,11 +71,11 @@ testFolder
 
 # Batch modification of scenarios
  
- If several scenarios have been developed in HexSim and later the user 
+ If several scenarios have been developed in HexSim and the user later 
  realises that there are modifications that need to be applied to several
  or all of them, this function can help automate this task. It involves 
  generating a scenario with the correct/new events and parameters. This 
- scenario is used then as template and the nodes that need to be added, 
+ scenario is then used as a template and the nodes that need to be added, 
  replaced or deleted are identified (mapped) using a .csv file. Some setting up is required 
  and it may not be worthwhile to use this function for a handful of scenarios. 
  
@@ -101,7 +101,7 @@ csv <- read.csv(csv.in)
 knitr::kable(csv)
 ```
  
- In this instance, I had decided that I wanted to add two census event to count the individuals (dingoes in this specific example) that were in different sections of the landscape. This would require not only the creation of a census event (e.g. _/scenario/event/censusEvent_), but also the machinery needed behind the scene: a trait to codify the individuals' positions (e.g. _/scenario/population/traits/accumulatedTrait_), an accumulator to count the individuals in each section of the landscape (e.g. _/scenario/population/accumulators/accumulator_), an event to update the accumulator (e.g. _/scenario/event/accumulateEvent/_) and the map to provide the spatial data to identify the various landscape sections (e.g. _/scenario/spatialDataSeries_). Because I was monitoring two different spatial approaches (what is indentified as _ThreeCells_ and _EightCells_ in the table), the whole process needed to be repeated twice. At the time I had >20 scenarios that I wanted to apply these modifications to, a very long process if I were to carry it out manually...
+ In this instance, I had decided that I wanted to add two census events to count the individuals (dingoes in this specific example) that were in different sections of the landscape. This would require not only the creation of a census event (e.g. _/scenario/event/censusEvent_), but also the machinery needed behind the scenes: a trait to codify the individuals' positions (e.g. _/scenario/population/traits/accumulatedTrait_), an accumulator to count the individuals in each section of the landscape (e.g. _/scenario/population/accumulators/accumulator_), an event to update the accumulator (e.g. _/scenario/event/accumulateEvent/_) and the map to provide the spatial data to identify the various landscape sections (e.g. _/scenario/spatialDataSeries_). Because I was monitoring two different spatial approaches (what is indentified as _ThreeCells_ and _EightCells_ in the table), the whole process needed to be repeated twice. At the time I had >20 scenarios that I wanted to apply these modifications to, a very long process if I were to carry it out manually...
  
  Let's step through the various elements of the table above so that you will be able to build your own if needed. The column with heading **nodes** is the path to the node to be searched 
  in `xml.template`, which is the template file (that is, the file that contains the new nodes/parameter values), except when the **mode** is `"delete"`, in 
@@ -120,15 +120,15 @@ knitr::kable(csv)
  
  **mode** indicates the type of action that needs to be performed. Possible 
  options are "**add**", "**before**", "**after**", "**replace**" or "**delete**". If `"add"` the 
- node is added as last child of the parent node. If the node needs to be added
+ node is added as the last child of the parent node. If the node needs to be added
  in a specific position (events generally do), `"before"` or `"after"` should be 
- used to indicate the position respect to the **ref** node (i.e. whether 
+ used to indicate the position in relation to the **ref** node (i.e. whether 
  the new node goes *before* or *after* the node **ref**. Note that the 
  **ref** node is searched in the `scenarios`" file(s), not the 
- `xml.template` (pay attention here: `xml.template` is the file that contains the new nodes/parameter values that it is used as template for the correct simulation settings. The `scenarios` file(s) are the ones that are modified). If the option `"delete"` is used, the node is searched and
+ `xml.template` (pay attention here: `xml.template` is the file that contains the new nodes/parameter values that are used as template for the correct simulation settings. The `scenarios` file(s) are the ones that are modified). If the option `"delete"` is used, the node is searched and
  deleted from the `scenarios` file. When `"replace"` is used, the **ref** node 
  must be provided, even when the node is the same. This is because there might
- be situations where what is being changed is the name of the node. In 
+ be situations where the name of the node is being changed. In 
  these cases, `scenarios.batch.modifier` would not find the original node
  in the `scenarios` file.
  
@@ -140,7 +140,7 @@ knitr::kable(csv)
  meaning as **identifier** and **attribute**, but they refer to the 
  **ref** node. Use `FALSE` when these are not relevant.
  
- An example of how to appply this funstion is:
+ An example of how to appply this function is:
  
 ```{r} 
 XMLTest <- scenarios.batch.modifier(
@@ -150,7 +150,7 @@ XMLTest <- scenarios.batch.modifier(
     csv.in="test_csv.csv")
 ```
 
- When you excecute `scenarios.batch.modifier`, a back up of the folder `path.scenarios` is copied in the folder "*Scenarios_bkup*", one level up from `path.scenarios`. You can use the backed up file to verify that the changes have been applied and identify the differences. You will see that a banch of accumulators and events and their relative spatial data have been added. 
+ When you excecute `scenarios.batch.modifier`, a back up of the folder `path.scenarios` is copied in the folder "*Scenarios_bkup*", one level up from `path.scenarios`. You can use the backed up file to verify that the changes have been applied and identify the differences. You will see that a bunch of accumulators and events and their relative spatial data have been added. 
  
            
  If `scenarios="all"` is used (default), all scenarios in `path.scenarios` are processed (wihth the exclusion of `xml.template`), otherwise it is possible to select a subset of scenarios using a character vector, e.g.
@@ -172,9 +172,9 @@ XMLTest <- scenarios.batch.modifier(
 
 
  The function `LHS.scenarios` is used to generate scenarios whose parameter combinations 
- follow a Latin Hypercupe Sampling design. In a nushell, what we want to achieve is to consider a range of values for a number of parameters (e.g. survival rates) and randomnly sample those parameters within the established range to evaluate whether the results change. A Latin Hypercupe Sampling (LHS) design is a sort of stratified random design that ensure that all the parameter combinations are considered. If enough samples are taken in a (generic) random sampling, there is probably no need to use a LHS, but it can help when fewer samples are taken. In my opinion, because using LHS can only improve inference compared to (generic) random sampling, or make no difference, I don't see a reason why it shouldn't be used.
+ follow a Latin Hypercube Sampling design. In a nushell, what we want to achieve is to consider a range of values for a number of parameters (e.g. survival rates) and randomly sample those parameters within the established range to evaluate whether the results change. A Latin Hypercube Sampling (LHS) design is a sort of stratified random design that ensures that all the parameter combinations are considered. If enough samples are taken in a (generic) random sampling, there is probably no need to use a LHS, but it can help when fewer samples are taken. In my opinion, because using LHS can only improve inference compared to (generic) random sampling, or make no difference, I don't see a reason why it shouldn't be used.
  
-Setting manually scenarios with different paramter values, becomes quickly annoying. For example, in the simple case where you want to test two parameters, each with 5 categorical values, you'll have to set up 25 scenarios... using `LHS.scenarios`, you can automate this process.
+Manually setting scenarios with different parameter values, becomes quickly annoying. For example, in the simple case where you want to test two parameters, each with 5 categorical values, you'll have to set up 25 scenarios... using `LHS.scenarios`, you can automate this process.
 
 Parameter values can be drawn from normal, lognormal, binomial, beta or uniform distributions or have a set of fixed values. You have to have a template scenario that constitutes the backbone of your simulation framework (identified with the argument `xml.template`).
  
@@ -196,15 +196,15 @@ knitr::kable(csv)
 ```
  
  
-On thing you may have noticed is that we are changing the values of a *spatialDataSeries*. In other words, we are changing the spatial data (e.g. a map) of the simulations. It is important to undestand that we are only changing the text string in the scenario file that indicates to HexSim where to find the spatial data. If the new value used doesn't exist (in our examples, if there is no HexMap "Shooting_5" and "Shooting_5_10") in the "project/Spatial Data/Hexagons"  directory of the HexSim's project, HexSim won't be able to locate the spatial data and will stop throwing an error. The other thing that it is important to consider is that there might be events that depend on that spatial data, and there might be events' parameters that might change depending on the spatial data loaded for that scenario with *spatialDataSeries*, so these have to match. We get back to this later on (see "Conditional replacement of xml elements") to find out how we can quickly cater for this situation. Last hint before moving on: if your xml modification also require the creations of lots of maps, the function `make.map` can help to automate this step too (if some conditions are met, see below).
+One thing you may have noticed is that we are changing the values of a *spatialDataSeries*. In other words, we are changing the spatial data (e.g. a map) of the simulations. It is important to undestand that we are only changing the text string in the scenario file that indicates to HexSim where to find the spatial data. If the new value used doesn't exist (in our examples, if there is no HexMap "Shooting_5" and "Shooting_5_10") in the "project/Spatial Data/Hexagons"  directory of the HexSim's project, HexSim won't be able to locate the spatial data and will stop, throwing an error. The other thing that it is important to consider is that there might be events that depend on that spatial data, and there might be events' parameters that might change depending on the spatial data loaded for that scenario with *spatialDataSeries*, so these have to match. We get back to this later on (see "Conditional replacement of xml elements") to find out how we can quickly cater for this situation. Last hint before moving on: if your xml modification also require the creations of lots of maps, the function `make.map` can help to automate this step too (if some conditions are met, see below).
  
- There might be situation where the parameter values to be changed are in an 
- internal node respect to the node identifier. In order to identify uniquely
+ There might be situations where the parameter values to be changed are in an 
+ internal node respective to the node identifier. In order to uniquely identify
  this parameter, the identifier of the parameter's node needs to be indicated. 
  This is best explained with an example. An *accumulateTrait* is identified by 
- the name attribute (i.e. **<accumulateTrait name="XXX">**), however the parameter
- values are contained in the **<value>** node within the *accumulateTrait*. The node
- **<value>** is itself identified by a name attribute, but the parameters are 
+ the name attribute (i.e. **\<accumulateTrait name="XXX">**), however the parameter
+ values are contained in the **\<value>** node within the *accumulateTrait*. The node
+ **\<value>** is itself identified by a name attribute, but the parameters are 
  stored under a **threshold** attribute. 
  
     <accumulatedTrait name="BaitRates" accumulator="BaitRate">
@@ -215,26 +215,26 @@ On thing you may have noticed is that we are changing the values of a *spatialDa
       </accumulatedTrait>
   
 
-A search for the node *accumulateTrait* with the attribute *name="BaitRates"* would return three child nodes. To avoid multiple hit, **nodes**, **identifier** and **attribute** are used to identify uniquely the 
+A search for the node *accumulateTrait* with the attribute *name="BaitRates"* would return three child nodes. To avoid multiple hits, **nodes**, **identifier** and **attribute** are used to uniquely identify the 
  parent node where the parameter is contained (i.e. the node *accumulateTrait* with the attribute *name="BaitRates"*). 
  
  **param_node**,	**param_node_identifier**, and 
- **param_node_attribute** (in this case, for example: */value/name* and *"Bait3km"*, respectively) are used to identify the node where the parameter values are contained (if not necessary, use `NA` for **param_node** and `FALSE` for the others columns), and **param_identifier** (here: *threshold*) is used 
+ **param_node_attribute** (in this case, for example: */value/name* and *"Bait3km"*, respectively) are used to identify the node where the parameter values are contained (if not necessary, use `NA` for **param_node** and `FALSE` for the other columns), and **param_identifier** (here: *threshold*) is used 
  to identify the actual parameter values that need to be changed, when this is
  stored as an attribute. Use `FALSE` when the latter is not relevant (e.g. if 
  the node identifier is the parameter that needs to be changed).
  
- **type** refers to the type of parameter. It can take exactly one of the 
+ **type** refers to the type of parameter. It can take one of the 
  following: `"integer"`, `"numeric"` or `"character"`. **value** refers to the 
  parameters of the distribution from which values are drawn (separated by a 
  comma) if one is used: mean and sd for normal, meanlog and sdlog for 
- lognormal, shape1 and shape2 for beta, prob for binomial and min and max for 
+ lognormal, shape1 and shape2 for beta, prob for binomial, and min and max for 
  uniform, otherwise a collection of values if **distribution** --> **fixed**. 
  When **distribution** --> **fixed** or **type** --> **character** the elements in 
  **value** have equal probability to be selected.
  
  **param_name** is the name of the parameter that is being changed. These 
- are used as labels (headers) in the hypercube matrix that it is saved to disk
+ are used as labels (headers) in the hypercube matrix that is saved to disk
  and returned as an object from the function.
  
  An example of how to use this function follows:
@@ -267,7 +267,7 @@ The function returns a list and saves a few files depending on the user's choice
  When `generate=TRUE`, the second element of the list returned contains 
  the nodes found in the template. It is probably a good idea to scan through 
  these to check whether these were the expected ones and most importantly that
- none is empty! If the latter, something went wrong in ID the nodes!
+ none are empty! If the latter, something went wrong in identifying the nodes!
 
 
 # Conditional replacement of xml elements
@@ -329,9 +329,9 @@ xml.cond.replacement(path.scenarios = testFolder,
 The functions presented above can be very useful to speed up the creation/modification of a large number of scenarios. However, they do not deal with the spatial data, which are an important component of HexSim models. To (partially) automate the map creation/manipulation, since HexSimR v 0.4.4, there are a couple of functions that help with these tasks.
 
 ## make.map
-This function searches for a value in a map and replaces it with `new.values`. This function works with .csv files and assumes that the user has a template map to use, so some intermediate steps are still required. To put this in context, consider the following example. Assume you have a fenced area (cell) and you want to test different size of your cell (say, five possible sizes) and you also want to simulate eight different carrying capacity values (K), which is usually set in HexSim indirectly with the resource map. If you want to test all the K values for each of the cell size (that is, 40 possible combinations), one way you could quickly set this up is by creating a template file for each cell size with one K value and then generate one map for each additional K values from this template using `make.map`. Once you have generated your template files, you can save them as .csv from HexSim (selecting *Display Spatial Data* --> *Display HexMap* from HexSim menu and then *File* --> *Save as* --> *CSV file*). In the example files distributed with HexSimR there is a zipped file with a few examples of such files. In each of these files, the hexagon with value=40 was used to set the resource value of the hexagons inside the cell, while the surrounding were set to 48. In the example below we will modify the resource values for the cell's hexagons according to a sequence of values starting with 16 and increasing in steps of 8. Since each of these modification will be saved in a different file, will also use the argument `sufs` to append a suffix to the file name (which is instead passsed with `file.name`) so that it is clearer what each file is. **Note** that if `length(new.values) > 1`, you **must** use the `sufs` argument, otherwise all the file will have the same name and will be overwritten over and over again.
+This function searches for a value in a map and replaces it with `new.values`. This function works with .csv files and assumes that the user has a template map to use, so some intermediate steps are still required. To put this in context, consider the following example. Assume you have a fenced area (cell) and you want to test different sizes of your cell (say, five possible sizes) and you also want to simulate eight different carrying capacity values (K), which are usually set in HexSim indirectly with the resource map. If you want to test all the K values for each of the cell sizes (that is, 40 possible combinations), one way you could quickly set this up is by creating a template file for each cell size with one K value and then generate one map for each additional K value from this template using `make.map`. Once you have generated your template files, you can save them as .csv from HexSim (selecting *Display Spatial Data* --> *Display HexMap* from HexSim menu and then *File* --> *Save as* --> *CSV file*). In the example files distributed with HexSimR there is a zipped file with a few examples of such files. In each of these files, the hexagon with value=40 was used to set the resource value of the hexagons inside the cell, while the surrounding were set to 48. In the example below we will modify the resource values for the cell's hexagons according to a sequence of values starting with 16 and increasing in incfrements of 8. Since each of these modifications will be saved in a different file, we will also use the argument `sufs` to append a suffix to the file name (which is instead passsed with `file.name`) so that it is clearer what each file is. **Note** that if `length(new.values) > 1`, you **must** use the `sufs` argument, otherwise all the files will have the same name and will be overwritten over and over again.
 
-Once the new .csv file have been created these can be imported in the model using HexSim machinery. The function `w.csvmap.batch` writes a .csv map batch file that can be run with the command prompt (where *HexMapConverter.exe* is, which is distributed with HexSim, see HexSim's manual).
+Once the new .csv files have been created, these can be imported in the model using HexSim machinery. The function `w.csvmap.batch` writes a .csv map batch file that can be run with the command prompt (where *HexMapConverter.exe* is, which is distributed with HexSim, see HexSim's manual).
 
 
 
