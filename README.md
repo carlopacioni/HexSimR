@@ -13,30 +13,30 @@ If you are on Windows and have not used `devtools` before, then you have to down
 ```
 install.packages("devtools")
 ```
-
-**NOTE (August 2016)**
-At the time of writing, the current official release of devtools (1.12.0) has an issue with R 3.3.1 on windows, which results in the dependencies of the package not being installed. This problem is resolved in the dev version. If you have problems installing `HexSimR` try the following (from devtools manual for the function `build_github_devtools`):
-
+If you want to access the package tutorials, you can use the option:
 ```
-# Install devtools from CRAN if you haven't already
-install.packages("devtools")
-
-library(devtools)
-build_github_devtools()
-
-#### Restart R before continuing ####
-install.packages("./devtools.zip", repos = NULL)
-
-# Remove the package after installation
-unlink("./devtools.zip")
-
-library(devtools)
-install_github("carlopacioni/HexSimR")
-
+install_github("carlopacioni/HexSimR",  build_vignettes=TRUE)
 ```
+but this requires some setting up. If this fails and you don't know what you should do to fix, then try to install from the binary version. To do this, download the binary version from [github](https://github.com/carlopacioni/HexSimR/releases) (either the zip or tar.gz files) and, assuming the downloaded package is in the working directory, run:
+```
+install.packages("./HexSimR-X.X.X.zip", repos = NULL)
+```
+where X.X.X is the version number. 
+
+You should be able to access to see the available topics with:
+```
+vignette(package="HexSimR")
+```
+And open the vignette with:
+```
+vignette("name", package="HexSimR")
+```
+where "name" is the name of the vignette you want to open.
+
 
 ## Documentation
 Use `help(package = "HexSimR")` to see the documentations available. For help on specific functions use `?function_name`, where function_name is the name of the function you are seeking information for.
+
 
 The [manual](https://www.researchgate.net/publication/306884751_HexSimR_manual?ev=prf_pub) and a short [tutorial](https://www.researchgate.net/publication/306911593_HexSimR_tutorial) can also be downloaded as PDF.
 
