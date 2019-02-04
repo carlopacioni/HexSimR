@@ -47,28 +47,28 @@
 #' @inheritParams SSMD.census
 #' @inheritParams census.calc
 #' @seealso \code{\link{collate.census}}
-#' @return A list with four elements: \itemize{ \item $means.Pext.time.step: A
+#' @return A list with four elements: \itemize{ \item means.Pext.time.step: A
 #'   \code{data.frame} (\code{data.table}) with the mean probability of
-#'   extinction for each time step, for each scenario \item $sds.Pext.time.step:
+#'   extinction for each time step, for each scenario \item sds.Pext.time.step:
 #'   A \code{data.frame} (\code{data.table}) with the standard deviation of the
 #'   probability of extinction for each time step, for each scenario \item
-#'   $cumul.Pext.means: A \code{data.frame} (\code{data.table}) with the mean
+#'   cumul.Pext.means: A \code{data.frame} (\code{data.table}) with the mean
 #'   cumulative probability of extinction from the Time Step \code{start} to
-#'   \code{end}, for each scenario \item $cumul.Pext.sds: A \code{data.frame}
+#'   \code{end}, for each scenario \item cumul.Pext.sds: A \code{data.frame}
 #'   (\code{data.table}) with standard deviation of the cumulative probability
 #'   of extinction from the Time Step \code{start} to \code{end}, for each
-#'   scenario  \item $means.time.step.Pext: A \code{data.frame}
+#'   scenario  \item means.time.step.Pext: A \code{data.frame}
 #'   (\code{data.table}) with the mean probability of extinction across all time
-#'   steps, for each scenario \item $sds.time.step.Pext: A \code{data.frame}
+#'   steps, for each scenario \item sds.time.step.Pext: A \code{data.frame}
 #'   (\code{data.table}) with the standard deviation of the probability of
 #'   extinction across all time steps, for each scenario}
 #'
 #'   These results are also saved to disk in two xls files: \itemize{ \item
-#'   $Pext/time.step_census:  The mean and standard deviation for each Time Step
-#'   (in two separate tabs) \item $Cumulative_Pext_census:  the mean and
+#'   Pext/time.step_census:  The mean and standard deviation for each Time Step
+#'   (in two separate tabs) \item Cumulative_Pext_census:  the mean and
 #'   standard deviation of the cumulative probability of extinction for the
 #'   selected time step interval (in two separate tabs) \item
-#'   $Pext.time.step_census: The mean and standard deviation of the time step
+#'   Pext.time.step_census: The mean and standard deviation of the time step
 #'   probability of extinction across all time steps within the selected
 #'   interval (in two separate tabs) } The results for the SSMD comparisons are
 #'   saved in the file starting with "SSMD_Cumul_Pext_census" or

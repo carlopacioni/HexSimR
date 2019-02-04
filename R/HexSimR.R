@@ -502,18 +502,18 @@ move <- function(rep.move=NULL) {
 #' @param end The last time step to be included
 #' @return A list with three elements:
 #'   \itemize{ 
-#'       \item $descriptive: A \code{data.frame} (\code{data.table}) with the 
+#'       \item descriptive: A \code{data.frame} (\code{data.table}) with the 
 #'              summary statistics with mean for each time step, for each event
-#'        \item $means: A \code{data.frame} (\code{data.table}) with the mean 
+#'        \item means: A \code{data.frame} (\code{data.table}) with the mean 
 #'              across the selected time steps
-#'        \item $sds: A \code{data.frame} (\code{data.table}) with the standard 
+#'        \item sds: A \code{data.frame} (\code{data.table}) with the standard 
 #'              deviation across the selected time steps      
 #'          }
 #'    These results are also saved to disk in two files:
 #'    \itemize{ 
-#'       \item $descriptive_ranges.csv:  The summary statistics for each time 
+#'       \item descriptive_ranges.csv:  The summary statistics for each time 
 #'               step, for each event     
-#'        \item $summary_ranges.xlsx:  the mean and standard deviation across 
+#'        \item summary_ranges.xlsx:  the mean and standard deviation across 
 #'               the selected time steps (in two separate tabs)
 #'            }
 #'              
