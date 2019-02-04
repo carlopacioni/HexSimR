@@ -144,7 +144,7 @@ Pext <- function(data=NULL, path.results, rda.in="collated.census.rda",
   sd.time.step.Pext <- list()
   
   for (scenario in scenarios) {
-    census <- data[[scenario]][[ncensus + 1]]
+    census <- data[[scenario]][[grep(paste0("\\.", ncensus, "$"), names(data[[scenario]]))]]
     if(start == "min") {
       if(census[, min(Time.Step)] == 0) {
         s_start <- 1
