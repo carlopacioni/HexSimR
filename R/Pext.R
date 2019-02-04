@@ -99,9 +99,9 @@ Pext <- function(data=NULL, path.results, rda.in="collated.census.rda",
   
   apply.ssmd <- function(means, sds, base, headers) {
     setkey(means, Scenario)
-    mbase <- means[base, (headers), with=FALSE]
+    mbase <- means[base, get(headers)]
     setkey(sds, Scenario)
-    sdbase <- sds[base, (headers), with=FALSE]
+    sdbase <- sds[base, get(headers)]
     
     mdata <- means[!base, (headers), with=FALSE]
     sddata <- sds[!base, (headers), with=FALSE]
