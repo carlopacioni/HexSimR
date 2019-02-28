@@ -2,7 +2,7 @@ Package: HexSimR
 Type: Package
 Title: an R package for post HexSim simulation analysis
 Version: 0.9.0.900
-Date: 07-Dec-2018
+Date: `r Sys.Date()`
 Authors@R: as.person(c(
   "Carlo Pacioni <c.pacioni@murdoch.edu.au> [aut, cre]",
   "Jason Bryer [ctb]"))
