@@ -366,7 +366,7 @@ scenarios.batch.modifier <- function(
             }
             
             if(grepl(pattern = "Event", x = xml_path(nodes[[i]]))) {
-              # nodes[[i]] <- xml_parent(nodes[[i]]) 
+               nodes[[i]] <- xml_parent(nodes[[i]]) 
             }
             xml_remove(nodes[[i]])
           } else {
