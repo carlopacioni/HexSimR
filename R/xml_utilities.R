@@ -301,7 +301,7 @@ scenarios.batch.modifier <- function(
         stop(paste("Can't find the node path:", 
                    Xpaths[i], "in the file", xml.template))
       
-      if(grepl(pattern = "Event", x = xml_path(nodes[[i]]))) {
+      if(sum(grepl(pattern = "Event", x = xml_path(nodes[[i]])))) {
         nodes[[i]] <- xml_parent(nodes[[i]]) 
       }
     } 
@@ -341,7 +341,7 @@ scenarios.batch.modifier <- function(
           if(length(ref_nodes[[i]]) == 0) 
             stop(paste("Can't find the node path:", 
                        ref_Xpaths[i], "in the file", scenario))
-          if(grepl(pattern = "Event", x = xml_path(ref_nodes[[i]]))) {
+          if(sum(grepl(pattern = "Event", x = xml_path(ref_nodes[[i]])))) {
             ref_nodes[[i]] <- xml_parent(ref_nodes[[i]]) 
           }
           if(length(ref_nodes[[i]]) > 1) {
@@ -365,7 +365,7 @@ scenarios.batch.modifier <- function(
                 Xpaths[i], "in the file", scenario))
             }
             
-            if(grepl(pattern = "Event", x = xml_path(nodes[[i]]))) {
+            if(sum(grepl(pattern = "Event", x = xml_path(nodes[[i]])))) {
                nodes[[i]] <- xml_parent(nodes[[i]]) 
             }
             xml_remove(nodes[[i]])
