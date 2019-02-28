@@ -47,30 +47,50 @@
 #' @inheritParams SSMD.census
 #' @inheritParams census.calc
 #' @seealso \code{\link{collate.census}}
-#' @return A list with four elements: \itemize{ \item means.Pext.time.step: A
+#' @return A list with seven elements: \itemize{ 
+#' 
+#'   \item means.Pext.time.step: A
 #'   \code{data.frame} (\code{data.table}) with the mean probability of
-#'   extinction for each time step, for each scenario \item sds.Pext.time.step:
+#'   extinction for each time step, for each scenario 
+#'   
+#'   \item sds.Pext.time.step:
 #'   A \code{data.frame} (\code{data.table}) with the standard deviation of the
-#'   probability of extinction for each time step, for each scenario \item
-#'   cumul.Pext.means: A \code{data.frame} (\code{data.table}) with the mean
+#'   probability of extinction for each time step, for each scenario 
+#'   
+#'   \item cumul.Pext.means: A \code{data.frame} (\code{data.table}) with the mean
 #'   cumulative probability of extinction from the Time Step \code{start} to
-#'   \code{end}, for each scenario \item cumul.Pext.sds: A \code{data.frame}
+#'   \code{end}, for each scenario 
+#'   
+#'   \item cumul.Pext.sds: A \code{data.frame}
 #'   (\code{data.table}) with standard deviation of the cumulative probability
 #'   of extinction from the Time Step \code{start} to \code{end}, for each
-#'   scenario  \item means.time.step.Pext: A \code{data.frame}
+#'   scenario  
+#'   
+#'   \item means.time.step.Pext: A \code{data.frame}
 #'   (\code{data.table}) with the mean probability of extinction across all time
-#'   steps, for each scenario \item sds.time.step.Pext: A \code{data.frame}
+#'   steps, for each scenario 
+#'   
+#'   \item sds.time.step.Pext: A \code{data.frame}
 #'   (\code{data.table}) with the standard deviation of the probability of
-#'   extinction across all time steps, for each scenario}
+#'   extinction across all time steps, for each scenario
+#'   
+#'   \item time.step.Pext: A \code{data.frame}
+#'   (\code{data.table}) with the raw data (i.e. all replicates, befoe subsetting 
+#'   the data for the time interval selected) where the columns are a logical answering
+#'   the question whether the population was extinct}
 #'
-#'   These results are also saved to disk in two xls files: \itemize{ \item
-#'   Pext/time.step_census:  The mean and standard deviation for each Time Step
-#'   (in two separate tabs) \item Cumulative_Pext_census:  the mean and
+#'   These results are also saved to disk in two xls files: \itemize{ 
+#'   \item Pext.time.step_census*:  The mean and standard deviation for each 
+#'   Time Step (in two separate tabs) 
+#'   \item Cumulative_Pext_census*:  the mean and
 #'   standard deviation of the cumulative probability of extinction for the
-#'   selected time step interval (in two separate tabs) \item
-#'   Pext.time.step_census: The mean and standard deviation of the time step
+#'   selected time step interval (in two separate tabs) 
+#'   \item Time_step_Pext_census: The mean and standard deviation of the time step
 #'   probability of extinction across all time steps within the selected
-#'   interval (in two separate tabs) } The results for the SSMD comparisons are
+#'   interval (in two separate tabs) } 
+#'   
+#'   The results for the SSMD comparisons are carried out for the means.Pext.time.step
+#'   and cumul.Pext.means only and are
 #'   saved in the file starting with "SSMD_Cumul_Pext_census" or
 #'   SSMD_means.time.step.Pext. The census number is appended to the name of all
 #'   xls file.
@@ -223,6 +243,9 @@ Pext <- function(data=NULL, path.results, rda.in="collated.census.rda",
   
  means.time.step.Pext <- rbindlist(mean.time.step.Pext, use.names=TRUE)
  sds.time.step.Pext <- rbindlist(sd.time.step.Pext, use.names=TRUE)
+ 
+ names(time.step.Pext) <- scenarios
+ time.step.Pext <- rbindlist(time.step.Pext, use.names = TRUE, idcol = "Scenario")
   
   # SSMD
   if(length(scenarios) > 1 & !is.null(base)) {
@@ -245,7 +268,11 @@ Pext <- function(data=NULL, path.results, rda.in="collated.census.rda",
                      create=TRUE)
   save.xlsx(path.results, wb, var1=means.time.step.Pext, var2=sds.time.step.Pext)
   
-  return(list(means.Pext.time.step=means.Pext.time.step, sds.Pext.time.step=sds.Pext.time.step, 
-              cumul.Pext.means=cumul.Pext.means, cumul.Pext.sds=cumul.Pext.sds,
-             means.time.step.Pext=means.time.step.Pext, sds.time.step.Pext=sds.time.step.Pext))
+  return(list(means.Pext.time.step=means.Pext.time.step, 
+              sds.Pext.time.step=sds.Pext.time.step, 
+              cumul.Pext.means=cumul.Pext.means, 
+              cumul.Pext.sds=cumul.Pext.sds,
+             means.time.step.Pext=means.time.step.Pext, 
+             sds.time.step.Pext=sds.time.step.Pext,
+             time.step.Pext=time.step.Pext))
 }
