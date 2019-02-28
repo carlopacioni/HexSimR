@@ -283,11 +283,11 @@ peall$cumul.Pext.means
  
  Note how the values are higher for 'collext', this is because using `keep.zeros=FALSE` we only retained the extant populations in the calculations, while when `keep.zeros=TRUE` the average calculations will include as many zeros as extinction events. Which one to use will then depend on the purpose of the analysis. If the user wants to compute the mean number of individuals when a population exists, then they will have to use only the extant populations (possibly in conjunction with `Pext` to find out how often the population doesn't exist).
  
- Before abandoning this dataset, I will also use it to show how the number of rows is different when the default option `end="max"` is used. This is because one line is completely dropped as it goes extinct in all replicates. Hence my remark before of not using the default option (and why Pext will throw an error if detects different number of rows in the collated data)!
+ Before abandoning this dataset, I will also use it to show how the number of rows is different when the default option `end="max"` is used. This is because one line is completely dropped as the population goes extinct in the lat year of the simulations in all replicates. Hence my remark before of not using the default option (and why Pext will throw an error if detects different number of rows in the collated data)!
  
 ```{r} 
   
-  collmax<-suppressWarnings(collate.census(path.results)) 
+  collmax<-suppressWarnings(collate.census(fake.simulations)) 
   nrow(collall$means$Sqkm5_LHS9$Sqkm5_LHS9.0)
   nrow(collmax$means$Sqkm5_LHS9$Sqkm5_LHS9.0)
 ```
