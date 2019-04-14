@@ -11,8 +11,7 @@
 #'
 #' \bold{Note} that the order in which the original folder names are replaced
 #' may not be progressive. For example, normally the replicate '10' is renamed
-#' after replicate '1' and before '2'. Also, note that the run number stored in
-#' census files or other outputs is not changed.
+#' after replicate '1' and before '2'. 
 #'
 #' @inheritParams collate.census
 #' @param scenario The scenario whose replicates need to be renamed
@@ -21,6 +20,21 @@
 #' @export
 
 rename.replicates <- function(path.results=NULL, scenario, suffix) {
+  #----------------------------------------------------------------------------#
+  # Helper functions
+  #----------------------------------------------------------------------------#
+  
+  change.run <- function(new.file, suffix) {
+    fs <- list.files("[0-9]+.csv$", path=new.file, full.names = TRUE)
+    for(f in fs) {
+      census.data <- fread(f)
+      census.data[, Run := suffix]
+      write.csv(census.data, f, row.names=FALSE)
+    }
+    return(census.data)
+  }
+  #----------------------------------------------------------------------------#
+  
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
   
@@ -37,5 +51,6 @@ rename.replicates <- function(path.results=NULL, scenario, suffix) {
   if(any(exist.checks)) stop("Can't rename folders because at least some already exist")
   message(paste("Found", length(l.iter.folders), "replicates to be renamed."))
   file.rename(from=l.iter.folders, to=new.nms)
+  l <- mapply(FUN = change.run, new.nms, suffix)
   return(list(original.folders=l.iter.folders, new.folders=new.nms))
 }

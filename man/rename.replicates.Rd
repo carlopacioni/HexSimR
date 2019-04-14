@@ -26,6 +26,5 @@ replicates.
 
 \bold{Note} that the order in which the original folder names are replaced
 may not be progressive. For example, normally the replicate '10' is renamed
-after replicate '1' and before '2'. Also, note that the run number stored in
-census files or other outputs is not changed.
+after replicate '1' and before '2'.
 }
