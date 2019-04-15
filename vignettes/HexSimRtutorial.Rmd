@@ -448,7 +448,7 @@ I glided over the selection of the events when I called ```m.range.rep``` before
 
 ```{r}
 library(data.table, quietly = TRUE)
-table_ranges[, Dispersal:=c("Pre", "Post")] 
+table_ranges[, Dispersal:=rep(c("Pre", "Post"), each=nrow(table_ranges)/length(unique(Scenario)))] 
 setcolorder(table_ranges, c("Scenario", "Dispersal", "GroupSize", "Resources", 
                             "nGroups", "ha", "sqkm"))
 knitr::kable(table_ranges)
