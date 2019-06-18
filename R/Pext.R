@@ -41,7 +41,7 @@
 #' then SSMD=0 and p-value=0.5.
 #'
 #' @param data The output from \code{collate.census}
-#' @param rda.in The fully qualified (i.e. including the path) name of the .rda
+#' @param rda.in The name of the .rda
 #'   file where the output from \code{collate.census} is saved
 #' @inheritParams ranges
 #' @inheritParams SSMD.census
@@ -145,7 +145,7 @@ Pext <- function(data=NULL, path.results, rda.in="collated.census.rda",
     #----------------------------------------------------------------------------#
   if(is.null(data)) {
     temp.space <- new.env()
-    data <- load(paste(path.results, rda.in, sep="/"), temp.space)
+    data <- load(file.path(path.results, rda.in), temp.space)
     data <- get(data, temp.space)
     rm(temp.space)
   }
