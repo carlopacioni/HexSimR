@@ -52,6 +52,7 @@
 #'  "all"
 #'@param keep.zeros Whether zeros are retained in the mean calculations (TRUE,
 #'  default), or are excluded (FALSE)
+#'@param verbose Should progress be printed in the console? Default: FALSE 
 #'@inheritParams ranges
 #'@return A list with three elements: the combined data, the mean and standard
 #'  deviation. Each of these elements is in itself a list with  each scenario as
@@ -64,14 +65,15 @@
 #'@export
 
 collate.census <- function(path.results=NULL, scenarios="all", start="min", end="max",
-                           keep.zeros=TRUE) {
+                           keep.zeros=TRUE, verbose=FALSE) {
   
   #----------------------------------------------------------------------------#
   # Helper functions
   #----------------------------------------------------------------------------#
   
-  byiter <- function(iter, l.iter.folders, census.list, census, nscen, start, end) {
+  byiter <- function(iter, l.iter.folders, census.list, census, nscen, start, end, verbose) {
     f <- paste(l.iter.folders[[nscen]][iter], census.list[census], sep="/")
+    if(verbose) message(paste("Processing iteration:", basename(l.iter.folders[[nscen]][iter])))
     census.data <- fread(f)
     headers <- make.names(names(census.data))
     setnames(census.data, headers)
@@ -97,26 +99,28 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
   }
   
   # Return a data.table with all iterations for one census type and one scenario
-  bycensus <- function(census, iters, l.iter.folders, file.list, nscen, start, end) {
+  bycensus <- function(census, iters, l.iter.folders, file.list, nscen, start, end, verbose) {
+    if(verbose) message(paste("Processing census:",  file.list[census]))
     # a list with data from one census type and one scenario for each iterations
     l.census.data <- lapply(iters, byiter, census=census, census.list=file.list, 
                             l.iter.folders=l.iter.folders, nscen=nscen, 
-                            start=start, end=end)
+                            start=start, end=end, verbose=verbose)
     census.data.comb <- rbindlist(l.census.data, use.names=TRUE)
     return(census.data.comb)
   }
   
   
   # Return a list with one scenario with each census type for element
-  byscen <- function (nscen, scenarios, l.iter.folders, start, end) {
+  byscen <- function (nscen, scenarios, l.iter.folders, start, end, verbose) {
     file.list <- list.files(l.iter.folders[[nscen]][1], 
                             pattern=paste0(scenarios[[nscen]], "\\.", "[0-9]+", 
                                            "\\.", "csv$"))
+    if(verbose) message(paste("Processing scenario:", scenarios[[nscen]]))
     iters <- seq_along(l.iter.folders[[nscen]])
     ncensus <- seq_along(file.list)
     # A list with one scenario with each census type for element
     scen.i <- lapply(ncensus, bycensus, iters, l.iter.folders, file.list, nscen, 
-                     start=start, end=end)
+                     start=start, end=end, verbose=verbose)
     census.names <- sub(pattern = ".csv", "", x = file.list)
     names(scen.i) <- census.names
     return(scen.i)
@@ -185,7 +189,7 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
   # A list of lists, each being a scenario. Each scenario has census types for 
   # elements
   data.comb <- lapply(nscens, byscen, scenarios=scenarios, 
-                      l.iter.folders=l.iter.folders, start=start, end=end)
+                      l.iter.folders=l.iter.folders, start=start, end=end, verbose=verbose)
   names(data.comb) <- scenarios
   
   scen.means <- lapply(data.comb, census.mean, keep.zeros=keep.zeros)
@@ -250,13 +254,14 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
 #' @importFrom tcltk tk_choose.dir 
 #' @export
 census.calc <- function(path.results=NULL, ncensus, headers, var.name=NULL, 
-                        bin.f="+", scenarios="all") {
+                        bin.f="+", scenarios="all", verbose=FALSE) {
   #----------------------------------------------------------------------------#
   # Helper functions
   #----------------------------------------------------------------------------#
   
   byiter <- function(iter, l.iter.folders, census.file, nscen, var.name, bin.f, 
-                     headers) {
+                     headers, verbose=verbose) {
+    if(verbose) message(paste("Processing iteration:", basename(l.iter.folders[[nscen]][iter])))
     f <- paste(l.iter.folders[[nscen]][iter], census.file, sep="/")
     census.data <- fread(f)  
     setnames(census.data, make.names(names(census.data)))   
@@ -266,11 +271,12 @@ census.calc <- function(path.results=NULL, ncensus, headers, var.name=NULL,
   }
   
   byscen <- function (nscen, scenarios, l.iter.folders, ncensus, var.name, bin.f, 
-                      headers) {
+                      headers, verbose) {
     census.file <- paste0(scenarios[[nscen]], ".", ncensus, ".", "csv")
+    if(verbose) message(paste("Processing scenario:", scenarios[[nscen]]))
     iters <- seq_along(l.iter.folders[[nscen]])    
     l.scen.i <- lapply(iters, byiter, l.iter.folders, census.file, nscen, 
-                       var.name, bin.f, headers)
+                       var.name, bin.f, headers, verbose=verbose)
     
     return(l.scen.i)
   }
@@ -289,7 +295,7 @@ census.calc <- function(path.results=NULL, ncensus, headers, var.name=NULL,
   l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
   nscens <- seq_along(scenarios)
   new.census <- lapply(nscens, byscen, scenarios, l.iter.folders, ncensus, 
-                       var.name, bin.f, headers)
+                       var.name, bin.f, headers, verbose=verbose)
   return(new.census)
 }
 

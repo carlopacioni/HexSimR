@@ -5,7 +5,7 @@
 \title{Carry out calculations on a subset of variables in a specific census file}
 \usage{
 census.calc(path.results = NULL, ncensus, headers, var.name = NULL,
-  bin.f = "+", scenarios = "all")
+  bin.f = "+", scenarios = "all", verbose = FALSE)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
@@ -23,6 +23,8 @@ the columns identified by \code{headers} (Default: \code{"+"})}
 
 \item{scenarios}{A character vector with the scenarios to be processed or
 "all"}
+
+\item{verbose}{Should progress be printed in the console? Default: FALSE}
 }
 \value{
 Save census file to disk and return a list with the new census files

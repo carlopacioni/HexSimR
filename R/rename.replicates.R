@@ -19,14 +19,16 @@
 #' @importFrom tcltk tk_choose.dir
 #' @export
 
-rename.replicates <- function(path.results=NULL, scenario, suffix) {
+rename.replicates <- function(path.results=NULL, scenario, suffix, verbose=FALSE) {
   #----------------------------------------------------------------------------#
   # Helper functions
   #----------------------------------------------------------------------------#
   
-  change.run <- function(new.file, suffix) {
+  change.run <- function(new.file, suffix, verbose) {
+    if(verbose) message(paste("Processing iteration:", basename(new.file)))
     fs <- list.files("[0-9]+.csv$", path=new.file, full.names = TRUE)
     for(f in fs) {
+      if(verbose) message(paste("Processing census file:", basename(f)))
       census.data <- fread(f)
       census.data[, Run := suffix]
       write.csv(census.data, f, row.names=FALSE)
@@ -50,7 +52,9 @@ rename.replicates <- function(path.results=NULL, scenario, suffix) {
   
   if(any(exist.checks)) stop("Can't rename folders because at least some already exist")
   message(paste("Found", length(l.iter.folders), "replicates to be renamed."))
+  if(verbose) message("Renaming directories...")
   file.rename(from=l.iter.folders, to=new.nms)
-  l <- mapply(FUN = change.run, new.nms, suffix)
+  if(verbose) message("Done!")
+  l <- mapply(FUN = change.run, new.nms, suffix, MoreArgs = list(verbose=verbose))
   return(list(original.folders=l.iter.folders, new.folders=new.nms))
 }

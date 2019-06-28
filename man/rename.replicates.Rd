@@ -4,7 +4,8 @@
 \alias{rename.replicates}
 \title{Rename (renumber) replicate folders within a scenario}
 \usage{
-rename.replicates(path.results = NULL, scenario, suffix)
+rename.replicates(path.results = NULL, scenario, suffix,
+  verbose = FALSE)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
@@ -12,6 +13,8 @@ rename.replicates(path.results = NULL, scenario, suffix)
 \item{scenario}{The scenario whose replicates need to be renamed}
 
 \item{suffix}{An integer vector to rename the replicates}
+
+\item{verbose}{Should progress be printed in the console? Default: FALSE}
 }
 \description{
 This function replaces the numbers between square brackets at the end of the

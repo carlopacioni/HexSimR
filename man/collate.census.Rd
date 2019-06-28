@@ -5,7 +5,7 @@
 \title{Combine together HexSim census outputs across iterations.}
 \usage{
 collate.census(path.results = NULL, scenarios = "all", start = "min",
-  end = "max", keep.zeros = TRUE)
+  end = "max", keep.zeros = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
@@ -19,6 +19,8 @@ collate.census(path.results = NULL, scenarios = "all", start = "min",
 
 \item{keep.zeros}{Whether zeros are retained in the mean calculations (TRUE,
 default), or are excluded (FALSE)}
+
+\item{verbose}{Should progress be printed in the console? Default: FALSE}
 }
 \value{
 A list with three elements: the combined data, the mean and standard
