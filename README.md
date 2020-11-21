@@ -1,7 +1,7 @@
 # HexSimR
 An R package for Post HexSim Simulation Analysis.  
 
-Using this package, data of population viability analysis (PVA) that were generated with the software HexSim (Schumaker N, HexSim (Version 3 & 4). US Environmental Protection Agency. Environmental Research Laboratory, Corvallis, Oregon. [http://www.epa.gov/hexsim](http://www.epa.gov/hexsim)), can be collated, plotted and analysed.
+Using this package, data of population viability analysis (PVA) that were generated with the software HexSim (Schumaker N, HexSim (Version 3 & 4). US Environmental Protection Agency. Environmental Research Laboratory, Corvallis, Oregon. [https://www.hexsim.net](https://www.hexsim.net)), can be collated, plotted and analysed.
 
 ## Quickstart
 Install the package from version control from within R:
