@@ -57,22 +57,18 @@ make.Xpaths <- function(node_paths, Xpaths, identifiers, attribs,
                         param_node_attributes=FALSE,
                         param_identifiers=FALSE, is.LHS=FALSE) {
   
-  suppressWarnings(
-    if(is.na(param_nodes) && length(param_nodes) == 1) 
-                                      param_nodes <- rep(NA, length(node_paths))
-  )
-  suppressWarnings(
-    if(is.na(param_identifiers) && length(param_identifiers) == 1) 
-                                param_identifiers <- rep(FALSE, length(node_paths))
-  )
-  suppressWarnings(
-    if(is.na(param_node_identifiers) && length(param_node_identifiers) == 1) 
-      param_node_identifiers <- rep(FALSE, length(node_paths))
-  )
-  suppressWarnings(
-    if(is.na(param_node_attributes) && length(param_node_attributes) == 1) 
-      param_node_attributes <- rep(FALSE, length(node_paths))
-  )
+    if(length(param_nodes) == 1)
+       if(is.na(param_nodes)) param_nodes <- rep(NA, length(node_paths))
+  
+  if(length(param_identifiers) == 1)
+       if(is.na(param_identifiers)) param_identifiers <- rep(FALSE, length(node_paths))
+  
+  if(length(param_node_identifiers) == 1)
+     if(is.na(param_node_identifiers)) param_node_identifiers <- rep(FALSE, length(node_paths))
+  
+  if(length(param_node_attributes) == 1)
+     if(is.na(param_node_attributes)) param_node_attributes <- rep(FALSE, length(node_paths))
+  
   param_node_Xpaths <- vector("character", length(node_paths))
   
   for(i in seq_along(node_paths)) {
