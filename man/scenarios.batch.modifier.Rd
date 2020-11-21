@@ -4,8 +4,12 @@
 \alias{scenarios.batch.modifier}
 \title{Batch modification of scenarios}
 \usage{
-scenarios.batch.modifier(path.scenarios = NULL, scenarios = "all",
-  xml.template = NULL, csv.in)
+scenarios.batch.modifier(
+  path.scenarios = NULL,
+  scenarios = "all",
+  xml.template = NULL,
+  csv.in
+)
 }
 \arguments{
 \item{path.scenarios}{The path to the 'Scenarios' folder}

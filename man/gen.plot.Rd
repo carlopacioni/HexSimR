@@ -4,8 +4,15 @@
 \alias{gen.plot}
 \title{Plot genetic distance with standard deviation bars}
 \usage{
-gen.plot(path.results = NULL, scenarios = "all", pop.name = NULL,
-  time.step = 1, traits, r = 2, c = 1)
+gen.plot(
+  path.results = NULL,
+  scenarios = "all",
+  pop.name = NULL,
+  time.step = 1,
+  traits,
+  r = 2,
+  c = 1
+)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

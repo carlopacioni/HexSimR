@@ -4,8 +4,7 @@
 \alias{multi.clean.genepop}
 \title{Remove illegal characters from several HexSim generated genepop input files}
 \usage{
-multi.clean.genepop(path.results = NULL, scenarios = "all",
-  pop.name = NULL)
+multi.clean.genepop(path.results = NULL, scenarios = "all", pop.name = NULL)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

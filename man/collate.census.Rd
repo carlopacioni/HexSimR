@@ -4,8 +4,14 @@
 \alias{collate.census}
 \title{Combine together HexSim census outputs across iterations.}
 \usage{
-collate.census(path.results = NULL, scenarios = "all", start = "min",
-  end = "max", keep.zeros = TRUE, verbose = FALSE)
+collate.census(
+  path.results = NULL,
+  scenarios = "all",
+  start = "min",
+  end = "max",
+  keep.zeros = TRUE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

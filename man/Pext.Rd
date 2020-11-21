@@ -4,9 +4,17 @@
 \alias{Pext}
 \title{Probability of extinction}
 \usage{
-Pext(data = NULL, path.results, rda.in = "collated.census.rda",
-  scenarios = "all", ncensus = 0, start = "min", end = "max",
-  headers = "Population.Size", base = NULL)
+Pext(
+  data = NULL,
+  path.results,
+  rda.in = "collated.census.rda",
+  scenarios = "all",
+  ncensus = 0,
+  start = "min",
+  end = "max",
+  headers = "Population.Size",
+  base = NULL
+)
 }
 \arguments{
 \item{data}{The output from \code{collate.census}}

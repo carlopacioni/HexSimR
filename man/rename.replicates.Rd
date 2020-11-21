@@ -4,8 +4,7 @@
 \alias{rename.replicates}
 \title{Rename (renumber) replicate folders within a scenario}
 \usage{
-rename.replicates(path.results = NULL, scenario, suffix,
-  verbose = FALSE)
+rename.replicates(path.results = NULL, scenario, suffix, verbose = FALSE)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

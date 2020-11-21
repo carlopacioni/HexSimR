@@ -4,8 +4,12 @@
 \alias{SSMD.ranges}
 \title{Compare ranges descriptive statistics against a baseline scenario.}
 \usage{
-SSMD.ranges(path.results = NULL, scenarios = "all", base = NULL,
-  sum.ranges = "summary_ranges.xlsx")
+SSMD.ranges(
+  path.results = NULL,
+  scenarios = "all",
+  base = NULL,
+  sum.ranges = "summary_ranges.xlsx"
+)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

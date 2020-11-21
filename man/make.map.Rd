@@ -4,8 +4,14 @@
 \alias{make.map}
 \title{Modify a csv with hexmap data}
 \usage{
-make.map(template, new.values, old.value, file.name, sufs = NULL,
-  dir.out = NULL)
+make.map(
+  template,
+  new.values,
+  old.value,
+  file.name,
+  sufs = NULL,
+  dir.out = NULL
+)
 }
 \arguments{
 \item{template}{The full name of the csv map file to use as template}

@@ -4,8 +4,15 @@
 \alias{census.calc}
 \title{Carry out calculations on a subset of variables in a specific census file}
 \usage{
-census.calc(path.results = NULL, ncensus, headers, var.name = NULL,
-  bin.f = "+", scenarios = "all", verbose = FALSE)
+census.calc(
+  path.results = NULL,
+  ncensus,
+  headers,
+  var.name = NULL,
+  bin.f = "+",
+  scenarios = "all",
+  verbose = FALSE
+)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

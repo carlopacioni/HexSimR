@@ -4,11 +4,21 @@
 \alias{copy.results}
 \title{Copy \code{HexSimR} results}
 \usage{
-copy.results(path.results, out = getwd(), copy.invasion = TRUE,
-  inv.name = "Invasion.front.xlsx", Pext = TRUE, comp.census = TRUE,
-  comp.move = TRUE, move.name = "SSMD_move.xlsx", comp.ranges = TRUE,
-  ranges.name = "SSMD_ranges.xlsx", plots = TRUE,
-  scen.results = TRUE, scenarios = "all")
+copy.results(
+  path.results,
+  out = getwd(),
+  copy.invasion = TRUE,
+  inv.name = "Invasion.front.xlsx",
+  Pext = TRUE,
+  comp.census = TRUE,
+  comp.move = TRUE,
+  move.name = "SSMD_move.xlsx",
+  comp.ranges = TRUE,
+  ranges.name = "SSMD_ranges.xlsx",
+  plots = TRUE,
+  scen.results = TRUE,
+  scenarios = "all"
+)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
@@ -50,7 +60,7 @@ This function is used to copy/back up  \code{HexSimR} results maintaining the
   results will be copied (i.e. no individual replicate results are copied). 
   All .xlsx files present in scenarios' folders will be copied (even 
   those with manually modified names) assuming that these are results to keep. 
-  These include genetic mean distances.
+  These include genetic mean distances. 
 
 It assummes that file names of plots start with "plot" as for   \code{HexSimR} 
   default. If exists, the file "gen.plot.data.csv" (if the name was not 

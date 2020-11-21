@@ -4,8 +4,12 @@
 \alias{is.attribs}
 \title{Check whether the param is an attribute or a node}
 \usage{
-is.attribs(attrib, param_node_attribute, param_node_identifier,
-  param_identifier)
+is.attribs(
+  attrib,
+  param_node_attribute,
+  param_node_identifier,
+  param_identifier
+)
 }
 \arguments{
 \item{attrib}{Whether the identifier is an attribute}

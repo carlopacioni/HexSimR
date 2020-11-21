@@ -5,8 +5,12 @@
 \title{Write a .xml file to be passed to HexSim to queue 'movements' and/or 'ranges'
  reports}
 \usage{
-report.batch(path.results = NULL, scenarios = "all", ranges = TRUE,
-  move = TRUE)
+report.batch(
+  path.results = NULL,
+  scenarios = "all",
+  ranges = TRUE,
+  move = TRUE
+)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

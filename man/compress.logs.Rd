@@ -4,9 +4,15 @@
 \alias{compress.logs}
 \title{Compress log files and optionally remove them}
 \usage{
-compress.logs(path.results = NULL, scenarios = "all",
-  delete.log = TRUE, overwrite.gz = TRUE, compression = 7,
-  parallel = FALSE, ncores = NULL)
+compress.logs(
+  path.results = NULL,
+  scenarios = "all",
+  delete.log = TRUE,
+  overwrite.gz = TRUE,
+  compression = 7,
+  parallel = FALSE,
+  ncores = NULL
+)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

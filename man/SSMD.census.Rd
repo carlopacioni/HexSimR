@@ -4,8 +4,13 @@
 \alias{SSMD.census}
 \title{Compare census values against a baseline scenario.}
 \usage{
-SSMD.census(path.results = NULL, scenarios = "all", base = NULL,
-  ncensus = 0, keep.zeros = "TRUE")
+SSMD.census(
+  path.results = NULL,
+  scenarios = "all",
+  base = NULL,
+  ncensus = 0,
+  keep.zeros = "TRUE"
+)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

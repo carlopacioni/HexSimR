@@ -4,8 +4,13 @@
 \alias{xml.cond.replacement}
 \title{Conditional replacement of xml elements}
 \usage{
-xml.cond.replacement(path.scenarios = NULL, scenarios = "all", csv.in,
-  lookup, verbose = TRUE)
+xml.cond.replacement(
+  path.scenarios = NULL,
+  scenarios = "all",
+  csv.in,
+  lookup,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{path.scenarios}{The path to the 'Scenarios' folder}

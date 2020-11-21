@@ -4,9 +4,17 @@
 \alias{make.Xpaths}
 \title{Check conditions and pass the right arguments to make.Xpath}
 \usage{
-make.Xpaths(node_paths, Xpaths, identifiers, attribs, param_nodes = NA,
-  param_node_identifiers = FALSE, param_node_attributes = FALSE,
-  param_identifiers = FALSE, is.LHS = FALSE)
+make.Xpaths(
+  node_paths,
+  Xpaths,
+  identifiers,
+  attribs,
+  param_nodes = NA,
+  param_node_identifiers = FALSE,
+  param_node_attributes = FALSE,
+  param_identifiers = FALSE,
+  is.LHS = FALSE
+)
 }
 \arguments{
 \item{node_paths}{A character vector of node_paths}

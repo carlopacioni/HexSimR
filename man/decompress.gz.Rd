@@ -5,9 +5,14 @@
 \title{Decompress files with ".gz" extension, append ".log" extension and optinally
 remove the .gz files}
 \usage{
-decompress.gz(path.results = NULL, scenarios = "all",
-  delete.gz = TRUE, overwrite.log = TRUE, parallel = FALSE,
-  ncores = NULL)
+decompress.gz(
+  path.results = NULL,
+  scenarios = "all",
+  delete.gz = TRUE,
+  overwrite.log = TRUE,
+  parallel = FALSE,
+  ncores = NULL
+)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

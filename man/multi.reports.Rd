@@ -4,9 +4,17 @@
 \alias{multi.reports}
 \title{Generate summary statistics for multiple reports}
 \usage{
-multi.reports(path.results = NULL, scenarios = "all",
-  pop.name = NULL, type = "move", all = TRUE, hx = NULL,
-  events = NULL, start = "min", end = "max")
+multi.reports(
+  path.results = NULL,
+  scenarios = "all",
+  pop.name = NULL,
+  type = "move",
+  all = TRUE,
+  hx = NULL,
+  events = NULL,
+  start = "min",
+  end = "max"
+)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

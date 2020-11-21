@@ -4,8 +4,7 @@
 \alias{ranges}
 \title{Calculates descriptive stats from the HexSim generated report 'ranges'}
 \usage{
-ranges(rep.ranges = NULL, hx = NULL, events = NULL, start = "min",
-  end = "max")
+ranges(rep.ranges = NULL, hx = NULL, events = NULL, start = "min", end = "max")
 }
 \arguments{
 \item{rep.ranges}{The fully qualified (i.e. including the path) name of the 

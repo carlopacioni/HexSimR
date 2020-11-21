@@ -4,8 +4,15 @@
 \alias{w.csvmap.batch}
 \title{Write a .bat file to generate hexmap from a list of csv files}
 \usage{
-w.csvmap.batch(file.list, header = "true", hexID = "true", rows, cols,
-  narrow = "false", dir.out = NULL)
+w.csvmap.batch(
+  file.list,
+  header = "true",
+  hexID = "true",
+  rows,
+  cols,
+  narrow = "false",
+  dir.out = NULL
+)
 }
 \arguments{
 \item{file.list}{A character vector with the fully qualified name of the csv 

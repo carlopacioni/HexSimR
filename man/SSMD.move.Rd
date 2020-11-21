@@ -4,8 +4,12 @@
 \alias{SSMD.move}
 \title{Compare mean movement distances against those of a baseline scenario.}
 \usage{
-SSMD.move(path.results = NULL, scenarios = "all", base = NULL,
-  sum.move = "summary_move.csv")
+SSMD.move(
+  path.results = NULL,
+  scenarios = "all",
+  base = NULL,
+  sum.move = "summary_move.csv"
+)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

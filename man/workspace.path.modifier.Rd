@@ -4,8 +4,11 @@
 \alias{workspace.path.modifier}
 \title{Modify the path of the workspace and grid file in all scenario files}
 \usage{
-workspace.path.modifier(path.scenarios = NULL, scenarios = "all",
-  new.grid.path)
+workspace.path.modifier(
+  path.scenarios = NULL,
+  scenarios = "all",
+  new.grid.path
+)
 }
 \arguments{
 \item{path.scenarios}{The path to the 'Scenarios' folder}
