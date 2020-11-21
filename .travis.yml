@@ -4,7 +4,6 @@ language: r
 sudo: required
 warnings_are_errors: false
 cache: packages
-dist: trusty
 
 before_install:
   - sudo add-apt-repository ppa:ubuntugis/ppa --yes
