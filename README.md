@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/carlopacioni/HexSimR.svg?branch=master)](https://travis-ci.org/carlopacioni/HexSimR)
+
 # HexSimR
 An R package for Post HexSim Simulation Analysis.  
 
