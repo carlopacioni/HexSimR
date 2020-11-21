@@ -1,6 +1,6 @@
 Package: HexSimR
 Type: Package
-Title: an R package for post HexSim simulation analysis
+Title: An R Package For Post HexSim Simulation Analysis
 Version: 0.9.0.900
 Date: `r Sys.Date()`
 Authors@R: as.person(c(
