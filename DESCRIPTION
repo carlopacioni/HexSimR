@@ -3,15 +3,13 @@ Type: Package
 Title: An R Package For Post HexSim Simulation Analysis
 Version: 0.9.0.900
 Date: `r Sys.Date()`
-Authors@R: as.person(c(
-  "Carlo Pacioni <c.pacioni@murdoch.edu.au> [aut, cre]",
-  "Jason Bryer [ctb]"))
+Authors@R: c(person("Carlo", "Pacioni", email="c.pacioni@murdoch.edu.au", role=c("aut", "cre")),
+  person("Jason", "Bryer", role="ctb"))
 BugReports: https://github.com/carlopacioni/HexSimR/issues
-Description: This package offers a number of tools to collate, plot and analyse
+Description: A number of tools to collate, plot and analyse
     Population Viability Analysis (PVA) data that were generated with the software
-    HexSim (Schumaker N, HexSim (Version 3); US Environmental Protection Agency.
-    Environmental Research Laboratory, Corvallis, Oregon;(http://www.epa.gov/
-    hexsim).
+    HexSim (Schumaker N, HexSim (Version 4); US Environmental Protection Agency.
+    Environmental Research Laboratory, Corvallis, Oregon;(<https://www.hexsim.net/>).
 License: GPL-3
 Depends:
     R (>= 3.2.0)

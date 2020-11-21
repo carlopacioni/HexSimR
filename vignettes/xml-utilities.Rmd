@@ -50,7 +50,7 @@ Scenario settings and parameters in HexSim are set by a node in
  elements that make the node unique. For example, accumulate events all have 
  the same structure, but they can be identified by the value given to the node
  **\<name>**. From a practical point of view, the easiest way to identify which nodes are modified when some changes are applied to a scenario is to create a reference scenario, then manually modify the events/parameters and save it with a different name. If you then compare 
- the two xml files using, for example, the plug-in "compare" in Notepad++, or the program [Winmerge](http://winmerge.org/) (on Windows), the lines that are different between the two files will be highlighted and it should be straightforward to identify the relevant nodes.
+ the two xml files using, for example, the plug-in "compare" in Notepad++, or the program [Winmerge](https://winmerge.org/) (on Windows), the lines that are different between the two files will be highlighted and it should be straightforward to identify the relevant nodes.
 
 ```{r, echo=FALSE, fig.cap="__Figure 1.__ An example of a comparison between two xml files in Notepad++ where the modified lines (the text element in this case) is highlighted."}
 knitr::include_graphics("CompareXml2.tif")
