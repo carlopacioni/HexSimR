@@ -1,3 +1,8 @@
+# HexSimR 0.9.1.000
+## Minor changes
+  *   Resolved length>1 issue with R v 4.x
+  *   Updated links and minor formatting edits to Description 
+
 # HexSimR 0.9.0.900
 ## New functionality
 collate.census gains keep.zeros
