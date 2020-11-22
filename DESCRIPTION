@@ -29,6 +29,7 @@ Suggests:
     devtools,
     roxygen2,
     gridExtra,
-    testthat
+    testthat,
+    covr
 VignetteBuilder: knitr
 RoxygenNote: 7.1.1

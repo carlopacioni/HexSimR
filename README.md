@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/carlopacioni/HexSimR.svg?branch=master)](https://travis-ci.org/carlopacioni/HexSimR)
+[![Codecov test coverage](https://codecov.io/gh/carlopacioni/HexSimR/branch/master/graph/badge.svg)](https://codecov.io/gh/carlopacioni/HexSimR?branch=master)
 
 # HexSimR
 An R package for Post HexSim Simulation Analysis.  
