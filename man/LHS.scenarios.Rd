@@ -88,6 +88,24 @@ When \bold{distribution}="fixed" or \bold{type}="character" the elements in
 are used as labels (headers) in the hypercube matrix that it is saved to disk
 and returned as an object.
 
+The optional column \bold{mult} can be used to indicate the order of the node
+to be considered if there are multiple nodes that are identified.
+For example, in the following, there are two 'parameter' nodes. If we want to 
+operate only on one of them, we can specify which one by using (e.g.) 
+\bold{mult=2} in the csv file.
+
+<accumulateEvent>
+  <name>SetRemoval</name>
+  <populationName>Dingoes</populationName>
+  <updaterFunction>
+  <accumulator>SetRemoval</accumulator>
+  <function>HexSimDomain.SubpopulationAssignUpdaterFunction</function>
+  <parameter>8</parameter>
+  <parameter>0</parameter>
+  </updaterFunction>
+  </accumulateEvent>
+ 
+
 When \code{generate=TRUE}, the second element of the list returned contains 
 the nodes found in the template. It is probably a good idea to scan through 
 these to check whether these were the expected ones and most importantly that

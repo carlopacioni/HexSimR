@@ -476,6 +476,13 @@ workspace.path.modifier <- function(
 #' are used as labels (headers) in the hypercube matrix that it is saved to disk
 #' and returned as an object.
 #' 
+#' The optional column \bold{mult} can be used to indicate the order of the node
+#' to be considered if there are multiple nodes that are identified 
+#' (this happens, for example, with the 'Subpopulation Assign Updater Function')
+#' where there are two 'parameter' nodes. If we want to 
+#' operate only on one of them, we can specify which one by using (e.g.) 
+#' \bold{mult=2} in the csv file.
+#' 
 #' When \code{generate=TRUE}, the second element of the list returned contains 
 #' the nodes found in the template. It is probably a good idea to scan through 
 #' these to check whether these were the expected ones and most importantly that
@@ -547,6 +554,9 @@ LHS.scenarios <- function(
   types <- csv_file[, "type"]
   values <- strsplit(csv_file[, "value"], ",")
   distrbs <- csv_file[, "distribution"]
+  if(sum(grepl("mult", colnames(csv_file)))==1) 
+    mult <- csv_file[, "mult"] else
+      mult <- 1
   k <- nrow(csv_file)
   if(!is.null(xml.template)) {
     root_name <- substr(xml.template, start=1, stop=nchar(xml.template) - 4)
@@ -599,7 +609,7 @@ LHS.scenarios <- function(
     nodes <- vector("list", length(node_paths))
     
     for(i in seq_along(node_paths)) {
-      nodes[[i]] <- xml_find_all(xml_template, Xpaths[i])  
+      nodes[[i]] <- xml_find_all(xml_template, Xpaths[i])[mult]  
     }
     
     for(r in 1:samples) {
