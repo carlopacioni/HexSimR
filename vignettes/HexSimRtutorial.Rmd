@@ -236,9 +236,10 @@ ssmd.ran
 ## Probability of extinction
 HexSimR also offers the possibility to calculate the probability of extinction. This estimate doesn't make much sense in my example because no population goes extinct, so I'll demonstrate here how ```Pext``` can be used with some made up data. ```Pext``` calculates the probability of extinction for each time step, the cumulative probability (which basically answers the question: what is the probability that a population goes extinct in at least one time step) and (since HexSimR v 1.0) the mean probability of extinction across all time steps. Any of these statistics can be requested within a specific interval. It will also conduct a statistical comparison (only of the cumulative probability) if the number of the requested scenarios is > 1 and ```base``` is not `NULL` for the cumulative probability of extinction and the mean probability of extinction across all time steps.
 
-```Pext``` calculates the probability of extinction starting from the census outputs and you can select any trait that is included in the census event you indicated with the argument ```headers```. This makes this function quite powerful as it can be used to calculate the probability that any trait(s) you included in a census file is (are) equal to zero (or non-zero by calculating 1 - Pext).  
+The function ```Pext``` calculates the probability of extinction starting from the census outputs and you can select any trait that is included in the census event you indicated with the argument ```headers```. This makes this function quite powerful as it can be used to calculate the probability that any trait(s) you included in a census file is (are) equal to zero (or non-zero by calculating `1 - Pext`).  
 
 Please, read the function help file for more details on this function. One important note that it is worthwhile to point out is that in this function the formula to calculate SSMD becomes:
+
 
 $$SSMD_{i}=\frac{V_B-V_i}{\sqrt{s^{2}_{i}+s^{2}_{B}}}$$
 
@@ -262,6 +263,8 @@ peall <- Pext(collall, path.results=fake.simulations, ncensus=0,
   
 peall$cumul.Pext.means
 ```
+
+
   
   You can see that in these fake simulations the population inside the fence goes extinct 100% of the time (for at least one time step), but the overall population never does. I found that this statistic doesn't tell us much because it is clearly different if the population goes extinct for only one time step but then new dogs colonise the inside of the fence as opposed to the possibility of the population being extinct at multiple time steps. In this sense, the mean probability of extinction across time steps is possibly more informative because its value will reflect whether the population is more likely to go extinct over multiple years, in multiple replicates. 
   
