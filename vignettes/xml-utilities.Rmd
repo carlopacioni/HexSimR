@@ -150,7 +150,7 @@ XMLTest <- scenarios.batch.modifier(
     csv.in="test_csv.csv")
 ```
 
- When you excecute `scenarios.batch.modifier`, a back up of the folder `path.scenarios` is copied in the folder "*Scenarios_bkup*", one level up from `path.scenarios`. You can use the backed up file to verify that the changes have been applied and identify the differences. You will see that a bunch of accumulators and events and their relative spatial data have been added. 
+ When you execute `scenarios.batch.modifier`, a back up of the folder `path.scenarios` is copied in the folder "*Scenarios_bkup*", one level up from `path.scenarios`. You can use the backed up file to verify that the changes have been applied and identify the differences. You will see that a bunch of accumulators and events and their relative spatial data have been added. 
  
            
  If `scenarios="all"` is used (default), all scenarios in `path.scenarios` are processed (with the exclusion of `xml.template`), otherwise it is possible to select a subset of scenarios using a character vector, e.g.
@@ -172,7 +172,7 @@ XMLTest <- scenarios.batch.modifier(
 
 
  The function `LHS.scenarios` is used to generate scenarios whose parameter combinations 
- follow a Latin Hypercube Sampling design. In a nushell, what we want to achieve is to consider a range of values for a number of parameters (e.g. survival rates) and randomly sample those parameters within the established range to evaluate whether the results change. A Latin Hypercube Sampling (LHS) design is a sort of stratified random design that ensures that all the parameter combinations are considered. If enough samples are taken in a (generic) random sampling, there is probably no need to use a LHS, but it can help when fewer samples are taken. In my opinion, because using LHS can only improve inference compared to (generic) random sampling, or make no difference, I don't see a reason why it shouldn't be used.
+ follow a Latin Hypercube Sampling design. In a nutshell, what we want to achieve is to consider a range of values for a number of parameters (e.g. survival rates) and randomly sample those parameters within the established range to evaluate whether the results change. A Latin Hypercube Sampling (LHS) design is a sort of stratified random design that ensures that all the parameter combinations are considered. If enough samples are taken in a (generic) random sampling, there is probably no need to use a LHS, but it can help when fewer samples are taken. In my opinion, because using LHS can only improve inference compared to (generic) random sampling, or make no difference, I don't see a reason why it shouldn't be used.
  
 Manually setting scenarios with different parameter values, becomes quickly annoying. For example, in the simple case where you want to test two parameters, each with 5 categorical values, you'll have to set up 25 scenarios... using `LHS.scenarios`, you can automate this process.
 
