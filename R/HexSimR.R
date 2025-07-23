@@ -175,7 +175,7 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
   
   #--------------------------------------------------------------------------#
   if(end == "max") {
-    warning("The value 'max' for the argument 'end' is a convinience option, \nbut can lead to spurious results if used improperly. \nPlease, see 'Details' in '?collate.census'.")
+    warning("The value 'max' for the argument 'end' is a convenience option, \nbut can lead to spurious results if used improperly. \nPlease, see 'Details' in '?collate.census'.")
     }
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption = txt)
