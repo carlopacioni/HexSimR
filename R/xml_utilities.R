@@ -426,7 +426,8 @@ workspace.path.modifier <- function(
 #' This function is used to generate scenarios whose parameter combinations 
 #' follow a Latin Hypercupe Sampling design. Parameter values can be drawn from 
 #' normal, lognormal, binomial, beta or uniform distributions or have a set of 
-#' fixed values.
+#' fixed values. If all the possible value combinations needto be tested, then 
+#' \code{factorial=TRUE} can be used.
 #' 
 #' An xml file is passed (with \code{xml.template}) to build the LHS scenarios, 
 #' which are saved in the same \code{path.scenarios} where the template is.
@@ -444,6 +445,11 @@ workspace.path.modifier <- function(
 #' param_name, type, value, distribution. See documentation for 
 #' \code{scenarios.batch.modifier} on the meaning of nodes, identifier, 
 #' attribute. When \code{generate=FALSE} only the last four are mandatory.
+#' 
+#' When \code{factorial=TRUE} (default \code{factorial=FALSE}) all possible
+#' value combinations are used. This is only possible when only fixed values are 
+#' used. When \code{factorial=TRUE} is used \code{samples} is ignored and calculated
+#' internally. Note, that this option may generate a large number of scenarios! 
 #' 
 #' There might be situation where the parameter values to be changed are in an 
 #' internal node respect to the node identifier. In order to identify uniquely
@@ -491,6 +497,7 @@ workspace.path.modifier <- function(
 #' @param samples The number of LHS samples (i.e. parameter combinations)
 #' @param generate Whether generate (TRUE) the xml files or stop after having 
 #'   created the hypercube matrix (FALSE)
+#' @factorial When \code{TRUE} all the possible value combinations 
 #' @inheritParams scenarios.batch.modifier
 #' @return A list where the first element is the hyercube matrix and the second 
 #'   are the nodes found in the template (if generate = TRUE). A csv file with 
@@ -526,6 +533,7 @@ LHS.scenarios <- function(
   xml.template=NULL,
   samples, 
   csv.in,
+  factorial=FALSE,
   generate=TRUE) {
   #----------------------------------------------------------------------------#
   # Helper functions
@@ -565,6 +573,10 @@ LHS.scenarios <- function(
   }
   
   #### write hypercube matrix ####
+  if(factorial) {
+    if(!all(distrbs=="fixed")) stop("The factorial option can only be used when all distribution are fixed")
+    hypercube <- expand.grid(values)
+  } else {
   hypercube <- as.data.frame(randomLHS(n=samples, k=k))
   
   for(i in seq_along(types)) {
@@ -575,6 +587,7 @@ LHS.scenarios <- function(
       hypercube[, i] <- distribute[[distrbs[[i]]]](hypercube[, i], values[[i]])
       if(types[i] == "integer") hypercube[, i] <- round(hypercube[, i])
     }
+  }
   }
   names(hypercube) <- pnames
   write.csv(hypercube, row.names=FALSE,
