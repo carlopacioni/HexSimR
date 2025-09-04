@@ -494,7 +494,8 @@ workspace.path.modifier <- function(
 #' these to check whether these were the expected ones and most importantly that
 #' none are empty!
 #' 
-#' @param samples The number of LHS samples (i.e. parameter combinations)
+#' @param samples The number of LHS samples (i.e. parameter combinations). 
+#' Ignored when \code{factorial=TRUE}
 #' @param generate Whether generate (TRUE) the xml files or stop after having 
 #'   created the hypercube matrix (FALSE)
 #' @factorial When \code{TRUE} all the possible value combinations 
@@ -576,6 +577,7 @@ LHS.scenarios <- function(
   if(factorial) {
     if(!all(distrbs=="fixed")) stop("The factorial option can only be used when all distribution are fixed")
     hypercube <- expand.grid(values)
+    samples <- nrow(hypercube)
   } else {
   hypercube <- as.data.frame(randomLHS(n=samples, k=k))
   
