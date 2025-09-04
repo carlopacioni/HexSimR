@@ -51,6 +51,7 @@ if(length(scenarios) == 1) {
 
 l.logs <- list.files(path=file.path(path.results, scenarios), pattern=".log$", 
                      full.names=TRUE, recursive=TRUE)
+if(length(l.logs)==0) stop("No log files found") 
 gz.names <- sub(pattern=".log$", replacement=".gz", x= l.logs) 
 
 message("Starting compressing log files")
