@@ -9,6 +9,7 @@ LHS.scenarios(
   xml.template = NULL,
   samples,
   csv.in,
+  factorial = FALSE,
   generate = TRUE
 )
 }
@@ -18,7 +19,8 @@ LHS.scenarios(
 \item{xml.template}{The name of the xml file to use as template for the new
 nodes}
 
-\item{samples}{The number of LHS samples (i.e. parameter combinations)}
+\item{samples}{The number of LHS samples (i.e. parameter combinations). 
+Ignored when \code{factorial=TRUE}}
 
 \item{csv.in}{The name of the .csv file in the "Scenarios" folder with the
 information on the nodes that need to be modified (or checked in case of
@@ -37,7 +39,8 @@ A list where the first element is the hyercube matrix and the second
 This function is used to generate scenarios whose parameter combinations 
 follow a Latin Hypercupe Sampling design. Parameter values can be drawn from 
 normal, lognormal, binomial, beta or uniform distributions or have a set of 
-fixed values.
+fixed values. If all the possible value combinations needto be tested, then 
+\code{factorial=TRUE} can be used.
 }
 \details{
 An xml file is passed (with \code{xml.template}) to build the LHS scenarios, 
@@ -56,6 +59,11 @@ param_node, param_node_identifier, param_node_attribute, param_identifier,
 param_name, type, value, distribution. See documentation for 
 \code{scenarios.batch.modifier} on the meaning of nodes, identifier, 
 attribute. When \code{generate=FALSE} only the last four are mandatory.
+
+When \code{factorial=TRUE} (default \code{factorial=FALSE}) all possible
+value combinations are used. This is only possible when only fixed values are 
+used. When \code{factorial=TRUE} is used \code{samples} is ignored and calculated
+internally. Note, that this option may generate a large number of scenarios! 
 
 There might be situation where the parameter values to be changed are in an 
 internal node respect to the node identifier. In order to identify uniquely
@@ -89,22 +97,11 @@ are used as labels (headers) in the hypercube matrix that it is saved to disk
 and returned as an object.
 
 The optional column \bold{mult} can be used to indicate the order of the node
-to be considered if there are multiple nodes that are identified.
-For example, in the following, there are two 'parameter' nodes. If we want to 
+to be considered if there are multiple nodes that are identified 
+(this happens, for example, with the 'Subpopulation Assign Updater Function')
+where there are two 'parameter' nodes. If we want to 
 operate only on one of them, we can specify which one by using (e.g.) 
 \bold{mult=2} in the csv file.
-
-<accumulateEvent>
-  <name>SetRemoval</name>
-  <populationName>Dingoes</populationName>
-  <updaterFunction>
-  <accumulator>SetRemoval</accumulator>
-  <function>HexSimDomain.SubpopulationAssignUpdaterFunction</function>
-  <parameter>8</parameter>
-  <parameter>0</parameter>
-  </updaterFunction>
-  </accumulateEvent>
- 
 
 When \code{generate=TRUE}, the second element of the list returned contains 
 the nodes found in the template. It is probably a good idea to scan through 
