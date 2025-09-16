@@ -7,14 +7,11 @@
 #' and remove them. Care should be taken if there are other files in the directory
 #' that are not the target files.
 #'
-#' Note that it makes sense to execute this function in parallel only if a solid
-#' state disk (SSD) is available. If \code{ncores} is left to its default
-#' (\code{NULL}) and \code{parallel=TRUE} all available processors will be used.
-#'
+#' @param delete.gz whether compressed files with extension .gz should be deleted
 #' @inheritParams collate.census
 #' @inheritParams compress.logs
-#' @return a list where the first element is the list of log files found and the
-#'   second is the gz files created
+#' @return a list where the first element is the list of log files and the
+#'   second is the gz files found and deleted
 #' @importFrom R.utils gzip
 #' @export
 #' @examples
@@ -23,13 +20,13 @@
 #' dir.create(file.path(tmp, "test"))
 #' # Create a fake log file
 #' cat(file=file.path(tmp, "test", "foo.log"), "Hello world!")
-#' # Compress the log file
+#' # Remove the log file
 #' remove.logs(path.results=tmp, scenarios="test", delete.log=TRUE)
 #' # clean up
 #' unlink(tmp, recursive=TRUE)
 
 remove.logs <- function(path.results=NULL, scenarios="all", delete.log=TRUE, 
-                        delete.gz=TRUE, parallel=FALSE, ncores=NULL) {
+                        delete.gz=TRUE) {
   
   
   #--------------------------------------------------------------------------#
@@ -64,37 +61,6 @@ remove.logs <- function(path.results=NULL, scenarios="all", delete.log=TRUE,
     }
   }
   
-  # if(parallel) {
-  #   message("Parallel execution...")
-  #   if(is.null(ncores)) ncores <- parallel::detectCores() 
-  #   if(length(l.logs) %% ncores != 0) 
-  #     stop(paste0("The number of files detected (", length(l.logs), ") ",
-  #                 "is not a multiple of the number of cores selected (", ncores, ")\n", 
-  #                 "This will cause problem in the parallel execution\n",
-  #                 "Please, adjust the number of cores or use parallel=FALSE"))
-  #   cl <- parallel::makeCluster(ncores)
-  #   on.exit(parallel::stopCluster(cl))
-  #   parallel::clusterEvalQ(cl, library("R.utils"))
-  #   parallel::clusterExport(cl, 
-  #                           varlist=c("l.logs", "gz.names", "compression",
-  #                                     "delete.log", "overwrite.gz"), 
-  #                           envir=environment()) 
-  #   t <-  system.time(
-  #     parallel::clusterMap(cl, R.utils::gzip, l.logs,  destname=gz.names, 
-  #                          MoreArgs=list(compression=compression,  remove=delete.log, 
-  #                                        FUN=gzfile, ext="gz", overwrite=overwrite.gz))
-  #   )
-  #   
-  # } else {
-  #   t <- system.time(
-  #     mapply(R.utils::gzip, l.logs,  destname=gz.names, 
-  #            MoreArgs=list(compression=compression,  remove=delete.log, FUN=gzfile, 
-  #                          ext="gz", overwrite=overwrite.gz))
-  #   )
-  # }
-  # 
-  # message("Done!")
-  # message(paste("Elapsed time in secs", t[3]))
   return(lf)
 }
 
