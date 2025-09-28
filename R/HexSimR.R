@@ -73,7 +73,7 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
   
   byiter <- function(iter, l.iter.folders, census.list, census, nscen, start, end, verbose) {
     f <- paste(l.iter.folders[[nscen]][iter], census.list[census], sep="/")
-    if(verbose) message(paste("Processing iteration:", basename(l.iter.folders[[nscen]][iter])))
+    if(verbose>1) message(paste("Processing iteration:", basename(l.iter.folders[[nscen]][iter])))
     census.data <- fread(f)
     headers <- make.names(names(census.data))
     setnames(census.data, headers)
