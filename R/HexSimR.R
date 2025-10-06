@@ -54,6 +54,7 @@
 #'  default), or are excluded (FALSE)
 #'@param verbose Should progress be printed in the console? Default: FALSE 
 #'@inheritParams ranges
+#'@inheritParams census.calc
 #'@return A list with three elements: the combined data, the mean and standard
 #'  deviation. Each of these elements is in itself a list with  each scenario as
 #'  a element. Nested within the scenarios is a list with each census file. An
@@ -64,7 +65,8 @@
 #'@importFrom tcltk tk_choose.dir
 #'@export
 
-collate.census <- function(path.results=NULL, scenarios="all", start="min", end="max",
+collate.census <- function(path.results=NULL, scenarios="all", ncensus="all", 
+                           start="min", end="max",
                            keep.zeros=TRUE, verbose=FALSE) {
   
   #----------------------------------------------------------------------------#
@@ -115,6 +117,12 @@ collate.census <- function(path.results=NULL, scenarios="all", start="min", end=
     file.list <- list.files(l.iter.folders[[nscen]][1], 
                             pattern=paste0(scenarios[[nscen]], "\\.", "[0-9]+", 
                                            "\\.", "csv$"))
+    if(ncensus != "all" & length(ncensus)) {
+      file.list <- file.list[grep(paste0(scenarios[[nscen]], ".", ncensus, ".", "csv"),
+                                  file.list)]
+    } else {
+      warning("ncensus can only be either 'all' or a integer. Assuming ncensus=='all'")
+    }
     if(verbose) message(paste("Processing scenario:", scenarios[[nscen]]))
     iters <- seq_along(l.iter.folders[[nscen]])
     ncensus <- seq_along(file.list)

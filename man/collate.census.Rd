@@ -7,6 +7,7 @@
 collate.census(
   path.results = NULL,
   scenarios = "all",
+  ncensus = "all",
   start = "min",
   end = "max",
   keep.zeros = TRUE,
@@ -18,6 +19,8 @@ collate.census(
 
 \item{scenarios}{A character vector with the scenarios to be processed or
 "all"}
+
+\item{ncensus}{The census number to be processed}
 
 \item{start}{The first time step to be included}
 
