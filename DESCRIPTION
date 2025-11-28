@@ -1,7 +1,7 @@
 Package: HexSimR
 Type: Package
 Title: An R Package For Post HexSim Simulation Analysis
-Version: 0.9.1.900
+Version: 0.10.0.0
 Date: `r Sys.Date()`
 Authors@R: c(person("Carlo", "Pacioni", email="c.pacioni@murdoch.edu.au", role=c("aut", "cre")),
   person("Jason", "Bryer", role="ctb"))
@@ -32,5 +32,5 @@ Suggests:
     testthat,
     covr
 VignetteBuilder: knitr
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Encoding: UTF-8
