@@ -26,6 +26,8 @@ Ignored when \code{factorial=TRUE}}
 information on the nodes that need to be modified (or checked in case of
 xml.cond.replacement)}
 
+\item{factorial}{When \code{TRUE} all the possible value combinations}
+
 \item{generate}{Whether generate (TRUE) the xml files or stop after having 
 created the hypercube matrix (FALSE)}
 }

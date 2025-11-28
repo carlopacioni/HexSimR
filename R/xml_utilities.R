@@ -498,7 +498,7 @@ workspace.path.modifier <- function(
 #' Ignored when \code{factorial=TRUE}
 #' @param generate Whether generate (TRUE) the xml files or stop after having 
 #'   created the hypercube matrix (FALSE)
-#' @factorial When \code{TRUE} all the possible value combinations 
+#' @param factorial When \code{TRUE} all the possible value combinations 
 #' @inheritParams scenarios.batch.modifier
 #' @return A list where the first element is the hyercube matrix and the second 
 #'   are the nodes found in the template (if generate = TRUE). A csv file with 
