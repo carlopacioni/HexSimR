@@ -117,7 +117,8 @@ m.gen.div <- function(path.results=NULL, scenarios="all", pop.name,
   
   hetResSim <- lapply(l.gen.div, rbindlist, use.names=TRUE)
   hetResSum <- lapply(hetResSim, FUN=function(x) {
-    x[, .(n.Loc=mean(n.Loc), Ho=round(mean(Ho), 4), HoSD=round(sd(Ho), 4), 
+    x[, .(n.Ind=round(mean(n.Ind), 2), n.Loc=mean(n.Loc), 
+          Ho=round(mean(Ho), 4), HoSD=round(sd(Ho), 4), 
           He=round(mean(He), 4), HeSD=round(sd(He), 4),
           uHe=round(mean(uHe), 4), uHeSD=round(sd(uHe), 4)), by=pop]
   })
@@ -126,7 +127,7 @@ m.gen.div <- function(path.results=NULL, scenarios="all", pop.name,
   hetResSum[, `:=`(Ho.ul=round(Ho + 1.96*HoSD, 4), Ho.ll=round(Ho - 1.96*HoSD, 4), 
                    He.ul=round(He + 1.96*HeSD, 4), He.ll=round(He - 1.96*HeSD, 4),
                    uHe.ul=round(uHe + 1.96*uHeSD, 4), uHe.ll=round(uHe - 1.96*uHeSD, 4))]
-  setcolorder(hetResSum, c("Scenario", "pop", "n.Loc", 
+  setcolorder(hetResSum, c("Scenario", "pop", "n.Ind", "n.Loc", 
                            "Ho", "HoSD","Ho.ul", "Ho.ll",
                            "He", "HeSD", "He.ul", "He.ll",
                            "uHe", "uHeSD", "uHe.ul", "uHe.ll"))
