@@ -22,6 +22,7 @@ read.one.gen <- function(fname) {
 #'   
 #' @param gi A genind object
 #' @import dartRverse
+#' @import dartR.base
 #' @return The output from gl.report.heterozygosity
 #' @export
 gen.div <- function(gi) {
