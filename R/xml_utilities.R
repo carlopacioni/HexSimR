@@ -611,6 +611,13 @@ LHS.scenarios <- function(
     param_identifiers <- csv_file[, "param_identifier"]
     Xpaths <- vector("character", length(node_paths))
     
+    # Checks
+    if(sum(grepl("/", node_paths)) != length(node_paths))
+      stop("Strings in the column 'nodes' need to start with '/'")
+    
+    if(!all(grepl("/", param_nodes[!is.na(param_nodes)])))
+      stop("Strings in the column 'param_node', where used, need to start with '/'")
+    
     # Create Xpaths
     Xpaths <- make.Xpaths(node_paths, Xpaths, identifiers, attribs, 
                             param_nodes=param_nodes, 
