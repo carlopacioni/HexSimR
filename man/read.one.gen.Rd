@@ -4,7 +4,7 @@
 \alias{read.one.gen}
 \title{Read one genepop}
 \usage{
-read.one.gen(fname)
+read.one.gen(fname, verbose)
 }
 \arguments{
 \item{fname}{A character vector with the name of the input file including the 

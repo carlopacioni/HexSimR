@@ -4,7 +4,12 @@
 \alias{read.multi.gen}
 \title{Read multiple genepop files}
 \usage{
-read.multi.gen(path.results = NULL, scenarios = "all", pop.name = NULL)
+read.multi.gen(
+  path.results = NULL,
+  scenarios = "all",
+  pop.name = NULL,
+  verbose
+)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}

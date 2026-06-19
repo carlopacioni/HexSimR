@@ -7,7 +7,8 @@
 #' @inheritParams clean.genepop
 #' @import adegenet
 #' 
-read.one.gen <- function(fname) {
+read.one.gen <- function(fname, verbose) {
+  if(verbose) message(paste("processing", fname))
   suppressWarnings(
   adegen.data <- adegenet::read.genepop(fname, ncode=3L, quiet=TRUE)
   )
@@ -42,17 +43,17 @@ gen.div <- function(gi) {
 #' @seealso gen.dist
 #' @importFrom tcltk tk_choose.dir
 #' @export
-read.multi.gen <- function(path.results=NULL, scenarios="all", pop.name=NULL) {
+read.multi.gen <- function(path.results=NULL, scenarios="all", pop.name=NULL, verbose) {
   #----------------------------------------------------------------------------#
   # Helper functions
   #----------------------------------------------------------------------------#
   
-  apply.read.gen <- function(nscen, l.iter.folders, scenarios, pop.name) {
+  apply.read.gen <- function(nscen, l.iter.folders, scenarios, pop.name, verbose) {
     message(paste("Processing scenario:", scenarios[nscen]))
     iters <- seq_along(l.iter.folders[[nscen]])
     gen.names <- lapply(iters, file.names, nscen, l.iter.folders, scenarios, 
                         pop.name)
-    genpops <- lapply(gen.names, read.one.gen)
+    genpops <- lapply(gen.names, read.one.gen, verbose=verbose)
     return(genpops)
   }
   
@@ -80,7 +81,7 @@ read.multi.gen <- function(path.results=NULL, scenarios="all", pop.name=NULL) {
   l.iter.folders <- lapply(scenarios, iter.folders, dir.path=path.results)
   nscens <- seq_along(scenarios)
   
-  lapply(nscens, apply.read.gen, l.iter.folders, scenarios, pop.name)
+  lapply(nscens, apply.read.gen, l.iter.folders, scenarios, pop.name, verbose=verbose)
   }
 
 #' Mean genetic diversity
@@ -100,7 +101,7 @@ read.multi.gen <- function(path.results=NULL, scenarios="all", pop.name=NULL) {
 #' @importFrom tcltk tk_choose.dir
 #' @export
 m.gen.div <- function(path.results=NULL, scenarios="all", pop.name, 
-                          traits) {
+                          traits, verbose=FALSE) {
 
   txt <- "Please, select the 'Results' folder within the workspace"
   if(is.null(path.results)) path.results <- tk_choose.dir(caption=txt)
@@ -109,7 +110,8 @@ m.gen.div <- function(path.results=NULL, scenarios="all", pop.name,
       scenarios <- list.dirs(path=path.results, full.names=FALSE, recursive=FALSE)
   }
   
-  gis <- read.multi.gen(path.results=path.results, scenarios=scenarios, pop.name=pop.name)
+  gis <- read.multi.gen(path.results=path.results, scenarios=scenarios, 
+                        pop.name=pop.name, verbose=verbose)
   
   l.gen.div <- lapply(gis, function(x) {
     return(lapply(x, gen.div))

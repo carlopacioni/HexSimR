@@ -4,7 +4,13 @@
 \alias{m.gen.div}
 \title{Mean genetic diversity}
 \usage{
-m.gen.div(path.results = NULL, scenarios = "all", pop.name, traits)
+m.gen.div(
+  path.results = NULL,
+  scenarios = "all",
+  pop.name,
+  traits,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{path.results}{The path to the 'Results' folder}
@@ -15,6 +21,8 @@ m.gen.div(path.results = NULL, scenarios = "all", pop.name, traits)
 \item{pop.name}{The name of the population}
 
 \item{traits}{A character vector with the name of the traits to be included}
+
+\item{verbose}{Should progress be printed in the console? Default: FALSE}
 }
 \value{
 A list with three elements: the mean and standard
