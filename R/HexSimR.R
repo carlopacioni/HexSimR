@@ -117,15 +117,17 @@ collate.census <- function(path.results=NULL, scenarios="all", ncensus="all",
     file.list <- list.files(l.iter.folders[[nscen]][1], 
                             pattern=paste0(scenarios[[nscen]], "\\.", "[0-9]+", 
                                            "\\.", "csv$"))
-    if(ncensus != "all" & length(ncensus)) {
+    if(ncensus != "all" & length(ncensus) == 1 & is.integer(as.integer(ncensus))) {
       file.list <- file.list[grep(paste0(scenarios[[nscen]], ".", ncensus, ".", "csv"),
                                   file.list)]
     } else {
-      warning("ncensus can only be either 'all' or a integer. Assuming ncensus=='all'")
+      warning("ncensus can only be either 'all' or a integer of length == 1. Assuming ncensus=='all'")
+      ncensus <- "all"
     }
     if(verbose) message(paste("Processing scenario:", scenarios[[nscen]]))
     iters <- seq_along(l.iter.folders[[nscen]])
     ncensus <- seq_along(file.list)
+    
     # A list with one scenario with each census type for element
     scen.i <- lapply(ncensus, bycensus, iters, l.iter.folders, file.list, nscen, 
                      start=start, end=end, verbose=verbose)
