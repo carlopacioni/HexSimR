@@ -3,3 +3,5 @@
 ^NEWS\.md$
 ^\.travis\.yml$
 ^codecov\.yml$
+^\.positai$
+^\.claude$
