@@ -4,7 +4,7 @@
 #' \code{make.plot} groups together \code{nscens_group} scenarios and plot them
 #'   as facets of the same plot. If multiple groups are processed, it is possible 
 #'   to indicate the sequential number of the group so that the next lot of 
-#'   scenarios is process. For example, if there are 20 scenarios and the user
+#'   scenarios is processed. For example, if there are 20 scenarios and the user
 #'   wants 4 groups, setting \code{nscens_group=5} and passing iteratively 
 #'   \code{ngroup=1:4}, the scenarios 1 to 5 will be processed first, then 6 to 
 #'   10, then 11 to 15 and lastly 16 to 20.
