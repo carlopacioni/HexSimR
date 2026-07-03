@@ -31,7 +31,7 @@ make.plot <- function(ngroup, path.results, nscens_group, means, sds, traits,
     geom_point(size=1.2) +
     facet_wrap(~Scenario, ncol=2) +
     xlab("Time Step") +
-    geom_errorbar(limits, width=0.5, size=0.1)
+    geom_errorbar(limits, width=0.5, linewidth=0.1)
   save(p, file=paste0(path.results, "/", "plots_census.", ncensus, ".group.",
                       ngroup, ".rda"))
   ggsave(paste0(path.results, "/", "plots_census.", ncensus, ".group.",
